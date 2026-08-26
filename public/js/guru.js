@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
        ELEMENT DATA GURU
        ===================================================== */
 
-    const guruAddButton = document.querySelector(".guru-add-button");
+    const guruAddButton = document.querySelector("#guru-add-button");
 
     const guruModal = document.querySelector("#guru-modal");
 
@@ -30,6 +30,47 @@ document.addEventListener("DOMContentLoaded", function () {
     let activeEditingRow = null;
 
     /* =====================================================
+       CSRF TOKEN
+       ===================================================== */
+
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute("content");
+
+    /* =====================================================
+       HELPER REQUEST
+       ===================================================== */
+
+    async function sendRequest(url, options = {}) {
+        const defaultHeaders = {
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrfToken,
+            "X-Requested-With": "XMLHttpRequest",
+        };
+
+        options.headers = {
+            ...defaultHeaders,
+            ...(options.headers || {}),
+        };
+
+        const response = await fetch(url, options);
+
+        let result = {};
+
+        try {
+            result = await response.json();
+        } catch (error) {
+            result = {};
+        }
+
+        if (!response.ok) {
+            throw new Error(result.message || "Terjadi kesalahan pada server.");
+        }
+
+        return result;
+    }
+
+    /* =====================================================
        MODAL TAMBAH / EDIT
        ===================================================== */
 
@@ -54,6 +95,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             guruForm.reset();
 
+            nipInput.value = "";
+
             activeEditingRow = null;
         }
 
@@ -73,6 +116,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (guruForm) {
             guruForm.reset();
+        }
+
+        if (nipInput) {
+            nipInput.value = "";
         }
 
         activeEditingRow = null;
@@ -98,6 +145,20 @@ document.addEventListener("DOMContentLoaded", function () {
             .forEach(function (element) {
                 element.addEventListener("click", closeGuruModal);
             });
+    }
+
+    /* =====================================================
+       NIP OTOMATIS DARI GURU
+       ===================================================== */
+
+    if (nameSelect && nipInput) {
+        nameSelect.addEventListener("change", function () {
+            const selectedOption = nameSelect.options[nameSelect.selectedIndex];
+
+            const nip = selectedOption?.dataset?.nip || "";
+
+            nipInput.value = nip;
+        });
     }
 
     /* =====================================================
@@ -154,24 +215,54 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    if (deleteConfirmBtn) {
-        deleteConfirmBtn.addEventListener("click", function () {
-            if (activeDeletingRow) {
-                const teacherName =
-                    activeDeletingRow
-                        .querySelector(".cell-nama")
-                        ?.textContent.trim() || "Guru";
+    /* =====================================================
+       DELETE DATABASE
+       ===================================================== */
 
-                activeDeletingRow.remove();
+    if (deleteConfirmBtn) {
+        deleteConfirmBtn.addEventListener("click", async function () {
+            if (!activeDeletingRow) {
+                return;
+            }
+
+            const row = activeDeletingRow;
+
+            const id = row.dataset.guruMapelId;
+
+            const teacherName =
+                row.querySelector(".cell-nama")?.textContent.trim() || "Guru";
+
+            if (!id) {
+                showAppToast("ID data guru tidak ditemukan.");
+
+                return;
+            }
+
+            deleteConfirmBtn.disabled = true;
+
+            try {
+                await sendRequest(`/guru/${id}`, {
+                    method: "DELETE",
+                });
+
+                /*
+                 * Hapus baris dari tampilan
+                 * setelah database berhasil.
+                 */
+                row.remove();
 
                 updateRowNumbers();
 
                 closeDeleteModal();
 
                 showAppToast(
-                    "Data " + teacherName + " berhasil dihapus.",
+                    `Data ${teacherName} berhasil dihapus.`,
                     "success",
                 );
+            } catch (error) {
+                showAppToast(error.message || "Data guru gagal dihapus.");
+            } finally {
+                deleteConfirmBtn.disabled = false;
             }
         });
     }
@@ -186,7 +277,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const deleteBtn = event.target.closest(".delete-btn");
 
-            /* EDIT */
+            /* =================================================
+                   EDIT
+                   ================================================= */
 
             if (editBtn) {
                 const row = editBtn.closest(".guru-table-row");
@@ -197,28 +290,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 activeEditingRow = row;
 
-                const currentNip = row.querySelector(".cell-nip")
-                    ? row.querySelector(".cell-nip").textContent.trim()
-                    : "";
+                const guruId = row.dataset.guruId || "";
 
-                const currentName = row.querySelector(".cell-nama")
-                    ? row.querySelector(".cell-nama").textContent.trim()
-                    : "";
+                const mapelId = row.dataset.mapelId || "";
 
-                const currentMapel = row.querySelector(".cell-mapel")
-                    ? row.querySelector(".cell-mapel").textContent.trim()
-                    : "";
+                const currentNip =
+                    row.dataset.nip ||
+                    row.querySelector(".cell-nip")?.textContent.trim() ||
+                    "";
 
                 nipInput.value = currentNip;
 
-                nameSelect.value = currentName;
+                nameSelect.value = guruId;
 
-                mapelSelect.value = currentMapel;
+                mapelSelect.value = mapelId;
 
                 openGuruModal(true);
             }
 
-            /* DELETE */
+            /* =================================================
+                   DELETE
+                   ================================================= */
 
             if (deleteBtn) {
                 const row = deleteBtn.closest(".guru-table-row");
@@ -227,9 +319,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-                const currentName = row.querySelector(".cell-nama")
-                    ? row.querySelector(".cell-nama").textContent.trim()
-                    : "guru ini";
+                const currentName =
+                    row.dataset.nama ||
+                    row.querySelector(".cell-nama")?.textContent.trim() ||
+                    "guru ini";
 
                 openDeleteModal(row, currentName);
             }
@@ -245,7 +338,9 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const rows = guruTableBody.querySelectorAll(".guru-table-row");
+        const rows = guruTableBody.querySelectorAll(
+            ".guru-table-row:not(.guru-table-empty)",
+        );
 
         rows.forEach(function (row, index) {
             const cellNo = row.querySelector(".cell-no");
@@ -257,161 +352,284 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =====================================================
+       MEMPERBARUI BARIS TABEL
+       ===================================================== */
+
+    function updateTableRow(row, data) {
+        if (!row || !data) {
+            return;
+        }
+
+        /*
+         * Update data-* attributes.
+         */
+        row.dataset.guruMapelId = data.id;
+        row.dataset.guruId = data.guru_id;
+        row.dataset.mapelId = data.mapel_id;
+        row.dataset.nip = data.nip || "";
+        row.dataset.nama = data.nama || "";
+        row.dataset.mapel = data.mapel || "";
+
+        /*
+         * Update tampilan tabel.
+         */
+        const nipCell = row.querySelector(".cell-nip");
+
+        const namaCell = row.querySelector(".cell-nama");
+
+        const mapelCell = row.querySelector(".cell-mapel");
+
+        if (nipCell) {
+            nipCell.textContent = data.nip || "-";
+        }
+
+        if (namaCell) {
+            namaCell.textContent = data.nama || "-";
+        }
+
+        if (mapelCell) {
+            mapelCell.textContent = data.mapel || "-";
+        }
+
+        /*
+         * Update accessibility label.
+         */
+        const editBtn = row.querySelector(".edit-btn");
+
+        const deleteBtn = row.querySelector(".delete-btn");
+
+        if (editBtn) {
+            editBtn.setAttribute("aria-label", `Edit ${data.nama}`);
+        }
+
+        if (deleteBtn) {
+            deleteBtn.setAttribute("aria-label", `Hapus ${data.nama}`);
+        }
+    }
+
+    /* =====================================================
+       MEMBUAT BARIS BARU
+       ===================================================== */
+
+    function createTableRow(data) {
+        const row = document.createElement("div");
+
+        row.className = "guru-table-row";
+
+        row.setAttribute("role", "row");
+
+        row.dataset.guruMapelId = data.id;
+
+        row.dataset.guruId = data.guru_id;
+
+        row.dataset.mapelId = data.mapel_id;
+
+        row.dataset.nip = data.nip || "";
+
+        row.dataset.nama = data.nama || "";
+
+        row.dataset.mapel = data.mapel || "";
+
+        row.innerHTML = `
+            <div
+                role="cell"
+                class="cell-no"
+            >
+                1
+            </div>
+
+            <div
+                role="cell"
+                class="cell-nip"
+            >
+                ${escapeHtml(data.nip || "-")}
+            </div>
+
+            <div
+                role="cell"
+                class="cell-nama"
+            >
+                ${escapeHtml(data.nama || "-")}
+            </div>
+
+            <div
+                role="cell"
+                class="cell-mapel"
+            >
+                ${escapeHtml(data.mapel || "-")}
+            </div>
+
+            <div
+                class="guru-actions"
+                role="cell"
+            >
+
+                <button
+                    type="button"
+                    aria-label="Edit ${escapeHtml(data.nama || "guru")}"
+                    class="edit-btn"
+                >
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M14.5 7.5l2 2"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+
+                    </svg>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    aria-label="Hapus ${escapeHtml(data.nama || "guru")}"
+                    class="delete-btn"
+                >
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </button>
+
+            </div>
+        `;
+
+        return row;
+    }
+
+    /* =====================================================
        SUBMIT TAMBAH / EDIT
        ===================================================== */
 
     if (guruForm) {
-        guruForm.addEventListener("submit", function (event) {
+        guruForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const nip = nipInput.value.trim();
+            const guruId = nameSelect.value;
 
-            const name = nameSelect.value;
+            const mapelId = mapelSelect.value;
 
-            const mapel = mapelSelect.value;
+            if (!guruId || !mapelId) {
+                showAppToast("Nama guru dan mata pelajaran wajib dipilih.");
 
-            if (!nip || !name || !mapel) {
-                showAppToast("NIP, nama guru, dan mata pelajaran wajib diisi.");
                 return;
             }
 
             const wasEditing = Boolean(activeEditingRow);
 
-            /* EDIT */
+            /*
+             * Tentukan URL dan HTTP method.
+             */
+            let url = "/guru";
 
-            if (activeEditingRow) {
-                activeEditingRow.querySelector(".cell-nip").textContent = nip;
+            let method = "POST";
 
-                activeEditingRow.querySelector(".cell-nama").textContent = name;
+            if (wasEditing && activeEditingRow) {
+                const id = activeEditingRow.dataset.guruMapelId;
 
-                activeEditingRow.querySelector(".cell-mapel").textContent =
-                    mapel;
+                url = `/guru/${id}`;
 
-                const editBtn = activeEditingRow.querySelector(".edit-btn");
-
-                const deleteBtn = activeEditingRow.querySelector(".delete-btn");
-
-                if (editBtn) {
-                    editBtn.setAttribute("aria-label", "Edit " + name);
-                }
-
-                if (deleteBtn) {
-                    deleteBtn.setAttribute("aria-label", "Hapus " + name);
-                }
-            } else {
-                /* TAMBAH */
-                const currentRows =
-                    guruTableBody.querySelectorAll(".guru-table-row").length;
-
-                const row = document.createElement("div");
-
-                row.className = "guru-table-row";
-
-                row.setAttribute("role", "row");
-
-                row.innerHTML = `
-                        <div
-                            role="cell"
-                            class="cell-no"
-                        >
-                            ${currentRows + 1}
-                        </div>
-
-                        <div
-                            role="cell"
-                            class="cell-nip"
-                        >
-                            ${escapeHtml(nip)}
-                        </div>
-
-                        <div
-                            role="cell"
-                            class="cell-nama"
-                        >
-                            ${escapeHtml(name)}
-                        </div>
-
-                        <div
-                            role="cell"
-                            class="cell-mapel"
-                        >
-                            ${escapeHtml(mapel)}
-                        </div>
-
-                        <div
-                            class="guru-actions"
-                            role="cell"
-                        >
-
-                            <button
-                                type="button"
-                                aria-label="Edit ${escapeHtml(name)}"
-                                class="edit-btn"
-                            >
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linejoin="round"
-                                    />
-
-                                    <path
-                                        d="M14.5 7.5l2 2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                aria-label="Hapus ${escapeHtml(name)}"
-                                class="delete-btn"
-                            >
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-                        </div>
-                    `;
-
-                guruTableBody.appendChild(row);
+                method = "PUT";
             }
 
-            closeGuruModal();
+            guruFormSubmitBtn.disabled = true;
 
-            showAppToast(
-                wasEditing
-                    ? "Data guru berhasil diperbarui."
-                    : "Data guru berhasil ditambahkan.",
-                "success",
-            );
+            try {
+                const result = await sendRequest(url, {
+                    method: method,
+
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+
+                    body: JSON.stringify({
+                        guru_id: guruId,
+
+                        mapel_id: mapelId,
+                    }),
+                });
+
+                /*
+                 * Pastikan server mengembalikan
+                 * data yang valid.
+                 */
+                if (!result.success || !result.data) {
+                    throw new Error(result.message || "Data gagal disimpan.");
+                }
+
+                /* =============================================
+                       EDIT
+                       ============================================= */
+
+                if (wasEditing && activeEditingRow) {
+                    updateTableRow(activeEditingRow, result.data);
+
+                    showAppToast(
+                        result.message || "Data guru berhasil diperbarui.",
+                        "success",
+                    );
+                } else {
+
+                /* =============================================
+                       TAMBAH
+                       ============================================= */
+                    /*
+                     * Jika sebelumnya tabel kosong,
+                     * hapus pesan "Belum ada data guru."
+                     */
+                    const emptyRow =
+                        guruTableBody.querySelector(".guru-table-empty");
+
+                    if (emptyRow) {
+                        emptyRow.remove();
+                    }
+
+                    const newRow = createTableRow(result.data);
+
+                    guruTableBody.appendChild(newRow);
+
+                    updateRowNumbers();
+
+                    showAppToast(
+                        result.message || "Data guru berhasil ditambahkan.",
+                        "success",
+                    );
+                }
+
+                closeGuruModal();
+            } catch (error) {
+                showAppToast(error.message || "Data guru gagal disimpan.");
+            } finally {
+                guruFormSubmitBtn.disabled = false;
+            }
         });
     }
 
@@ -431,7 +649,9 @@ document.addEventListener("DOMContentLoaded", function () {
         searchInput.addEventListener("input", function () {
             const keyword = searchInput.value.trim().toLowerCase();
 
-            const rows = guruTableBody.querySelectorAll(".guru-table-row");
+            const rows = guruTableBody.querySelectorAll(
+                ".guru-table-row:not(.guru-table-empty)",
+            );
 
             rows.forEach(function (row) {
                 const rowText = row.textContent.toLowerCase();

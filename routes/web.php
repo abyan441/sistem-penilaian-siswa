@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MataPelajaranController;
+use App\Http\Controllers\GuruController;
 
 
 /*
@@ -21,10 +22,17 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/guru', function () {
-    return view('guru');
-})->name('guru');
+Route::get('/guru', [GuruController::class, 'index'])
+    ->name('guru');
 
+Route::post('/guru', [GuruController::class, 'store'])
+    ->name('guru.store');
+
+Route::put('/guru/{id}', [GuruController::class, 'update'])
+    ->name('guru.update');
+
+Route::delete('/guru/{id}', [GuruController::class, 'destroy'])
+    ->name('guru.destroy');
 
 /*
 |--------------------------------------------------------------------------

@@ -18,6 +18,17 @@ class User extends Authenticatable
     protected $table = 'users';
 
     /**
+     * Primary key.
+     */
+    protected $primaryKey = 'id';
+
+    /**
+     * Tabel users tidak menggunakan
+     * created_at dan updated_at.
+     */
+    public $timestamps = false;
+
+    /**
      * Kolom yang dapat diisi secara massal.
      */
     protected $fillable = [
@@ -56,7 +67,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Relasi ke data guru-mata pelajaran.
+     * =====================================================
+     * RELASI KE GURU MAPEL
+     * =====================================================
+     *
+     * Satu user dengan role guru dapat memiliki
+     * beberapa mata pelajaran.
      */
     public function guruMapel()
     {
@@ -64,10 +80,40 @@ class User extends Authenticatable
     }
 
     /**
-     * Relasi ke kelas yang diwalikan.
+     * =====================================================
+     * RELASI KE WALI KELAS
+     * =====================================================
      */
     public function waliKelas()
     {
         return $this->hasOne(Kelas::class, 'wali_kelas_id');
+    }
+
+    /**
+     * =====================================================
+     * DATA GURU
+     * =====================================================
+     *
+     * Mengambil seluruh user yang memiliki role guru.
+     *
+     * Diurutkan berdasarkan nama lengkap A-Z.
+     */
+    public static function semuaGuru()
+    {
+        return self::where('role', 'guru')
+            ->orderBy('nama_lengkap', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
+    }
+
+    /**
+     * =====================================================
+     * MENGAMBIL GURU BERDASARKAN ID
+     * =====================================================
+     */
+    public static function guruById($id)
+    {
+        return self::where('role', 'guru')
+            ->findOrFail($id);
     }
 }
