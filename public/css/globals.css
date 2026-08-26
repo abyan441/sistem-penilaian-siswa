@@ -1,0 +1,148 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+
+* {
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0px;
+    min-height: 100%;
+}
+
+button:focus-visible {
+    outline: 2px solid #4a90e2 !important;
+    outline: -webkit-focus-ring-color auto 5px !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+.app-toast {
+    position: fixed;
+    z-index: 2000;
+    top: 76px;
+    right: 24px;
+    display: flex;
+    align-items: flex-start;
+    width: min(360px, calc(100vw - 48px));
+    gap: 12px;
+    padding: 14px 12px 14px 14px;
+    border: 1px solid var(--primarypr-30);
+    border-radius: 12px;
+    background: var(--primarypr-00);
+    box-shadow: 0 12px 28px rgba(24, 46, 68, 0.16);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+        opacity 0.18s ease,
+        transform 0.18s ease;
+}
+
+.app-toast[hidden] {
+    display: none;
+}
+
+.app-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.app-toast-icon {
+    display: grid;
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--primarypr-20);
+    color: var(--primarypr-40);
+}
+
+.app-toast-icon::before {
+    content: "✓";
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.app-toast.is-error {
+    border-color: var(--secondarysec-70);
+}
+
+.app-toast.is-error .app-toast-icon {
+    background: var(--secondarysec-70);
+    color: var(--secondarysec-90);
+}
+
+.app-toast.is-error .app-toast-icon::before {
+    content: "!";
+}
+
+.app-toast-copy {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 1px;
+}
+
+.app-toast-title,
+.app-toast-message {
+    font-family: var(--paragraph-p16-regular-font-family);
+}
+
+.app-toast-title {
+    color: var(--primarypr-50);
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.app-toast-message {
+    color: var(--primarypr-40);
+    font-size: 13px;
+    line-height: 19px;
+}
+
+.app-toast-close {
+    display: grid;
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    margin: -3px -3px 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--primarypr-40);
+    cursor: pointer;
+    place-items: center;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.app-toast-close:hover {
+    background: var(--primarypr-10);
+}
+
+@media (max-width: 768px) {
+    .app-toast {
+        top: 64px;
+        right: 12px;
+        width: min(360px, calc(100vw - 24px));
+    }
+}
+
+/* TYPOGRAPHY BASE */
+html,
+body,
+button,
+input,
+textarea,
+select {
+    font-family: var(--paragraph-p16-regular-font-family);
+}

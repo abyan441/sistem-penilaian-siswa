@@ -1,0 +1,1162 @@
+/* =========================================================
+   DATA GURU
+   ========================================================= */
+
+/* =========================================================
+   CONTENT UTAMA
+   ========================================================= */
+
+.guru-content {
+    width: 100%;
+
+    margin: 0;
+
+    /*
+     * Jarak atas dibuat 4px agar posisi halaman Guru
+     * lebih dekat dengan posisi konten Dashboard.
+     *
+     * Padding kiri dan kanan diatur oleh layouts.app.
+     */
+    padding: 4px 0 36px;
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p16-regular-font-family);
+
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER DATA GURU
+   ========================================================= */
+
+.guru-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    width: 100%;
+
+    min-height: 72px;
+
+    gap: 24px;
+
+    box-sizing: border-box;
+}
+
+.guru-heading-text {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    min-width: 0;
+
+    flex: 1 1 auto;
+}
+
+.guru-heading h1 {
+    margin: 4px 0 0;
+
+    color: var(--primarypr-40);
+
+    font-family: var(--heading-h5-medium-font-family);
+
+    font-size: var(--heading-h5-medium-font-size);
+
+    font-weight: var(--heading-h5-medium-font-weight);
+
+    line-height: var(--heading-h5-medium-line-height);
+}
+
+.guru-heading p {
+    margin: 0;
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p16-regular-font-family);
+
+    font-size: var(--paragraph-p16-regular-font-size);
+
+    line-height: var(--paragraph-p16-regular-line-height);
+}
+
+/* =========================================================
+   TOMBOL TAMBAH GURU
+   ========================================================= */
+
+.guru-add-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 165px;
+
+    min-width: 165px;
+
+    height: 40px;
+
+    margin-top: 13px;
+
+    padding: 0 14px;
+
+    gap: 7px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: var(--primarypr-30);
+
+    color: var(--primarypr-00);
+
+    font-family: var(--label-l16-regular-font-family);
+
+    font-size: var(--label-l16-regular-font-size);
+
+    font-weight: var(--label-l16-regular-font-weight);
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        filter 0.2s ease;
+
+    box-sizing: border-box;
+}
+
+.guru-add-button:hover {
+    filter: brightness(0.95);
+}
+
+.guru-add-button svg {
+    width: 16px;
+
+    height: 16px;
+
+    flex: 0 0 16px;
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.guru-search-card {
+    width: 100%;
+
+    height: 82px;
+
+    margin-top: 16px;
+
+    padding: 20px;
+
+    border: 1px solid var(--secondarysc-50);
+
+    border-radius: 15px;
+
+    background: var(--primarypr-10);
+
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+
+    box-sizing: border-box;
+}
+
+.guru-search-form {
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    height: 41px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--secondarysc-50);
+
+    border-radius: 12px;
+
+    background: var(--primarypr-00);
+}
+
+.guru-search-form input {
+    width: 100%;
+
+    min-width: 0;
+
+    height: 100%;
+
+    padding: 0 14px;
+
+    border: 0;
+
+    outline: 0;
+
+    background: transparent;
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p16-regular-font-family);
+
+    font-size: var(--paragraph-p16-regular-font-size);
+
+    box-sizing: border-box;
+}
+
+.guru-search-form button {
+    display: grid;
+
+    place-items: center;
+
+    width: 54px;
+
+    height: 100%;
+
+    flex: 0 0 54px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--primarypr-50);
+
+    cursor: pointer;
+}
+
+.guru-search-form button svg {
+    width: 22px;
+
+    height: 22px;
+}
+
+/* =========================================================
+   TABLE DATA GURU
+   ========================================================= */
+
+.guru-table-card {
+    width: 100%;
+
+    margin-top: 32px;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    border: 1px solid var(--secondarysc-50);
+
+    border-radius: 15px;
+
+    background: var(--primarypr-00);
+
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+
+    box-sizing: border-box;
+}
+
+.guru-table-scroll {
+    width: max-content;
+
+    min-width: 100%;
+}
+
+.guru-table {
+    width: 100%;
+
+    min-width: 760px;
+}
+
+.guru-table-header,
+.guru-table-row {
+    display: grid;
+
+    grid-template-columns:
+        8%
+        22%
+        30%
+        25%
+        15%;
+
+    align-items: center;
+}
+
+.guru-table-header {
+    min-height: 63px;
+
+    border-bottom: 1px solid var(--secondarysc-50);
+
+    background: var(--primarypr-10);
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p16-medium-font-family);
+
+    font-size: var(--paragraph-p16-medium-font-size);
+
+    font-weight: var(--paragraph-p16-medium-font-weight);
+
+    box-sizing: border-box;
+}
+
+.guru-table-header > div,
+.guru-table-row > div {
+    min-width: 0;
+
+    padding: 0 16px;
+
+    box-sizing: border-box;
+}
+
+.guru-table-header > div:last-child {
+    text-align: center;
+}
+
+.guru-table-row {
+    min-height: 78px;
+
+    border-bottom: 1px solid var(--secondarysc-00);
+
+    background: var(--primarypr-00);
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p16-regular-font-family);
+
+    font-size: var(--paragraph-p16-regular-font-size);
+
+    font-weight: var(--paragraph-p16-regular-font-weight);
+
+    box-sizing: border-box;
+}
+
+.guru-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+
+    gap: 16px;
+}
+
+.guru-actions button {
+    display: grid;
+
+    place-items: center;
+
+    width: 32px;
+
+    height: 32px;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease;
+}
+
+.guru-actions button:hover {
+    transform: scale(1.15);
+}
+
+.guru-actions svg {
+    width: 20px;
+
+    height: 20px;
+}
+
+.guru-actions .edit-btn {
+    color: var(--secondarysec-80);
+}
+
+.guru-actions .delete-btn {
+    color: var(--colors-accents-red);
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+body.guru-modal-open {
+    overflow: hidden;
+}
+
+.guru-modal[hidden] {
+    display: none !important;
+}
+
+.guru-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 2000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100vw;
+
+    height: 100vh;
+
+    padding: 16px;
+
+    box-sizing: border-box;
+}
+
+.guru-modal-backdrop {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    backdrop-filter: blur(3px);
+}
+
+.guru-modal-dialog {
+    position: relative;
+
+    z-index: 2001;
+
+    width: 100%;
+
+    max-width: 520px;
+
+    max-height: calc(100vh - 32px);
+
+    overflow-y: auto;
+
+    padding: 24px 28px;
+
+    border-radius: 16px;
+
+    background: var(--primarypr-00);
+
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+
+    animation: modalIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+
+    box-sizing: border-box;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+
+        transform: scale(0.95) translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* =========================================================
+   MODAL HEADER
+   ========================================================= */
+
+.guru-modal-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid var(--secondarysc-00);
+}
+
+.guru-modal-header h2 {
+    margin: 0;
+
+    color: var(--primarypr-40);
+
+    font-family: var(--heading-h5-bold-font-family);
+
+    font-size: var(--heading-h5-bold-font-size);
+
+    font-weight: var(--heading-h5-bold-font-weight);
+
+    line-height: var(--heading-h5-bold-line-height);
+}
+
+.guru-modal-header p {
+    margin: 4px 0 0;
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p12-regular-font-family);
+
+    font-size: var(--paragraph-p12-regular-font-size);
+}
+
+.guru-modal-close {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 4px;
+
+    border: 0;
+
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: var(--primarypr-50);
+
+    cursor: pointer;
+}
+
+.guru-modal-close:hover {
+    background: var(--secondarysc-00);
+}
+
+.guru-modal-close svg {
+    width: 20px;
+
+    height: 20px;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.guru-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+.guru-form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.guru-form-group label {
+    color: var(--primarypr-50);
+
+    font-family: var(--label-l16-medium-font-family);
+
+    font-size: var(--label-l16-medium-font-size);
+
+    font-weight: var(--label-l16-medium-font-weight);
+}
+
+.guru-form-group input,
+.guru-select-wrap select {
+    width: 100%;
+
+    height: 42px;
+
+    padding: 0 14px;
+
+    outline: none;
+
+    border: 1px solid var(--secondarysc-50);
+
+    border-radius: 8px;
+
+    background: var(--primarypr-00);
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p16-regular-font-family);
+
+    font-size: var(--paragraph-p16-regular-font-size);
+
+    box-sizing: border-box;
+}
+
+.guru-form-group input:focus,
+.guru-select-wrap select:focus {
+    border-color: var(--primarypr-40);
+
+    box-shadow: 0 0 0 3px rgba(53, 104, 92, 0.12);
+}
+
+.guru-form-help {
+    color: var(--primarypr-50);
+
+    font-size: 12px;
+}
+
+/* =========================================================
+   FORM BUTTONS
+   ========================================================= */
+
+.guru-form-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 8px;
+
+    padding-top: 16px;
+
+    border-top: 1px solid var(--secondarysc-00);
+}
+
+.guru-form-cancel,
+.guru-form-submit,
+.guru-form-delete-confirm {
+    min-height: 40px;
+
+    padding: 9px 16px;
+
+    border-radius: 8px;
+
+    font-family: var(--label-l16-medium-font-family);
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+}
+
+.guru-form-cancel {
+    border: 1px solid var(--secondarysc-50);
+
+    background: var(--primarypr-00);
+
+    color: var(--primarypr-50);
+}
+
+.guru-form-submit {
+    border: 1px solid var(--primarypr-30);
+
+    background: var(--primarypr-30);
+
+    color: var(--primarypr-00);
+}
+
+.guru-form-delete-confirm {
+    border: 1px solid var(--colors-accents-red);
+
+    background: var(--colors-accents-red);
+
+    color: var(--primarypr-00);
+}
+
+/* =========================================================
+   DELETE MODAL
+   ========================================================= */
+
+.delete-modal-dialog {
+    text-align: center;
+
+    max-width: 440px;
+}
+
+.delete-modal-icon {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 52px;
+
+    height: 52px;
+
+    margin: 0 auto 14px;
+
+    border-radius: 50%;
+
+    background: rgba(220, 53, 69, 0.1);
+
+    color: var(--colors-accents-red);
+}
+
+.delete-modal-icon svg {
+    width: 25px;
+
+    height: 25px;
+}
+
+.delete-modal-title {
+    margin: 0;
+
+    color: var(--primarypr-50);
+
+    font-family: var(--heading-h5-bold-font-family);
+
+    font-size: var(--heading-h5-bold-font-size);
+}
+
+.delete-modal-text {
+    margin: 10px 0 0;
+
+    color: var(--primarypr-50);
+
+    font-size: 14px;
+
+    line-height: 22px;
+}
+
+.delete-actions {
+    justify-content: center;
+
+    border-top: 0;
+
+    padding-top: 0;
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.sr-only {
+    position: absolute;
+
+    width: 1px;
+
+    height: 1px;
+
+    padding: 0;
+
+    margin: -1px;
+
+    overflow: hidden;
+
+    clip: rect(0, 0, 0, 0);
+
+    white-space: nowrap;
+
+    border: 0;
+}
+
+/* =========================================================
+   TABLET
+   769px - 1100px
+   ========================================================= */
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .guru-content {
+        padding-top: 4px;
+
+        padding-bottom: 32px;
+    }
+
+    .guru-heading {
+        min-height: 68px;
+
+        gap: 18px;
+    }
+
+    .guru-heading h1 {
+        margin-top: 4px;
+    }
+
+    .guru-add-button {
+        width: 165px;
+
+        min-width: 165px;
+
+        margin-top: 13px;
+    }
+
+    .guru-search-card {
+        margin-top: 14px;
+
+        height: 78px;
+
+        padding: 18px;
+
+        border-radius: 13px;
+    }
+
+    .guru-table-card {
+        margin-top: 26px;
+
+        border-radius: 13px;
+    }
+
+    .guru-table {
+        min-width: 720px;
+    }
+
+    .guru-table-header,
+    .guru-table-row {
+        grid-template-columns:
+            8%
+            22%
+            30%
+            25%
+            15%;
+    }
+
+    .guru-table-header > div,
+    .guru-table-row > div {
+        padding: 0 14px;
+    }
+
+    .guru-modal {
+        padding: 16px;
+    }
+
+    .guru-modal-dialog {
+        max-width: 520px;
+
+        padding: 22px 24px;
+    }
+}
+
+/* =========================================================
+   MOBILE
+   <= 768px
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .guru-content {
+        padding: 4px 0 28px;
+    }
+
+    .guru-heading {
+        min-height: auto;
+
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    .guru-heading h1 {
+        margin-top: 4px;
+
+        font-size: 20px;
+
+        line-height: 28px;
+    }
+
+    .guru-heading p {
+        font-size: 14px;
+
+        line-height: 21px;
+    }
+
+    .guru-add-button {
+        width: 100%;
+
+        min-width: 0;
+
+        height: 40px;
+
+        margin-top: 0;
+
+        padding: 0 12px;
+    }
+
+    .guru-search-card {
+        height: 78px;
+
+        margin-top: 12px;
+
+        padding: 18px;
+
+        border-radius: 12px;
+    }
+
+    .guru-search-form {
+        height: 40px;
+
+        border-radius: 10px;
+    }
+
+    .guru-search-form input {
+        padding: 0 12px;
+
+        font-size: 14px;
+    }
+
+    .guru-search-form button {
+        width: 48px;
+
+        flex-basis: 48px;
+    }
+
+    .guru-search-form button svg {
+        width: 20px;
+
+        height: 20px;
+    }
+
+    .guru-table-card {
+        margin-top: 20px;
+
+        border-radius: 12px;
+
+        width: 100%;
+
+        max-width: 100%;
+    }
+
+    .guru-table-scroll {
+        width: max-content;
+
+        min-width: 100%;
+    }
+
+    .guru-table {
+        width: 720px;
+
+        min-width: 720px;
+    }
+
+    .guru-table-header,
+    .guru-table-row {
+        grid-template-columns:
+            8%
+            22%
+            30%
+            25%
+            15%;
+    }
+
+    .guru-table-header {
+        min-height: 58px;
+
+        font-size: 14px;
+    }
+
+    .guru-table-row {
+        min-height: 70px;
+
+        font-size: 14px;
+    }
+
+    .guru-table-header > div,
+    .guru-table-row > div {
+        padding: 0 12px;
+    }
+
+    .guru-actions {
+        gap: 12px;
+    }
+
+    .guru-actions button {
+        width: 30px;
+
+        height: 30px;
+    }
+
+    .guru-actions svg {
+        width: 19px;
+
+        height: 19px;
+    }
+
+    .guru-modal {
+        padding: 12px;
+    }
+
+    .guru-modal-dialog {
+        max-width: 520px;
+
+        max-height: calc(100dvh - 24px);
+
+        padding: 20px;
+
+        border-radius: 14px;
+    }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   <= 480px
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .guru-content {
+        padding: 4px 0 24px;
+    }
+
+    .guru-heading {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 8px;
+    }
+
+    .guru-heading h1 {
+        margin-top: 2px;
+
+        font-size: 20px;
+
+        line-height: 27px;
+    }
+
+    .guru-heading p {
+        font-size: 13px;
+
+        line-height: 20px;
+    }
+
+    .guru-add-button {
+        width: 100%;
+
+        min-width: 0;
+
+        height: 40px;
+
+        margin-top: 3px;
+    }
+
+    .guru-search-card {
+        height: 72px;
+
+        margin-top: 10px;
+
+        padding: 16px;
+
+        border-radius: 11px;
+    }
+
+    .guru-search-form {
+        height: 40px;
+
+        border-radius: 9px;
+    }
+
+    .guru-search-form input {
+        padding: 0 10px;
+
+        font-size: 13px;
+    }
+
+    .guru-search-form button {
+        width: 44px;
+
+        flex-basis: 44px;
+    }
+
+    .guru-search-form button svg {
+        width: 19px;
+
+        height: 19px;
+    }
+
+    .guru-table-card {
+        margin-top: 16px;
+
+        border-radius: 11px;
+    }
+
+    .guru-table {
+        width: 720px;
+
+        min-width: 720px;
+    }
+
+    .guru-table-header {
+        min-height: 56px;
+
+        font-size: 13px;
+    }
+
+    .guru-table-row {
+        min-height: 66px;
+
+        font-size: 13px;
+    }
+
+    .guru-table-header > div,
+    .guru-table-row > div {
+        padding: 0 10px;
+    }
+
+    .guru-actions {
+        gap: 10px;
+    }
+
+    .guru-actions button {
+        width: 28px;
+
+        height: 28px;
+    }
+
+    .guru-actions svg {
+        width: 18px;
+
+        height: 18px;
+    }
+
+    .guru-modal {
+        padding: 8px;
+    }
+
+    .guru-modal-dialog {
+        max-height: calc(100dvh - 16px);
+
+        padding: 18px 14px;
+
+        border-radius: 12px;
+    }
+
+    .guru-modal-header {
+        margin-bottom: 16px;
+
+        padding-bottom: 10px;
+    }
+
+    .guru-modal-header h2 {
+        font-size: 18px;
+
+        line-height: 24px;
+    }
+
+    .guru-form {
+        gap: 14px;
+    }
+
+    .guru-form-actions {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 8px;
+    }
+
+    .guru-form-cancel,
+    .guru-form-submit,
+    .guru-form-delete-confirm {
+        width: 100%;
+    }
+}

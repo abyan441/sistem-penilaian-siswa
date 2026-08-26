@@ -1,0 +1,993 @@
+.mapel-subtitle {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #6c757d;
+    font-weight: 400;
+}
+
+.dashboard .frame-4 > #mata-pelajaran.mapel-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0 20px 40px;
+    box-sizing: border-box;
+    gap: 0;
+    color: #202020;
+}
+
+.mapel-heading {
+    width: 100%;
+    min-height: 80px;
+    padding: 20px 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.mapel-heading-text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.mapel-heading h1 {
+    margin: 0;
+    font-family: var(--heading-h5-medium-font-family);
+    font-size: var(--heading-h5-medium-font-size);
+    line-height: var(--heading-h5-medium-line-height);
+    font-weight: var(--heading-h5-medium-font-weight);
+    letter-spacing: var(--heading-h5-medium-letter-spacing);
+    color: #659287;
+}
+
+.mapel-add-button {
+    width: 245px;
+    min-width: 245px;
+    height: 40px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 9px;
+    background: #88bda4;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-family: var(--label-l16-regular-font-family);
+    font-size: var(--label-l16-regular-font-size);
+    line-height: var(--label-l16-regular-line-height);
+    font-weight: var(--label-l16-regular-font-weight);
+    white-space: nowrap;
+    transition:
+        filter 0.2s ease,
+        transform 0.2s ease;
+}
+
+.mapel-add-button:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+}
+
+.mapel-add-button svg {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+}
+
+.mapel-summary {
+    width: 100%;
+    margin: 0;
+    padding: 12px 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
+    box-sizing: border-box;
+}
+
+.mapel-stat-card {
+    width: 100%;
+    min-width: 0;
+    height: 85px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+.mapel-stat-text {
+    min-width: 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.mapel-stat-text p {
+    margin: 0;
+    color: #202020;
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: var(--paragraph-p16-regular-font-size);
+    line-height: var(--paragraph-p16-regular-line-height);
+    font-weight: var(--paragraph-p16-regular-font-weight);
+}
+
+.mapel-stat-text strong {
+    margin: 0;
+    color: #659287;
+    font-family: var(--heading-h3-bold-font-family);
+    font-size: var(--heading-h3-bold-font-size);
+    line-height: var(--heading-h3-bold-line-height);
+    font-weight: var(--heading-h3-bold-font-weight);
+}
+
+.mapel-stat-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.mapel-stat-icon svg {
+    width: 21px;
+    height: 21px;
+    display: block;
+}
+
+.mapel-icon-book {
+    background: #41431b;
+    color: #ffffff;
+}
+
+.mapel-icon-chart {
+    background: #aeb784;
+    color: #ffffff;
+}
+
+.mapel-icon-lowest {
+    background: #faf7bb;
+    color: #202020;
+}
+
+.mapel-table-card {
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid var(--secondarysc-50);
+    border-radius: 15px;
+    background: var(--primarypr-00);
+    overflow: hidden;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+.mapel-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.mapel-table {
+    width: 100%;
+    min-width: 860px;
+}
+
+.mapel-table-header,
+.mapel-table-row {
+    display: grid;
+    grid-template-columns: 8% 22% 30% 22% 18%;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.mapel-table-header {
+    min-height: 63px;
+    background: var(--primarypr-10);
+    border-bottom: 1px solid var(--secondarysc-50);
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-medium-font-family);
+    font-size: var(--paragraph-p16-medium-font-size);
+    line-height: var(--paragraph-p16-medium-line-height);
+    font-weight: var(--paragraph-p16-medium-font-weight);
+}
+
+.mapel-table-header > div,
+.mapel-table-row > div {
+    min-width: 0;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+.mapel-table-header > div:nth-child(3) {
+    line-height: 24px;
+}
+
+.mapel-table-header > div:nth-child(5),
+.mapel-table-row > .mapel-actions {
+    text-align: center;
+}
+
+.mapel-table-row {
+    min-height: 78px;
+    background: var(--primarypr-00);
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: var(--paragraph-p16-regular-font-size);
+    line-height: 24px;
+    font-weight: var(--paragraph-p16-regular-font-weight);
+    border-bottom: 1px solid var(--secondarysc-00);
+}
+
+.mapel-table-row:last-child {
+    border-bottom: 0;
+}
+
+.cell-nama {
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+.cell-kkm {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+}
+
+.kkm-badge {
+    display: inline-flex;
+    min-width: 38px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    color: #202020;
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: var(--paragraph-p16-regular-font-size);
+    line-height: 24px;
+}
+
+.kkm-low {
+    background: #faf7bb;
+}
+
+.kkm-high {
+    background: #b1d3b9;
+}
+
+.mapel-actions {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    box-sizing: border-box;
+}
+
+.mapel-actions button {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.18s ease;
+}
+
+.mapel-actions button:hover {
+    transform: scale(1.12);
+}
+
+.mapel-actions svg {
+    width: 21px;
+    height: 21px;
+}
+
+.mapel-edit-btn {
+    color: #2196f3;
+}
+
+.mapel-delete-btn {
+    color: #ff383c;
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .dashboard .frame-4 > #mata-pelajaran.mapel-content {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .mapel-summary {
+        gap: 16px;
+    }
+
+    .mapel-stat-card {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .mapel-table-card {
+        margin-top: 20px;
+    }
+
+    .mapel-table {
+        min-width: 860px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard .frame-4 > #mata-pelajaran.mapel-content {
+        padding: 0 16px 30px;
+    }
+
+    .mapel-heading {
+        min-height: 0;
+        padding: 16px 0 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    .mapel-heading h1 {
+        font-size: 22px;
+        line-height: 30px;
+    }
+
+    .mapel-add-button {
+        width: 100%;
+        min-width: 0;
+        flex: 0 0 40px;
+        margin-top: 0;
+        padding: 0 14px;
+        justify-content: center;
+    }
+
+    .mapel-summary {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 22px;
+    }
+
+    .mapel-stat-card {
+        height: 82px;
+    }
+
+    .mapel-table-card {
+        margin-top: 20px;
+        border-radius: 13px;
+    }
+
+    .mapel-table {
+        min-width: 860px;
+    }
+
+    .mapel-table-header {
+        min-height: 76px;
+    }
+
+    .mapel-table-row {
+        min-height: 82px;
+    }
+
+    .mapel-table-header > div,
+    .mapel-table-row > div {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard .frame-4 > #mata-pelajaran.mapel-content {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .mapel-summary {
+        gap: 10px;
+    }
+
+    .mapel-stat-card {
+        padding: 12px 16px;
+    }
+
+    .mapel-table {
+        min-width: 820px;
+    }
+}
+
+.mapel-table-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.mapel-table-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.mapel-table-scroll::-webkit-scrollbar-thumb {
+    background: #b5b5b5;
+    border-radius: 10px;
+}
+
+.mapel-table-scroll::-webkit-scrollbar-thumb:hover {
+    background: #8f8f8f;
+}
+
+.dashboard .frame-6 .fluent {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    flex: 0 0 40px;
+}
+
+.dashboard .frame-6 .vector-8 {
+    position: absolute;
+    width: 100%;
+    height: 84.38%;
+    top: 15.62%;
+    left: 0;
+    object-fit: contain;
+}
+
+.dashboard .mapel-heading {
+    min-height: 0;
+    padding: 8px 0;
+    gap: 20px;
+}
+
+.dashboard .mapel-heading-text {
+    gap: 0;
+}
+
+.dashboard .mapel-heading h1 {
+    margin: -1px 0 0;
+    font-family: var(--heading-h5-medium-font-family);
+    font-size: var(--heading-h5-medium-font-size);
+    line-height: var(--heading-h5-medium-line-height);
+    font-weight: var(--heading-h5-medium-font-weight);
+    letter-spacing: var(--heading-h5-medium-letter-spacing);
+    font-style: var(--heading-h5-medium-font-style);
+    color: var(--primarypr-40);
+}
+
+.dashboard .mapel-subtitle {
+    margin: 0;
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: var(--paragraph-p16-regular-font-size);
+    line-height: var(--paragraph-p16-regular-line-height);
+    font-weight: var(--paragraph-p16-regular-font-weight);
+    letter-spacing: var(--paragraph-p16-regular-letter-spacing);
+    color: var(--primarypr-50);
+}
+
+@media (max-width: 768px) {
+    .dashboard .frame-6 .fluent {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        flex-basis: 30px;
+    }
+
+    .dashboard .mapel-heading {
+        padding: 8px 0 0;
+        gap: 14px;
+    }
+
+    .dashboard .mapel-heading h1 {
+        font-size: var(--heading-h5-medium-font-size);
+        line-height: var(--heading-h5-medium-line-height);
+    }
+}
+
+.mapel-summary {
+    align-items: stretch;
+}
+
+.mapel-stat-card {
+    height: auto;
+    min-height: 85px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.mapel-stat-text {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+.mapel-stat-text p {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+.mapel-stat-icon {
+    flex: 0 0 40px;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    min-height: 40px;
+    max-width: 40px;
+}
+
+.mapel-stat-image {
+    width: 21px;
+    height: 21px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .mapel-stat-card {
+        height: auto;
+        min-height: 85px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mapel-stat-card {
+        height: auto;
+        min-height: 82px;
+        align-items: center;
+    }
+
+    .mapel-stat-text {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .mapel-stat-card {
+        min-height: 82px;
+        padding: 12px 16px;
+    }
+
+    .mapel-stat-text {
+        gap: 5px;
+    }
+}
+
+body.mapel-modal-open {
+    overflow: hidden;
+}
+
+.mapel-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.mapel-modal[hidden] {
+    display: none;
+}
+
+.mapel-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+}
+
+.mapel-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 500px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+    box-sizing: border-box;
+    animation: mapelModalShow 0.2s ease-out;
+}
+
+@keyframes mapelModalShow {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.mapel-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid #e9e9e9;
+    box-sizing: border-box;
+}
+
+.mapel-modal-heading {
+    min-width: 0;
+}
+
+.mapel-modal-heading h2 {
+    margin: 0;
+    color: #202020;
+    font-family: var(--heading-h5-medium-font-family);
+    font-size: 22px;
+    line-height: 30px;
+    font-weight: 600;
+}
+
+.mapel-modal-heading p {
+    margin: 4px 0 0;
+    color: #777;
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 14px;
+    line-height: 21px;
+}
+
+.mapel-modal-close {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.mapel-modal-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+.mapel-modal-close:hover {
+    background: #f1f1f1;
+    color: #202020;
+}
+
+.mapel-form {
+    padding: 22px 24px 24px;
+    box-sizing: border-box;
+}
+
+.mapel-form-group {
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.mapel-form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #202020;
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+}
+
+.mapel-form-group label span {
+    color: #e53935;
+}
+
+.mapel-form-group input {
+    width: 100%;
+    height: 44px;
+    padding: 0 13px;
+    border: 1px solid #d5d5d5;
+    border-radius: 8px;
+    outline: 0;
+    background: #fff;
+    color: #202020;
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 14px;
+    line-height: 20px;
+    box-sizing: border-box;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.mapel-form-group input::placeholder {
+    color: #aaa;
+}
+
+.mapel-form-group input:focus {
+    border-color: #659287;
+    box-shadow: 0 0 0 3px rgba(101, 146, 135, 0.14);
+}
+
+.mapel-form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #888;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.mapel-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 26px;
+}
+
+.mapel-form-cancel,
+.mapel-form-submit {
+    min-height: 42px;
+    padding: 0 18px;
+    border-radius: 8px;
+    font-family: var(--paragraph-p16-medium-font-family);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.1s ease;
+}
+
+.mapel-form-cancel {
+    border: 1px solid #d5d5d5;
+    background: #fff;
+    color: #555;
+}
+
+.mapel-form-cancel:hover {
+    background: #f5f5f5;
+}
+
+.mapel-form-submit {
+    border: 1px solid #659287;
+    background: #659287;
+    color: #fff;
+}
+
+.mapel-form-submit:hover {
+    background: #577f75;
+    border-color: #577f75;
+}
+
+.mapel-form-cancel:active,
+.mapel-form-submit:active {
+    transform: translateY(1px);
+}
+
+@media (max-width: 768px) {
+    .mapel-stat-card {
+        height: auto;
+        min-height: 82px;
+    }
+
+    .mapel-modal {
+        padding: 16px;
+    }
+
+    .mapel-modal-dialog {
+        max-width: none;
+        max-height: calc(100vh - 32px);
+        border-radius: 14px;
+    }
+
+    .mapel-modal-header {
+        padding: 18px;
+    }
+
+    .mapel-modal-heading h2 {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .mapel-form {
+        padding: 18px;
+    }
+
+    .mapel-form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .mapel-form-cancel,
+    .mapel-form-submit {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .mapel-stat-card {
+        min-height: 82px;
+        padding: 12px 16px;
+    }
+
+    .mapel-modal {
+        padding: 10px;
+    }
+
+    .mapel-modal-dialog {
+        max-height: calc(100vh - 20px);
+        border-radius: 12px;
+    }
+
+    .mapel-modal-header,
+    .mapel-form {
+        padding: 16px;
+    }
+}
+
+.mapel-delete-modal {
+    align-items: center;
+}
+
+.mapel-delete-dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 430px;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+    box-sizing: border-box;
+    text-align: center;
+    animation: mapelModalShow 0.2s ease-out;
+}
+
+.mapel-delete-icon {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff3e0;
+    color: #e68a00;
+}
+
+.mapel-delete-icon svg {
+    width: 27px;
+    height: 27px;
+}
+
+.mapel-delete-dialog h2 {
+    margin: 0;
+    color: #202020;
+    font-family: var(--heading-h5-medium-font-family);
+    font-size: 21px;
+    line-height: 29px;
+    font-weight: 600;
+}
+
+.mapel-delete-dialog p {
+    margin: 12px 0 7px;
+    color: #555555;
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.mapel-delete-dialog p strong {
+    color: #202020;
+}
+
+.mapel-delete-warning {
+    display: block;
+    color: #999999;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.mapel-delete-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.mapel-delete-actions .mapel-form-cancel,
+.mapel-delete-confirm {
+    min-width: 105px;
+    min-height: 42px;
+    padding: 0 18px;
+    border-radius: 8px;
+    font-family: var(--paragraph-p16-medium-font-family);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.mapel-delete-confirm {
+    border: 1px solid #d9534f;
+    background: #d9534f;
+    color: #ffffff;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.mapel-delete-confirm:hover {
+    background: #c74440;
+    border-color: #c74440;
+}
+
+.mapel-delete-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #777777;
+    cursor: pointer;
+}
+
+.mapel-delete-close:hover {
+    background: #f1f1f1;
+    color: #202020;
+}
+
+.mapel-delete-close svg {
+    width: 19px;
+    height: 19px;
+}
+
+@media (max-width: 480px) {
+    .mapel-delete-dialog {
+        max-width: none;
+        padding: 26px 18px 20px;
+    }
+
+    .mapel-delete-actions {
+        flex-direction: column-reverse;
+    }
+
+    .mapel-delete-actions .mapel-form-cancel,
+    .mapel-delete-confirm {
+        width: 100%;
+    }
+}

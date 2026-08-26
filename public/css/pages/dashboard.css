@@ -1,0 +1,509 @@
+/* =========================================================
+   DASHBOARD PAGE
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   JUDUL DASHBOARD
+   --------------------------------------------------------- */
+
+.dashboard .frame-12 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    align-self: stretch;
+    width: 100%;
+}
+
+.dashboard .frame-12 .frame-7 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.dashboard .frame-12 .text-wrapper-5 {
+    position: relative;
+    align-self: stretch;
+    margin-top: -1px;
+    font-family: var(--heading-h5-medium-font-family);
+    font-weight: var(--heading-h5-medium-font-weight);
+    font-size: var(--heading-h5-medium-font-size);
+    line-height: var(--heading-h5-medium-line-height);
+    letter-spacing: var(--heading-h5-medium-letter-spacing);
+    font-style: var(--heading-h5-medium-font-style);
+    color: var(--primarypr-40);
+}
+
+.dashboard .p {
+    position: relative;
+    align-self: stretch;
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-weight: var(--paragraph-p16-regular-font-weight);
+    font-size: var(--paragraph-p16-regular-font-size);
+    line-height: var(--paragraph-p16-regular-line-height);
+    letter-spacing: var(--paragraph-p16-regular-letter-spacing);
+    font-style: var(--paragraph-p16-regular-font-style);
+    color: var(--primarypr-50);
+}
+
+/* ---------------------------------------------------------
+   CARD STATISTIK
+   --------------------------------------------------------- */
+
+.dashboard .frame-13 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    align-self: stretch;
+    width: 100%;
+}
+
+.dashboard .frame-14 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 20px;
+    background-color: var(--primarypr-00);
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.dashboard .fluent-mdl,
+.dashboard .radix-icons-people,
+.dashboard .group-wrapper {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.07);
+    aspect-ratio: 1;
+}
+
+.dashboard .fluent-mdl {
+    background-color: var(--secondarysc-40);
+}
+
+.dashboard .radix-icons-people {
+    background-color: var(--secondarysc-30);
+}
+
+.dashboard .group-wrapper {
+    background-color: var(--secondarysc-20);
+}
+
+.dashboard .vector-10,
+.dashboard .vector-11,
+.dashboard .vector-12 {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+.dashboard .frame-15 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    align-self: stretch;
+    width: 100%;
+}
+
+.dashboard .text-wrapper-10 {
+    position: relative;
+    align-self: stretch;
+    font-family: var(--paragraph-p16-medium-font-family);
+    font-weight: var(--paragraph-p16-medium-font-weight);
+    font-size: var(--paragraph-p16-medium-font-size);
+    line-height: var(--paragraph-p16-medium-line-height);
+    letter-spacing: var(--paragraph-p16-medium-letter-spacing);
+    font-style: var(--paragraph-p16-medium-font-style);
+    color: var(--primarypr-50);
+    overflow-wrap: anywhere;
+}
+
+.dashboard .text-wrapper-11 {
+    position: relative;
+    align-self: stretch;
+    font-family: var(--heading-h3-bold-font-family);
+    font-weight: var(--heading-h3-bold-font-weight);
+    font-size: var(--heading-h3-bold-font-size);
+    line-height: var(--heading-h3-bold-line-height);
+    letter-spacing: var(--heading-h3-bold-letter-spacing);
+    font-style: var(--heading-h3-bold-font-style);
+    color: var(--primarypr-40);
+    overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------
+   GRAFIK
+   --------------------------------------------------------- */
+
+.dashboard .frame-16 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    align-self: stretch;
+    width: 100%;
+}
+
+.dashboard .frame-17 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    align-self: stretch;
+    width: 100%;
+    min-width: 0;
+    background-color: var(--primarypr-00);
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    overflow-x: auto;
+}
+
+.dashboard .text-wrapper-12 {
+    position: relative;
+    align-self: stretch;
+    font-family: var(--heading-h5-medium-font-family);
+    font-weight: var(--heading-h5-medium-font-weight);
+    font-size: var(--heading-h5-medium-font-size);
+    line-height: var(--heading-h5-medium-line-height);
+    letter-spacing: var(--heading-h5-medium-letter-spacing);
+    font-style: var(--heading-h5-medium-font-style);
+    color: var(--primarypr-50);
+}
+
+.student-chart-card {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.student-chart {
+    width: 100%;
+    min-width: 0;
+    margin-top: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.student-chart-svg {
+    display: block;
+    width: 100%;
+    min-width: 820px;
+    height: 330px;
+    overflow: visible;
+}
+
+.student-chart-svg .chart-grid line {
+    stroke: #d5d5d5;
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+}
+
+.student-chart-svg .chart-area {
+    fill: var(--primarypr-40);
+    fill-opacity: 0.72;
+    stroke: none;
+}
+
+.student-chart-svg .chart-line {
+    fill: none;
+    stroke: var(--primarypr-40);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.student-chart-svg .chart-points circle {
+    fill: var(--primarypr-40);
+    stroke: var(--primarypr-40);
+    stroke-width: 1;
+}
+
+.student-chart-svg .chart-y-labels text,
+.student-chart-svg .chart-x-labels text {
+    fill: #222;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.student-chart-svg .chart-x-labels text {
+    text-anchor: middle;
+}
+
+/* ---------------------------------------------------------
+   TABEL AKTIVITAS
+   --------------------------------------------------------- */
+
+.dashboard .frame-18 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    align-self: stretch;
+    width: 100%;
+}
+
+.dashboard .frame-19 {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    width: 100%;
+    min-width: 0;
+    background-color: var(--primarypr-00);
+    border: 1px solid var(--secondarysc-50);
+    border-radius: 12px;
+    overflow-x: auto;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+.dashboard .frame-20 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(140px, 1fr));
+    gap: 16px;
+    padding: 16px 20px;
+    background-color: var(--primarypr-10);
+    border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid var(--secondarysc-50);
+    min-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard .text-wrapper-20 {
+    font-family: var(--label-l16-medium-font-family);
+    font-weight: var(--label-l16-medium-font-weight);
+    font-size: var(--label-l16-medium-font-size);
+    line-height: var(--label-l16-medium-line-height);
+    color: var(--primarypr-50);
+}
+
+.dashboard .frame-21 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(140px, 1fr));
+    column-gap: 16px;
+    row-gap: 50px;
+    padding: 20px 20px 24px;
+    background-color: var(--primarypr-00);
+    border-radius: 0 0 12px 12px;
+    min-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard .frame-21 [class^="text-wrapper-"] {
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-weight: var(--paragraph-p16-regular-font-weight);
+    font-size: var(--paragraph-p16-regular-font-size);
+    line-height: var(--paragraph-p16-regular-line-height);
+    letter-spacing: var(--paragraph-p16-regular-letter-spacing);
+    font-style: var(--paragraph-p16-regular-font-style);
+    color: var(--primarypr-50);
+    word-break: break-word;
+}
+
+/* ---------------------------------------------------------
+   GENERAL INTERACTION
+   --------------------------------------------------------- */
+
+.dashboard .frame-13,
+.dashboard .frame-14,
+.dashboard .frame-17,
+.dashboard .frame-19 {
+    transition:
+        padding 0.25s ease,
+        gap 0.25s ease,
+        border-radius 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+/* ---------------------------------------------------------
+   TABLET
+   769px - 1100px
+   --------------------------------------------------------- */
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .dashboard .frame-13 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        width: 100%;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+
+    .dashboard .frame-13 .frame-14 {
+        width: 100%;
+        min-width: 0;
+        min-height: 145px;
+        padding: 16px;
+    }
+
+    .dashboard .frame-15 {
+        min-width: 0;
+    }
+
+    .dashboard .text-wrapper-10,
+    .dashboard .text-wrapper-11 {
+        overflow-wrap: anywhere;
+    }
+
+    .dashboard .frame-17,
+    .dashboard .frame-19 {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .student-chart-svg {
+        min-width: 760px;
+        height: 310px;
+    }
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+   <= 768px
+   --------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    .dashboard .frame-12 {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    .dashboard .frame-12 .text-wrapper-5 {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .dashboard .frame-12 .p {
+        font-size: 14px;
+        line-height: 21px;
+    }
+
+    .dashboard .frame-13 {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        min-width: 0;
+        gap: 10px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    .dashboard .frame-13 .frame-14 {
+        width: 100%;
+        min-width: 0;
+        min-height: 132px;
+        padding: 14px;
+        gap: 9px;
+    }
+
+    .dashboard .frame-13 .frame-15 {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .dashboard .frame-13 .text-wrapper-10 {
+        font-size: 15px;
+        line-height: 22px;
+    }
+
+    .dashboard .frame-13 .text-wrapper-11 {
+        font-size: 28px;
+        line-height: 36px;
+    }
+
+    .dashboard .frame-17 {
+        width: 100%;
+        min-width: 0;
+        padding: 14px;
+        overflow-x: auto;
+    }
+
+    .dashboard .frame-19 {
+        width: 100%;
+        min-width: 0;
+        overflow-x: auto;
+    }
+
+    .dashboard .frame-20,
+    .dashboard .frame-21 {
+        min-width: 650px;
+    }
+
+    .student-chart {
+        margin-top: 6px;
+    }
+
+    .student-chart-svg {
+        min-width: 760px;
+        height: 300px;
+    }
+
+    .student-chart-svg .chart-y-labels text,
+    .student-chart-svg .chart-x-labels text {
+        font-size: 11px;
+    }
+
+    .dashboard .frame-21 {
+        column-gap: 16px;
+        row-gap: 38px;
+        padding: 18px 16px 20px;
+    }
+}
+
+/* ---------------------------------------------------------
+   EXTRA SMALL PHONE
+   <= 480px
+   --------------------------------------------------------- */
+
+@media (max-width: 480px) {
+    .dashboard .frame-12 {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    .dashboard .frame-13 .frame-14 {
+        min-height: 128px;
+        padding: 13px;
+    }
+
+    .dashboard .frame-13 .text-wrapper-10 {
+        font-size: 14px;
+        line-height: 21px;
+    }
+
+    .dashboard .frame-13 .text-wrapper-11 {
+        font-size: 26px;
+        line-height: 34px;
+    }
+
+    .dashboard .frame-21 {
+        row-gap: 32px;
+        padding: 16px 14px 18px;
+    }
+
+    .student-chart-svg {
+        min-width: 720px;
+        height: 290px;
+    }
+}

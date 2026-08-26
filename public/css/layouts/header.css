@@ -1,0 +1,685 @@
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   HEADER UTAMA
+   --------------------------------------------------------- */
+
+.dashboard .frame-5 {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: var(--primarypr-10);
+    box-sizing: border-box;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------------------------------------------------------
+   IDENTITAS APLIKASI
+   --------------------------------------------------------- */
+
+.dashboard .frame-6 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+
+.dashboard .fluent {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1;
+    flex-shrink: 0;
+}
+
+.dashboard .vector-8 {
+    position: absolute;
+    width: 100%;
+    height: 84.38%;
+    top: 15.62%;
+    left: 0;
+}
+
+.dashboard .frame-6 .frame-7 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
+    min-width: 0;
+}
+
+.dashboard .frame-6 .text-wrapper-5 {
+    position: relative;
+    align-self: stretch;
+    margin-top: -1px;
+    font-family: var(--heading-h5-medium-font-family);
+    font-weight: var(--heading-h5-medium-font-weight);
+    font-size: var(--heading-h5-medium-font-size);
+    line-height: var(--heading-h5-medium-line-height);
+    letter-spacing: var(--heading-h5-medium-letter-spacing);
+    font-style: var(--heading-h5-medium-font-style);
+    color: var(--primarypr-40);
+}
+
+.dashboard .frame-6 .text-wrapper-6 {
+    position: relative;
+    align-self: stretch;
+    font-family: var(--paragraph-p12-regular-font-family);
+    font-weight: var(--paragraph-p12-regular-font-weight);
+    font-size: var(--paragraph-p12-regular-font-size);
+    line-height: var(--paragraph-p12-regular-line-height);
+    letter-spacing: var(--paragraph-p12-regular-letter-spacing);
+    font-style: var(--paragraph-p12-regular-font-style);
+    color: var(--primarypr-50);
+}
+
+/* ---------------------------------------------------------
+   INFORMASI ADMIN
+   --------------------------------------------------------- */
+
+.dashboard .frame-8 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.dashboard .frame-9 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.dashboard .div-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+}
+
+.dashboard .text-wrapper-7 {
+    position: relative;
+    margin-top: -1px;
+    font-family: var(--paragraph-p16-medium-font-family);
+    font-weight: var(--paragraph-p16-medium-font-weight);
+    font-size: var(--paragraph-p16-medium-font-size);
+    line-height: var(--paragraph-p16-medium-line-height);
+    letter-spacing: var(--paragraph-p16-medium-letter-spacing);
+    font-style: var(--paragraph-p16-medium-font-style);
+    color: var(--primarypr-50);
+    text-align: right;
+}
+
+.dashboard .text-wrapper-8 {
+    position: relative;
+    align-self: stretch;
+    font-family: var(--paragraph-p12-regular-font-family);
+    font-weight: var(--paragraph-p12-regular-font-weight);
+    font-size: var(--paragraph-p12-regular-font-size);
+    line-height: var(--paragraph-p12-regular-line-height);
+    letter-spacing: var(--paragraph-p12-regular-letter-spacing);
+    font-style: var(--paragraph-p12-regular-font-style);
+    color: var(--primarypr-50);
+    text-align: right;
+}
+
+/* ---------------------------------------------------------
+   TOMBOL PROFILE
+   --------------------------------------------------------- */
+
+.dashboard .frame-10 {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    z-index: 51;
+}
+
+.dashboard .frame-10[aria-expanded="true"] .vector-9 {
+    transform: rotate(180deg);
+    transform-origin: center;
+}
+
+.dashboard .frame-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.dashboard .frame-11 {
+    display: flex;
+    flex-direction: column;
+    width: 60px;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px 19px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.dashboard .ellipse-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.dashboard .ellipse {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background-color: var(--primarypr-40);
+    border-radius: 20px;
+    box-shadow: inset 10px -10px 20px rgba(182, 206, 180, 0.5);
+}
+
+.dashboard .text-wrapper-9 {
+    position: relative;
+    align-self: stretch;
+    margin-top: -1px;
+    font-family: var(--paragraph-p16-medium-font-family);
+    font-weight: var(--paragraph-p16-medium-font-weight);
+    font-size: var(--paragraph-p16-medium-font-size);
+    line-height: var(--paragraph-p16-medium-line-height);
+    letter-spacing: var(--paragraph-p16-medium-letter-spacing);
+    font-style: var(--paragraph-p16-medium-font-style);
+    color: var(--primarypr-00);
+    text-align: center;
+    z-index: 1;
+}
+
+.dashboard .mingcute-down-fill {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    aspect-ratio: 1;
+}
+
+.dashboard .vector-9 {
+    position: absolute;
+    width: 80.24%;
+    height: 67.74%;
+    top: 32.26%;
+    left: 19.76%;
+    transition: transform 0.2s ease;
+}
+
+/* ---------------------------------------------------------
+   DROPDOWN AKUN
+   --------------------------------------------------------- */
+
+.account-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 205px;
+    min-width: 205px;
+    padding: 7px;
+    background: var(--primarypr-00, #ffffff);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    box-sizing: border-box;
+    animation: accountDropdownIn 0.18s ease-out;
+}
+
+@keyframes accountDropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.account-menu-item,
+.account-submenu-item {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    font-family: var(
+        --paragraph-p14-regular-font-family,
+        var(--paragraph-p16-regular-font-family)
+    );
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--primarypr-50);
+    text-align: left;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.account-menu-item {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 7px;
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease;
+}
+
+.account-menu-item:hover,
+.account-submenu-item:hover {
+    background-color: rgba(104, 151, 139, 0.1);
+}
+
+.account-menu-chevron {
+    font-size: 20px;
+    line-height: 1;
+    transform: rotate(0deg);
+    transition: transform 0.2s ease;
+}
+
+.account-settings-toggle.is-open .account-menu-chevron {
+    transform: rotate(90deg);
+}
+
+.account-settings-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 2px 0 4px;
+    padding: 3px 0 3px 10px;
+    border-left: 2px solid var(--primarypr-40);
+}
+
+.account-submenu-item {
+    min-height: 34px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 400;
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease;
+}
+
+.account-menu-divider {
+    height: 1px;
+    margin: 5px 4px;
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.account-logout {
+    color: #dc3545;
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        transform 0.2s ease;
+}
+
+.account-logout:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.account-menu-item:focus-visible,
+.account-submenu-item:focus-visible {
+    outline: 2px solid var(--primarypr-40);
+    outline-offset: -2px;
+}
+
+.account-dropdown[hidden],
+.account-settings-submenu[hidden] {
+    display: none;
+}
+
+/* ---------------------------------------------------------
+   TABLET
+   --------------------------------------------------------- */
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .dashboard .frame-5 {
+        padding: 12px 18px;
+        gap: 12px;
+    }
+
+    .dashboard .frame-6 {
+        min-width: 0;
+    }
+
+    .dashboard .frame-6 .text-wrapper-5,
+    .dashboard .frame-6 .text-wrapper-6 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .dashboard .frame-8 {
+        flex: 0 0 auto;
+    }
+
+    .account-dropdown {
+        width: 200px;
+        min-width: 200px;
+        right: 0;
+    }
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    .dashboard .frame-5 {
+        width: 100%;
+        min-width: 0;
+        min-height: 58px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 8px 12px;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background-color: var(--primarypr-10);
+        box-sizing: border-box;
+    }
+
+    .dashboard .frame-6 {
+        min-width: 0;
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .dashboard .fluent {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        flex: 0 0 30px;
+    }
+
+    .dashboard .frame-6 .frame-7 {
+        min-width: 0;
+        max-width: 190px;
+    }
+
+    .dashboard .frame-6 .text-wrapper-5 {
+        width: 100%;
+        font-size: 15px;
+        line-height: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .dashboard .frame-6 .text-wrapper-6 {
+        width: 100%;
+        font-size: 9px;
+        line-height: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .dashboard .frame-8 {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 6px;
+        min-width: 0;
+    }
+
+    .dashboard .frame-9 {
+        min-width: 0;
+        max-width: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .dashboard .text-wrapper-7,
+    .dashboard .text-wrapper-8 {
+        display: block;
+        width: 100%;
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    .dashboard .text-wrapper-7 {
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    .dashboard .text-wrapper-8 {
+        font-size: 8px;
+        line-height: 12px;
+    }
+
+    .dashboard .frame-10 {
+        flex: 0 0 38px;
+        width: 38px;
+        min-width: 38px;
+        max-width: 38px;
+        height: 38px;
+        min-height: 38px;
+        max-height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .dashboard .frame-wrapper {
+        flex: 0 0 38px;
+        width: 38px;
+        min-width: 38px;
+        max-width: 38px;
+        height: 38px;
+        min-height: 38px;
+        max-height: 38px;
+        position: relative;
+        display: block;
+        box-sizing: border-box;
+    }
+
+    .dashboard .frame-11 {
+        position: relative;
+        flex: 0 0 38px;
+        width: 38px;
+        min-width: 38px;
+        max-width: 38px;
+        height: 38px;
+        min-height: 38px;
+        max-height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        border-radius: 50%;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .dashboard .ellipse-wrapper {
+        position: absolute;
+        inset: 0;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .dashboard .ellipse {
+        position: absolute;
+        inset: 0;
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        min-height: 38px;
+        max-width: 38px;
+        max-height: 38px;
+        padding: 0;
+        margin: 0;
+        border-radius: 50%;
+        aspect-ratio: 1 / 1;
+        box-sizing: border-box;
+    }
+
+    .dashboard .text-wrapper-9 {
+        position: relative;
+        z-index: 2;
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        font-size: 12px;
+        line-height: 38px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .dashboard .frame-10 .mingcute-down-fill {
+        display: none;
+    }
+
+    .account-dropdown {
+        top: calc(100% + 5px);
+        right: 0;
+        width: min(205px, calc(100vw - 24px));
+        min-width: 0;
+        padding: 6px;
+        border-radius: 10px;
+    }
+
+    .account-menu-item {
+        min-height: 38px;
+        padding: 8px 9px;
+    }
+
+    .account-submenu-item {
+        min-height: 33px;
+    }
+
+    .dashboard .frame-10[aria-expanded="true"] .vector-9 {
+        transform: none;
+    }
+}
+
+/* ---------------------------------------------------------
+   EXTRA SMALL PHONE
+   --------------------------------------------------------- */
+
+@media (max-width: 480px) {
+    .dashboard .frame-5 {
+        min-height: 54px;
+        padding: 6px 10px;
+    }
+
+    .dashboard .frame-6 .frame-7 {
+        max-width: 150px;
+    }
+
+    .dashboard .frame-6 .text-wrapper-5 {
+        font-size: 14px;
+        line-height: 19px;
+    }
+
+    .dashboard .frame-6 .text-wrapper-6 {
+        font-size: 8px;
+        line-height: 12px;
+    }
+
+    .dashboard .frame-9 {
+        max-width: 65px;
+    }
+
+    .dashboard .text-wrapper-7,
+    .dashboard .text-wrapper-8 {
+        max-width: 65px;
+    }
+
+    .dashboard .frame-10,
+    .dashboard .frame-wrapper,
+    .dashboard .frame-11 {
+        flex-basis: 34px;
+        width: 34px;
+        min-width: 34px;
+        max-width: 34px;
+        height: 34px;
+        min-height: 34px;
+        max-height: 34px;
+    }
+
+    .dashboard .ellipse-wrapper,
+    .dashboard .ellipse {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        min-height: 34px;
+        max-width: 34px;
+        max-height: 34px;
+    }
+
+    .dashboard .text-wrapper-9 {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+        line-height: 34px;
+        font-size: 11px;
+    }
+
+    .account-dropdown {
+        top: calc(100% + 4px);
+        width: 190px;
+    }
+
+    .account-menu-item {
+        font-size: 12px;
+    }
+
+    .account-submenu-item {
+        font-size: 11px;
+    }
+}

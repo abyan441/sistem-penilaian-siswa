@@ -1,0 +1,554 @@
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   SIDEBAR DESKTOP
+   --------------------------------------------------------- */
+
+.dashboard .frame {
+    display: flex;
+    width: 280px;
+    min-width: 280px;
+    height: 100vh;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 0;
+    background-color: var(--primarypr-40);
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   BRAND
+   --------------------------------------------------------- */
+
+.dashboard .div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 24px;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+}
+
+.dashboard .hugeicons-school {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 44px;
+    padding: 8px;
+    background-color: var(--primarypr-00);
+    border-radius: 12px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+.dashboard .school-icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.dashboard .frame-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+    flex: 1;
+    flex-grow: 1;
+}
+
+.dashboard .frame-2 .text-wrapper {
+    position: relative;
+    align-self: stretch;
+    margin-top: -1px;
+    font-family: var(--heading-h5-medium-font-family);
+    font-weight: var(--heading-h5-medium-font-weight);
+    font-size: var(--heading-h5-medium-font-size);
+    line-height: var(--heading-h5-medium-line-height);
+    letter-spacing: var(--heading-h5-medium-letter-spacing);
+    font-style: var(--heading-h5-medium-font-style);
+    color: var(--primarypr-00);
+}
+
+.dashboard .frame-2 .text-wrapper-2 {
+    position: relative;
+    align-self: stretch;
+    font-family: var(--paragraph-p12-regular-font-family);
+    font-weight: var(--paragraph-p12-regular-font-weight);
+    font-size: var(--paragraph-p12-regular-font-size);
+    line-height: var(--paragraph-p12-regular-line-height);
+    letter-spacing: var(--paragraph-p12-regular-letter-spacing);
+    font-style: var(--paragraph-p12-regular-font-style);
+    color: var(--primarypr-00);
+}
+
+/* ---------------------------------------------------------
+   GARIS SIDEBAR
+   --------------------------------------------------------- */
+
+.dashboard .frame > .line {
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    height: 1px;
+    flex: 0 0 1px;
+    background-color: rgba(255, 255, 255, 0.55);
+    border: 0;
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   NAVIGASI
+   --------------------------------------------------------- */
+
+.dashboard .frame-3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 0 24px 24px;
+    position: relative;
+    flex: 1;
+    align-self: stretch;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard .button-dashboard,
+.dashboard .div-2 {
+    align-items: center;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 9px;
+    color: var(--primarypr-00);
+    text-decoration: none;
+    transition:
+        background-color 0.25s ease,
+        filter 0.25s ease;
+}
+
+.dashboard .button-dashboard {
+    background-color: var(--primarypr-30);
+}
+
+.dashboard .div-2 {
+    background-color: var(--primarypr-40);
+}
+
+.dashboard .img-2 {
+    position: relative;
+    width: 17px;
+    height: 17px;
+    aspect-ratio: 1;
+    object-fit: contain;
+    transition: filter 0.25s ease;
+}
+
+.dashboard .text-wrapper-3,
+.dashboard .text-wrapper-4 {
+    flex: 1;
+    font-family: var(--label-l16-regular-font-family);
+    font-weight: var(--label-l16-regular-font-weight);
+    font-size: var(--label-l16-regular-font-size);
+    line-height: var(--label-l16-regular-line-height);
+    letter-spacing: var(--label-l16-regular-letter-spacing);
+    font-style: var(--label-l16-regular-font-style);
+    color: var(--primarypr-00);
+    position: relative;
+    transition: color 0.25s ease;
+}
+
+.dashboard .text-wrapper-4 {
+    margin-top: -1px;
+}
+
+/* ---------------------------------------------------------
+   LOGOUT SIDEBAR
+   --------------------------------------------------------- */
+
+.dashboard .button-logout {
+    all: unset;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: auto;
+    background-color: var(--primarypr-40);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 9px;
+    cursor: pointer;
+    color: var(--primarypr-00);
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        transform 0.2s ease;
+}
+
+.dashboard .button-logout:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.dashboard .button-logout:hover .img-2 {
+    filter: brightness(0) invert(1);
+}
+
+/* ---------------------------------------------------------
+   INTERAKSI
+   --------------------------------------------------------- */
+
+.dashboard .button-dashboard:focus-visible,
+.dashboard .div-2:focus-visible,
+.dashboard .button-logout:focus-visible {
+    outline: 2px solid var(--primarypr-00);
+    outline-offset: 2px;
+}
+
+.dashboard .button-dashboard:hover,
+.dashboard .div-2:hover {
+    filter: brightness(0.95);
+}
+
+/* ---------------------------------------------------------
+   MOBILE MENU BUTTON
+   --------------------------------------------------------- */
+
+.mobile-menu-toggle {
+    display: none;
+}
+
+/* ---------------------------------------------------------
+   TABLET
+   --------------------------------------------------------- */
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .dashboard .frame {
+        width: 280px;
+        min-width: 280px;
+        flex: 0 0 280px;
+        height: 100vh;
+    }
+}
+
+/* ---------------------------------------------------------
+   MOBILE <= 768px
+   --------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    .dashboard .frame {
+        position: relative;
+        z-index: 100;
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: 70px;
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 7px 10px;
+        background-color: var(--primarypr-40);
+        box-sizing: border-box;
+        overflow: visible;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition:
+            box-shadow 0.25s ease,
+            padding 0.25s ease;
+    }
+
+    .dashboard .frame > .div {
+        width: 100%;
+        height: 54px;
+        min-height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        padding: 0 52px 0 2px;
+        box-sizing: border-box;
+    }
+
+    .dashboard .hugeicons-school {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        flex: 0 0 36px;
+        padding: 6px;
+        border-radius: 9px;
+    }
+
+    .dashboard .frame-2 {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    .dashboard .frame-2 .text-wrapper,
+    .dashboard .frame-2 .text-wrapper-2 {
+        display: block;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .dashboard .frame-2 .text-wrapper {
+        font-size: 16px;
+        line-height: 21px;
+    }
+
+    .dashboard .frame-2 .text-wrapper-2 {
+        font-size: 10px;
+        line-height: 14px;
+    }
+
+    .dashboard .frame > .line {
+        display: none;
+    }
+
+    .dashboard .mobile-menu-toggle {
+        position: absolute;
+        top: 15px;
+        right: 10px;
+        z-index: 120;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        padding: 0;
+        border: 0;
+        border-radius: 9px;
+        background: var(--primarypr-30);
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    .dashboard .mobile-menu-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        border-radius: 2px;
+        background-color: var(--primarypr-00);
+        transition:
+            transform 0.2s ease,
+            opacity 0.2s ease;
+    }
+
+    .dashboard .mobile-menu-toggle[aria-expanded="true"] span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .dashboard .mobile-menu-toggle[aria-expanded="true"] span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .dashboard .mobile-menu-toggle[aria-expanded="true"] span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .dashboard .frame-3 {
+        width: 100%;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        padding: 0;
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        transform: translateY(-8px);
+        transition:
+            max-height 0.28s ease,
+            opacity 0.2s ease,
+            transform 0.28s ease,
+            padding 0.28s ease,
+            visibility 0.28s ease;
+    }
+
+    .dashboard .frame.mobile-menu-open .frame-3 {
+        max-height: 500px;
+        opacity: 1;
+        visibility: visible;
+        overflow: visible;
+        transform: translateY(0);
+        padding-top: 7px;
+        padding-bottom: 3px;
+    }
+
+    .dashboard .frame-3 .button-dashboard,
+    .dashboard .frame-3 .div-2,
+    .dashboard .frame-3 .button-logout {
+        width: 100%;
+        min-width: 0;
+        min-height: 40px;
+        flex: 0 0 auto;
+        padding: 10px 12px;
+        border-radius: 9px;
+        box-sizing: border-box;
+        white-space: nowrap;
+    }
+}
+
+/* ---------------------------------------------------------
+   EXTRA SMALL PHONE <= 480px
+   --------------------------------------------------------- */
+
+@media (max-width: 480px) {
+    .dashboard .frame {
+        height: 64px;
+        min-height: 64px;
+        flex-basis: 64px;
+        padding: 5px 9px;
+    }
+
+    .dashboard .frame > .div {
+        height: 52px;
+        min-height: 52px;
+        padding-left: 1px;
+        padding-right: 50px;
+    }
+
+    .dashboard .hugeicons-school {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        min-height: 34px;
+        flex-basis: 34px;
+    }
+
+    .dashboard .mobile-menu-toggle {
+        top: 12px;
+        right: 9px;
+        width: 38px;
+        height: 38px;
+    }
+
+    .dashboard .frame-2 .text-wrapper {
+        font-size: 15px;
+        line-height: 20px;
+    }
+
+    .dashboard .frame-2 .text-wrapper-2 {
+        font-size: 9px;
+        line-height: 13px;
+    }
+
+    .dashboard .frame.mobile-menu-open {
+        position: relative;
+        z-index: 100;
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: 70px;
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 7px 10px;
+        background-color: var(--primarypr-40);
+        box-sizing: border-box;
+        overflow: visible;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard .frame.mobile-menu-open > .div {
+        width: 100%;
+        height: 54px;
+        min-height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        padding: 0 52px 0 2px;
+        box-sizing: border-box;
+    }
+
+    .dashboard .frame.mobile-menu-open .hugeicons-school {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        flex: 0 0 36px;
+        padding: 6px;
+        border-radius: 9px;
+    }
+
+    .dashboard .frame.mobile-menu-open .frame-2 {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    .dashboard .frame.mobile-menu-open .frame-2 .text-wrapper,
+    .dashboard .frame.mobile-menu-open .frame-2 .text-wrapper-2 {
+        display: block;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .dashboard .frame.mobile-menu-open .frame-2 .text-wrapper {
+        font-size: 16px;
+        line-height: 21px;
+    }
+
+    .dashboard .frame.mobile-menu-open .frame-2 .text-wrapper-2 {
+        font-size: 10px;
+        line-height: 14px;
+    }
+
+    .dashboard .frame.mobile-menu-open .mobile-menu-toggle {
+        top: 15px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .dashboard .frame.mobile-menu-open .frame-3 {
+        width: 100%;
+        min-width: 0;
+        gap: 6px;
+        padding: 7px 0 3px;
+        max-height: 500px;
+        opacity: 1;
+        visibility: visible;
+        overflow: visible;
+        transform: translateY(0);
+    }
+
+    .dashboard .frame.mobile-menu-open .frame-3 .button-dashboard,
+    .dashboard .frame.mobile-menu-open .frame-3 .div-2,
+    .dashboard .frame.mobile-menu-open .frame-3 .button-logout {
+        width: 100%;
+        min-width: 0;
+        min-height: 40px;
+        flex: 0 0 auto;
+        padding: 10px 12px;
+        border-radius: 9px;
+        box-sizing: border-box;
+        white-space: nowrap;
+    }
+}

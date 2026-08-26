@@ -1,0 +1,1244 @@
+/* =========================================================
+   HALAMAN PENGGUNA
+   ========================================================= */
+
+.user-management-content {
+    width: 100%;
+    max-width: none;
+    padding: 4px 0 40px;
+    margin: 0;
+    box-sizing: border-box;
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.mp-visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* =========================================================
+   HEADER HALAMAN
+   ========================================================= */
+
+.user-management-content .mp-div {
+    width: 100%;
+    height: 72px;
+    min-height: 72px;
+    padding: 4px 0 0;
+    margin: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.user-management-content .mp-div-2 {
+    padding-top: 0;
+    gap: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.user-management-content .mp-text-wrapper {
+    margin: 4px 0 0;
+    color: var(--primarypr-40);
+    font-family: var(--heading-h5-medium-font-family);
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 500;
+}
+
+.user-management-content .mp-p {
+    margin: 0;
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 16px;
+    line-height: 21px;
+}
+
+/* =========================================================
+   TOMBOL TAMBAH PENGGUNA
+   ========================================================= */
+
+.user-management-content .mp-button-tambah-siswa {
+    width: 200px;
+    min-height: 41px;
+    height: 41px;
+    margin-top: 13px;
+    flex: 0 0 auto;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    padding: 10px;
+    box-sizing: border-box;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: var(--primarypr-30);
+    color: var(--primarypr-00);
+
+    cursor: pointer;
+
+    font-family: var(--label-l16-regular-font-family);
+    font-size: var(--label-l16-regular-font-size);
+    font-weight: var(--label-l16-regular-font-weight);
+
+    transition:
+        filter 0.2s ease,
+        transform 0.2s ease;
+}
+
+.user-management-content .mp-button-tambah-siswa:hover {
+    filter: brightness(0.94);
+    transform: translateY(-1px);
+}
+
+.user-management-content .mp-button-tambah-siswa:active {
+    transform: translateY(0);
+}
+
+.user-management-content .mp-ic-round-plus {
+    width: 17px;
+    height: 17px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 17px;
+}
+
+.user-management-content .mp-vector {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.user-management-content .mp-tambah-siswa {
+    color: var(--primarypr-00);
+    white-space: nowrap;
+}
+
+/* =========================================================
+   KARTU STATISTIK
+   ========================================================= */
+
+.user-management-content .mp-div-3 {
+    width: 100%;
+    height: 109px;
+    padding: 0;
+    margin: 0 0 24px;
+
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 36px;
+
+    box-sizing: border-box;
+}
+
+.user-management-content .mp-div-4 {
+    width: 100%;
+    height: 101px;
+    min-height: 101px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    gap: 8px;
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background: var(--primarypr-10);
+    border-radius: 12px;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.user-management-content .mp-text-wrapper-2,
+.user-management-content .mp-text-wrapper-3 {
+    width: 100%;
+    margin: 0;
+    color: var(--primarypr-50);
+}
+
+.user-management-content .mp-text-wrapper-2 {
+    font-family: var(--label-l16-regular-font-family);
+    font-size: 16px;
+    font-weight: var(--label-l16-regular-font-weight);
+    line-height: 20px;
+}
+
+.user-management-content .mp-text-wrapper-3 {
+    font-family: var(--heading-h4-medium-font-family);
+    font-size: 24px;
+    font-weight: var(--heading-h4-medium-font-weight);
+    line-height: 31px;
+}
+
+/* =========================================================
+   TABEL
+   ========================================================= */
+
+.user-management-content .mp-div-5 {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+
+.user-management-content .mp-user-table {
+    width: 100%;
+    min-width: 1088px;
+
+    margin: 0;
+
+    border: 1px solid var(--secondarysc-50);
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    background: var(--primarypr-00);
+
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   GRID TABEL
+   ========================================================= */
+
+.user-management-content .mp-user-row {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        8%
+        16%
+        20%
+        24%
+        12%
+        8%
+        12%;
+
+    align-items: center;
+
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER TABEL
+   ========================================================= */
+
+.user-management-content .mp-user-table-header {
+    height: 63px;
+    min-height: 63px;
+
+    padding: 0;
+
+    background: var(--primarypr-10);
+
+    border-bottom: 1px solid var(--secondarysc-50);
+
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   BODY TABEL
+   ========================================================= */
+
+.user-management-content .mp-user-table-body {
+    width: 100%;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    background: var(--primarypr-00);
+}
+
+.user-management-content .mp-user-table-body .mp-user-row {
+    height: 78px;
+    min-height: 78px;
+
+    padding: 0;
+
+    border: 0;
+
+    border-bottom: 1px solid var(--secondarysc-00);
+
+    box-sizing: border-box;
+}
+
+.user-management-content .mp-user-table-body .mp-user-row:last-child {
+    border-bottom: 0;
+}
+
+/* =========================================================
+   CELL
+   ========================================================= */
+
+.user-management-content .mp-user-cell {
+    min-width: 0;
+
+    padding: 0 16px;
+    margin: 0;
+
+    overflow-wrap: anywhere;
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 16px;
+    line-height: 24px;
+
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   ALIGNMENT HEADER
+   ========================================================= */
+
+.user-management-content .mp-user-table-header .mp-user-cell:nth-child(1) {
+    text-align: left;
+}
+
+.user-management-content .mp-user-table-header .mp-user-cell:nth-child(2),
+.user-management-content .mp-user-table-header .mp-user-cell:nth-child(3),
+.user-management-content .mp-user-table-header .mp-user-cell:nth-child(4) {
+    text-align: left;
+}
+
+.user-management-content .mp-user-table-header .mp-user-cell:nth-child(n + 5) {
+    text-align: center;
+}
+
+.user-management-content .mp-user-table-header .mp-user-cell:nth-child(7) {
+    padding-right: 28px;
+}
+
+/* =========================================================
+   ALIGNMENT BODY
+   ========================================================= */
+
+.user-management-content .mp-user-table-body .mp-user-cell:nth-child(1) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: 100%;
+    height: 100%;
+
+    text-align: left;
+}
+
+.user-management-content .mp-user-table-body .mp-user-cell:nth-child(2),
+.user-management-content .mp-user-table-body .mp-user-cell:nth-child(3),
+.user-management-content .mp-user-table-body .mp-user-cell:nth-child(4) {
+    justify-self: start;
+    text-align: left;
+}
+
+.user-management-content .mp-user-table-body .mp-user-cell:nth-child(n + 5) {
+    justify-self: center;
+    text-align: center;
+}
+
+.user-management-content .mp-user-table-body .mp-user-cell:nth-child(7) {
+    padding-right: 28px;
+}
+
+/* =========================================================
+   BADGE ROLE & STATUS
+   ========================================================= */
+
+.user-management-content .mp-div-wrapper,
+.user-management-content .mp-div-wrapper-2,
+.user-management-content .mp-div-wrapper-3,
+.user-management-content .mp-div-wrapper-4,
+.user-management-content .mp-div-wrapper-5,
+.user-management-content .mp-div-wrapper-6,
+.user-management-content .mp-div-wrapper-7,
+.user-management-content .mp-div-wrapper-8,
+.user-management-content .mp-div-wrapper-9,
+.user-management-content .mp-div-wrapper-10,
+.user-management-content .mp-div-wrapper-11,
+.user-management-content .mp-div-wrapper-12 {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+.user-management-content .mp-text-wrapper-11,
+.user-management-content .mp-text-wrapper-17,
+.user-management-content .mp-text-wrapper-22,
+.user-management-content .mp-text-wrapper-12 {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 28px;
+    height: 28px;
+
+    padding: 4px 12px;
+
+    border-radius: 14px;
+
+    line-height: 20px;
+
+    white-space: nowrap;
+
+    box-sizing: border-box;
+}
+
+/* Administrator */
+.user-management-content .mp-text-wrapper-11 {
+    background: var(--secondarysec-70);
+    color: var(--secondarysec-90);
+}
+
+/* Kepala Sekolah */
+.user-management-content .mp-text-wrapper-17 {
+    background: var(--primarypr-20);
+    color: var(--primarypr-00);
+}
+
+/* Guru */
+.user-management-content .mp-text-wrapper-22 {
+    background: var(--secondarysc-20);
+    color: var(--primarypr-50);
+}
+
+/* Aktif */
+.user-management-content .mp-text-wrapper-12 {
+    background: var(--primarypr-20);
+    color: var(--primarypr-00);
+}
+
+/* =========================================================
+   AKSI
+   ========================================================= */
+
+.user-management-content .mp-div-7,
+.user-management-content .mp-div-8,
+.user-management-content .mp-div-9,
+.user-management-content .mp-div-10,
+.user-management-content .mp-div-11,
+.user-management-content .mp-div-12 {
+    width: 100%;
+    height: 95px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 16px;
+
+    padding: 0;
+    margin: 0;
+
+    box-sizing: border-box;
+}
+
+.user-management-content .mp-action-button {
+    width: 32px;
+    height: 32px;
+
+    min-width: 32px;
+    min-height: 32px;
+
+    padding: 0;
+    margin: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 32px;
+
+    border-radius: 8px;
+
+    box-sizing: border-box;
+
+    cursor: pointer;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+.user-management-content .mp-action-button:hover {
+    opacity: 1;
+    background: var(--primarypr-10);
+    transform: translateY(-1px);
+}
+
+.user-management-content .mp-action-button:active {
+    transform: translateY(0);
+}
+
+.user-management-content .mp-action-icon {
+    width: 18px;
+    height: 18px;
+
+    min-width: 18px;
+    min-height: 18px;
+
+    display: block;
+
+    object-fit: contain;
+}
+
+.user-management-content .mp-icon-edit {
+    color: var(--secondarysec-80);
+}
+
+.user-management-content .mp-icon-key {
+    color: var(--secondarysec-80);
+}
+
+.user-management-content .mp-icon-trash {
+    color: #dc3545;
+}
+
+/* =========================================================
+   MODAL TAMBAH PENGGUNA
+   ========================================================= */
+
+.user-form-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(15, 23, 42, 0.48);
+
+    box-sizing: border-box;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition:
+        opacity 0.18s ease,
+        visibility 0.18s ease;
+}
+
+.user-form-overlay[hidden] {
+    display: none;
+}
+
+.user-form-overlay.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+body.user-form-open {
+    overflow: hidden;
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.user-form-modal {
+    width: min(760px, 100%);
+
+    max-height: calc(100dvh - 48px);
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--primarypr-00);
+
+    border-radius: 15px;
+
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+
+    overflow: hidden;
+
+    transform: translateY(8px) scale(0.99);
+
+    transition: transform 0.18s ease;
+}
+
+.user-form-overlay.is-visible .user-form-modal {
+    transform: translateY(0) scale(1);
+}
+
+/* =========================================================
+   MODAL HEADER
+   ========================================================= */
+
+.user-form-header {
+    width: 100%;
+
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 24px 18px;
+
+    box-sizing: border-box;
+}
+
+.user-form-title-group {
+    min-width: 0;
+}
+
+.user-form-title-group h2 {
+    margin: 0;
+
+    color: var(--primarypr-40);
+
+    font-family: var(--heading-h5-medium-font-family);
+
+    font-size: 21px;
+
+    line-height: 27px;
+
+    font-weight: 500;
+}
+
+.user-form-title-group p {
+    margin: 4px 0 0;
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p16-regular-font-family);
+
+    font-size: 13px;
+
+    line-height: 19px;
+}
+
+/* =========================================================
+   TOMBOL CLOSE
+   ========================================================= */
+
+.user-form-close {
+    position: relative;
+
+    flex: 0 0 36px;
+
+    width: 36px;
+    height: 36px;
+
+    padding: 0;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+.user-form-close:hover {
+    background: var(--primarypr-10);
+}
+
+.user-form-close span {
+    position: absolute;
+
+    top: 17px;
+    left: 8px;
+
+    width: 20px;
+    height: 2px;
+
+    border-radius: 2px;
+
+    background: var(--primarypr-50);
+}
+
+.user-form-close span:first-child {
+    transform: rotate(45deg);
+}
+
+.user-form-close span:last-child {
+    transform: rotate(-45deg);
+}
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.user-form-divider {
+    width: 100%;
+    height: 1px;
+
+    background: var(--secondarysc-50);
+
+    flex: 0 0 1px;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.user-form {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 0;
+
+    overflow-y: auto;
+}
+
+.user-form-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 18px 20px;
+
+    padding: 22px 24px;
+
+    box-sizing: border-box;
+}
+
+.user-form-field {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.user-form-field-full {
+    grid-column: 1 / -1;
+}
+
+.user-form-field label {
+    color: var(--primarypr-50);
+
+    font-family: var(--label-l16-medium-font-family);
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.user-form-field label > span:not(.optional) {
+    color: #dc3545;
+}
+
+.user-form-field label .optional {
+    color: var(--primarypr-50);
+    opacity: 0.65;
+    font-weight: 400;
+}
+
+.user-form-field input,
+.user-form-field select {
+    width: 100%;
+
+    height: 43px;
+    min-height: 43px;
+
+    padding: 0 13px;
+
+    border: 1px solid var(--secondarysc-50);
+
+    border-radius: 9px;
+
+    background: var(--primarypr-00);
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p16-regular-font-family);
+
+    font-size: 14px;
+
+    line-height: 20px;
+
+    box-sizing: border-box;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.user-form-field input::placeholder {
+    color: var(--primarypr-50);
+    opacity: 0.55;
+}
+
+.user-form-field input:focus,
+.user-form-field select:focus {
+    border-color: var(--primarypr-30);
+
+    box-shadow: 0 0 0 2px rgba(136, 193, 167, 0.18);
+}
+
+.user-form-field small {
+    color: var(--primarypr-50);
+
+    opacity: 0.7;
+
+    font-family: var(--paragraph-p16-regular-font-family);
+
+    font-size: 11px;
+
+    line-height: 16px;
+}
+
+/* =========================================================
+   PASSWORD
+   ========================================================= */
+
+.user-password-wrap {
+    position: relative;
+
+    width: 100%;
+}
+
+.user-password-wrap input {
+    padding-right: 48px;
+}
+
+.password-toggle {
+    position: absolute;
+
+    top: 50%;
+    right: 8px;
+
+    width: 32px;
+    height: 32px;
+
+    padding: 0;
+
+    border: 0;
+
+    transform: translateY(-50%);
+
+    background: transparent;
+
+    color: var(--primarypr-50);
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.password-toggle svg {
+    width: 20px;
+    height: 20px;
+
+    display: block;
+}
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+.user-select-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.user-select-wrap select {
+    appearance: auto;
+    cursor: pointer;
+}
+
+/* =========================================================
+   FOOTER MODAL
+   ========================================================= */
+
+.user-form-footer {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding: 16px 24px 20px;
+
+    border-top: 1px solid var(--secondarysc-50);
+
+    box-sizing: border-box;
+}
+
+.user-form-required {
+    margin: 0;
+
+    color: var(--primarypr-50);
+
+    font-size: 12px;
+
+    line-height: 18px;
+}
+
+.user-form-required span {
+    color: #dc3545;
+}
+
+.user-form-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.user-form-button {
+    height: 40px;
+
+    min-width: 110px;
+
+    padding: 0 16px;
+
+    border-radius: 8px;
+
+    font-family: var(--label-l16-regular-font-family);
+
+    font-size: 13px;
+
+    line-height: 18px;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition:
+        filter 0.2s ease,
+        transform 0.2s ease;
+}
+
+.user-form-cancel {
+    border: 1px solid var(--secondarysc-50);
+
+    background: var(--primarypr-00);
+
+    color: var(--primarypr-50);
+}
+
+.user-form-cancel:hover {
+    background: var(--primarypr-10);
+}
+
+.user-form-submit {
+    border: 1px solid var(--primarypr-30);
+
+    background: var(--primarypr-30);
+
+    color: var(--primarypr-00);
+}
+
+.user-form-submit:hover:not(:disabled) {
+    filter: brightness(0.94);
+    transform: translateY(-1px);
+}
+
+.user-form-submit:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+.user-form-close:focus-visible,
+.password-toggle:focus-visible,
+.user-form-button:focus-visible,
+.user-form-field input:focus-visible,
+.user-form-field select:focus-visible {
+    outline: 2px solid var(--primarypr-30);
+    outline-offset: 2px;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+    .user-management-content {
+        width: 100%;
+        max-width: none;
+    }
+
+    .user-management-content .mp-div-3 {
+        gap: 20px;
+    }
+
+    .user-management-content .mp-user-table {
+        min-width: 1088px;
+    }
+
+    .user-management-content .mp-div-5 {
+        overflow-x: auto;
+    }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .user-management-content {
+        width: 100%;
+        padding: 4px 0 32px;
+        box-sizing: border-box;
+    }
+
+    .user-management-content .mp-div {
+        width: 100%;
+        height: auto;
+        min-height: 72px;
+        gap: 14px;
+    }
+
+    .user-management-content .mp-text-wrapper {
+        font-size: 20px;
+        line-height: 26px;
+    }
+
+    .user-management-content .mp-p {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .user-management-content .mp-button-tambah-siswa {
+        width: 165px;
+        min-width: 165px;
+        height: 40px;
+        min-height: 40px;
+        margin-top: 13px;
+        flex-basis: auto;
+    }
+
+    .user-management-content .mp-div-3 {
+        width: 100%;
+        height: auto;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 16px;
+
+        margin-bottom: 24px;
+    }
+
+    .user-management-content .mp-div-4 {
+        width: 100%;
+        min-height: 101px;
+    }
+
+    .user-management-content .mp-user-table {
+        min-width: 1088px;
+    }
+
+    .user-management-content .mp-div-5 {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .user-form-overlay {
+        align-items: center;
+        padding: 16px;
+    }
+
+    .user-form-modal {
+        width: min(620px, 100%);
+        max-height: calc(100dvh - 32px);
+        border-radius: 14px;
+    }
+
+    .user-form-header {
+        padding: 18px 18px 15px;
+    }
+
+    .user-form-title-group h2 {
+        font-size: 19px;
+        line-height: 25px;
+    }
+
+    .user-form-title-group p {
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .user-form-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 18px;
+    }
+
+    .user-form-field-full {
+        grid-column: auto;
+    }
+
+    .user-form-footer {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px 18px 18px;
+    }
+
+    .user-form-actions {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .user-form-button {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   HP KECIL
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .user-management-content {
+        padding: 4px 0 30px;
+    }
+
+    .user-management-content .mp-div {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .user-management-content .mp-button-tambah-siswa {
+        width: 100%;
+        min-width: 0;
+        height: 40px;
+        min-height: 40px;
+        margin-top: 0;
+    }
+
+    .user-management-content .mp-div-3 {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .user-management-content .mp-div-4 {
+        min-height: 92px;
+        padding: 16px;
+    }
+
+    .user-management-content .mp-text-wrapper-2 {
+        font-size: 14px;
+        line-height: 19px;
+    }
+
+    .user-management-content .mp-text-wrapper-3 {
+        font-size: 22px;
+        line-height: 28px;
+    }
+
+    .user-form-overlay {
+        align-items: flex-end;
+        padding: 8px;
+    }
+
+    .user-form-modal {
+        width: 100%;
+        max-height: calc(100dvh - 16px);
+        border-radius: 14px 14px 10px 10px;
+    }
+
+    .user-form-header {
+        padding: 16px 15px 13px;
+    }
+
+    .user-form-close {
+        flex-basis: 34px;
+        width: 34px;
+        height: 34px;
+    }
+
+    .user-form-close span {
+        top: 16px;
+    }
+
+    .user-form-grid {
+        gap: 14px;
+        padding: 16px 15px;
+    }
+
+    .user-form-field label {
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    .user-form-field input,
+    .user-form-field select {
+        height: 42px;
+        min-height: 42px;
+        font-size: 13px;
+    }
+
+    .user-form-footer {
+        padding: 13px 15px 15px;
+    }
+
+    .user-form-actions {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .user-form-button {
+        height: 42px;
+        min-height: 42px;
+    }
+}

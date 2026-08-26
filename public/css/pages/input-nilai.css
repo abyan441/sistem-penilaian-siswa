@@ -1,0 +1,616 @@
+/* =========================================================
+   INPUT NILAI - LARAVEL PAGE
+   ========================================================= */
+
+.nilai-page {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0 24px 40px 24px;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.nilai-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 0;
+    gap: 12px;
+}
+
+.nilai-page-title {
+    min-width: 0;
+}
+
+.nilai-page-title h1 {
+    margin: 0;
+    color: var(--primarypr-40);
+    font-family: var(--heading-h5-medium-font-family);
+    font-size: var(--heading-h5-medium-font-size);
+    font-weight: var(--heading-h5-medium-font-weight);
+    line-height: var(--heading-h5-medium-line-height);
+}
+
+.nilai-page-title p {
+    margin: 0;
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: var(--paragraph-p16-regular-font-size);
+    font-weight: var(--paragraph-p16-regular-font-weight);
+    line-height: var(--paragraph-p16-regular-line-height);
+}
+
+/* =========================================================
+   NOTIFIKASI SIMPAN NILAI
+   ========================================================= */
+
+.nilai-toast {
+    position: fixed;
+    z-index: 20;
+    top: 76px;
+    right: 24px;
+    display: flex;
+    align-items: flex-start;
+    width: min(360px, calc(100vw - 48px));
+    gap: 12px;
+    padding: 14px 12px 14px 14px;
+    border: 1px solid rgba(42, 157, 143, 0.3);
+    border-radius: 12px;
+    background: var(--primarypr-00);
+    box-shadow: 0 12px 28px rgba(24, 46, 68, 0.16);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+        opacity 0.18s ease,
+        transform 0.18s ease;
+}
+
+.nilai-toast[hidden] {
+    display: none;
+}
+
+.nilai-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nilai-toast-icon {
+    display: grid;
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border-radius: 50%;
+    background: #e1f4ef;
+    color: #208a7c;
+}
+
+.nilai-toast-icon svg,
+.nilai-toast-close svg {
+    width: 18px;
+    height: 18px;
+}
+
+.nilai-toast-copy {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 1px;
+}
+
+.nilai-toast-copy strong {
+    color: var(--primarypr-50);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+}
+
+.nilai-toast-copy span {
+    color: var(--primarypr-60);
+    font-size: 13px;
+    line-height: 19px;
+}
+
+.nilai-toast-close {
+    display: grid;
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    margin: -3px -3px 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--primarypr-60);
+    cursor: pointer;
+    place-items: center;
+}
+
+.nilai-toast-close:hover {
+    background: var(--primarypr-10);
+    color: var(--primarypr-50);
+}
+
+@media (max-width: 768px) {
+    .nilai-toast {
+        top: 64px;
+        right: 12px;
+        width: min(360px, calc(100vw - 24px));
+    }
+}
+
+/* =========================================================
+   BUTTON SIMPAN NILAI
+   ========================================================= */
+
+.button-tambah-siswa {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    margin-top: 0;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--primarypr-30);
+    color: var(--primarypr-00);
+    font: inherit;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.button-tambah-siswa:hover {
+    background: var(--primarypr-40);
+}
+
+.button-tambah-siswa:active {
+    transform: translateY(1px);
+}
+
+.button-tambah-siswa .ci-save {
+    width: 17px;
+    height: 17px;
+    color: currentColor;
+}
+
+.button-tambah-siswa span {
+    margin: 0;
+    color: inherit;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   FILTER CARD
+   ========================================================= */
+
+.nilai-filter-wrapper {
+    width: 100%;
+    margin-top: 16px;
+}
+
+.nilai-filter-card {
+    width: 100%;
+    padding: 20px;
+    border-radius: 12px;
+    background: var(--primarypr-00);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+.nilai-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 40px;
+}
+
+.nilai-filter-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 8px;
+}
+
+.nilai-filter-label {
+    display: block;
+    margin: 0;
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.dropdown-items {
+    width: 100%;
+    height: 40px;
+    min-width: 0;
+    padding: 7px 38px 7px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 12px;
+    background: var(--primarypr-00);
+    color: var(--primarypr-50);
+    font: inherit;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+    accent-color: var(--primarypr-30);
+}
+
+.dropdown-items:focus {
+    border-color: var(--primarypr-40);
+    background: var(--primarypr-10);
+}
+
+.dropdown-items option {
+    background: var(--primarypr-00);
+    color: var(--primarypr-50);
+}
+
+.dropdown-items option:checked {
+    background: var(--primarypr-30);
+    color: var(--primarypr-50);
+}
+
+/* =========================================================
+   INFO BOBOT NILAI
+   ========================================================= */
+
+.info-bobot-nilai-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 47px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: 1px solid var(--secondarysec-70);
+    border-radius: 12px;
+    background: var(--secondarysec-60);
+    box-sizing: border-box;
+}
+
+.info-bobot-nilai {
+    margin: 0;
+    color: var(--secondarysec-90);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.info-bobot-nilai strong {
+    font-weight: 700;
+}
+
+.info-bobot-nilai span {
+    color: var(--secondarysec-90);
+}
+
+/* =========================================================
+   NILAI TABLE
+   ========================================================= */
+
+.nilai-table-wrapper {
+    width: 100%;
+    margin-top: 30px;
+    overflow-x: auto;
+    border: 1px solid var(--secondarysc-50);
+    border-radius: 15px;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+}
+
+.nilai-table-header,
+.nilai-table-body {
+    display: grid;
+    grid-template-columns:
+        0.65fr
+        1.55fr
+        repeat(3, 1fr)
+        1fr
+        0.8fr;
+    column-gap: 0;
+    min-width: 900px;
+}
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+.nilai-table-header {
+    align-items: center;
+    min-height: 63px;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--secondarysc-50);
+    border-radius: 14px 14px 0 0;
+    background: var(--primarypr-10);
+}
+
+.nilai-table-header > * {
+    min-width: 0;
+    margin: 0;
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 16px;
+    font-weight: var(--paragraph-p16-regular-font-weight);
+    line-height: 24px;
+}
+
+.nilai-table-header > :nth-child(1),
+.nilai-table-header > :nth-child(2) {
+    text-align: left;
+}
+
+.nilai-table-header > :nth-child(n + 3) {
+    text-align: center;
+}
+
+/* =========================================================
+   TABLE BODY
+   ========================================================= */
+
+.nilai-table-body {
+    grid-auto-rows: 78px;
+    align-items: center;
+    padding: 0 20px;
+    border-radius: 0 0 14px 14px;
+    background: var(--primarypr-00);
+    box-shadow: none;
+}
+
+.nilai-row {
+    display: contents;
+}
+
+.nilai-table-body > * {
+    align-self: center;
+    min-width: 0;
+    margin: 0;
+}
+
+/* =========================================================
+   NOMOR + NAMA
+   ========================================================= */
+
+.nilai-table-body .nilai-no,
+.nilai-table-body .nilai-student-name {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.nilai-no {
+    color: var(--primarypr-50);
+    font-size: 16px;
+}
+
+.nilai-student-name {
+    color: var(--primarypr-50);
+    font-size: 16px;
+}
+
+/* =========================================================
+   INPUT NILAI
+   ========================================================= */
+
+.nilai-input-wrapper {
+    width: 108px;
+    height: 42px;
+    justify-self: center;
+}
+
+.nilai-input {
+    width: 100%;
+    height: 100%;
+    padding: 8px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 12px;
+    background: var(--primarypr-00);
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.nilai-input:focus {
+    border-color: var(--primarypr-30);
+}
+
+/* Hilangkan spinner pada Chrome, Edge, Safari */
+.nilai-input::-webkit-outer-spin-button,
+.nilai-input::-webkit-inner-spin-button {
+    margin: 0;
+    appearance: none;
+}
+
+/* Hilangkan spinner pada Firefox */
+.nilai-input[type="number"] {
+    appearance: textfield;
+}
+
+/* =========================================================
+   NILAI AKHIR
+   ========================================================= */
+
+.nilai-table-body .nilai-akhir {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 42px;
+    color: var(--primarypr-50);
+    font-size: 16px;
+    line-height: 24px;
+}
+
+/* =========================================================
+   PREDIKAT
+   ========================================================= */
+
+.predikat-badge {
+    justify-self: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.predikat-badge span {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* A */
+.predikat-a {
+    background: var(--secondarysec-70);
+}
+
+.predikat-a span {
+    color: var(--primarypr-00);
+}
+
+/* B */
+.predikat-b {
+    background: var(--primarypr-20);
+}
+
+.predikat-b span {
+    color: var(--primarypr-00);
+}
+
+/* C */
+.predikat-c {
+    background: var(--secondarysc-20);
+}
+
+.predikat-c span {
+    color: var(--primarypr-50);
+}
+
+/* D */
+.predikat-d {
+    background: var(--secondarysc-20);
+}
+
+.predikat-d span {
+    color: var(--secondarysc-40);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+    .nilai-page {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .nilai-filter-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nilai-page {
+        padding: 0 16px 28px 16px;
+    }
+
+    .nilai-page-header {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 8px 0;
+        gap: 14px;
+    }
+
+    .nilai-page-title h1 {
+        font-size: 20px;
+    }
+
+    .nilai-page-title p {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .button-tambah-siswa {
+        width: 100%;
+        min-height: 40px;
+        padding: 8px 10px;
+    }
+
+    .button-tambah-siswa span {
+        font-size: 14px;
+    }
+
+    .nilai-filter-card {
+        padding: 16px;
+    }
+
+    .nilai-filter-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .info-bobot-nilai-wrapper {
+        padding: 10px 14px;
+    }
+
+    .info-bobot-nilai {
+        font-size: 14px;
+        line-height: 21px;
+    }
+
+    .nilai-table-wrapper {
+        margin-top: 20px;
+    }
+
+    .nilai-table-header,
+    .nilai-table-body {
+        min-width: 900px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nilai-page {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .nilai-page-header {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .nilai-page-title h1 {
+        font-size: 19px;
+    }
+
+    .nilai-page-title p {
+        font-size: 13px;
+    }
+
+    .button-tambah-siswa {
+        padding: 7px 9px;
+    }
+
+    .button-tambah-siswa .ci-save {
+        width: 16px;
+        height: 16px;
+    }
+}

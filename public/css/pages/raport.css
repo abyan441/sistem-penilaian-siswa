@@ -1,0 +1,638 @@
+/* =========================================================
+   RAPORT PAGE
+   ========================================================= */
+
+.raport-page {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+}
+
+/* =========================================================
+   JUDUL
+   ========================================================= */
+
+.raport-heading {
+    width: 100%;
+    min-height: 54px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    box-sizing: border-box;
+}
+
+.raport-heading-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.raport-heading h1 {
+    margin: 0;
+    color: var(--primarypr-40);
+    font-family: var(--heading-h5-medium-font-family);
+    font-size: 21px;
+    line-height: 27px;
+    font-weight: 500;
+}
+
+.raport-heading p {
+    margin: 0;
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 14px;
+    line-height: 20px;
+}
+
+/* =========================================================
+   FILTER CARD
+   ========================================================= */
+
+.raport-filter-card {
+    width: 100%;
+    min-height: 169px;
+    margin-top: 24px;
+    padding: 22px 20px 20px;
+    background: var(--primarypr-00);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+.raport-filter-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.raport-filter-fields {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 40px;
+}
+
+.raport-field {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.raport-field > span {
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.raport-field select {
+    width: 100%;
+    height: 40px;
+    min-width: 0;
+    padding: 0 40px 0 14px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 9px;
+    background-color: var(--primarypr-00);
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 14px;
+    line-height: 20px;
+    outline: none;
+    cursor: pointer;
+    accent-color: var(--primarypr-30);
+    box-sizing: border-box;
+}
+
+.raport-field select:focus {
+    border-color: var(--primarypr-40);
+    background-color: var(--primarypr-10);
+    box-shadow: 0 0 0 2px rgba(101, 146, 135, 0.18);
+}
+
+.raport-field select option {
+    background: var(--primarypr-00);
+    color: var(--primarypr-50);
+}
+
+.raport-field select option:checked {
+    background: var(--primarypr-30);
+    color: var(--primarypr-50);
+}
+
+/* =========================================================
+   FILTER ACTION
+   ========================================================= */
+
+.raport-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 19px;
+}
+
+.raport-preview-button,
+.raport-pdf-button {
+    height: 34px;
+    padding: 0 11px;
+    border: 0;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: var(--label-l16-regular-font-family);
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--primarypr-00);
+    background: var(--primarypr-30);
+    cursor: pointer;
+    box-sizing: border-box;
+    transition:
+        filter 0.2s ease,
+        transform 0.2s ease;
+}
+
+.raport-preview-button {
+    min-width: 135px;
+}
+
+.raport-pdf-button {
+    min-width: 135px;
+}
+
+.raport-preview-button:hover,
+.raport-pdf-button:hover {
+    filter: brightness(0.95);
+}
+
+.raport-preview-button:active,
+.raport-pdf-button:active {
+    transform: translateY(1px);
+}
+
+.raport-filter-actions .raport-button-icon {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    display: block;
+    fill: none;
+    stroke: var(--primarypr-00);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* =========================================================
+   SEARCH CARD
+   ========================================================= */
+
+.raport-search-card {
+    width: 100%;
+    height: 82px;
+    min-height: 82px;
+    margin-top: 22px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: block;
+    border: 1px solid var(--secondarysc-50);
+    border-radius: 15px;
+    background: var(--primarypr-10);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+}
+
+.raport-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 41px;
+    min-height: 41px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--secondarysc-50);
+    border-radius: 12px;
+    background: var(--primarypr-00);
+    overflow: hidden;
+}
+
+.raport-search-input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0 52px 0 14px;
+    box-sizing: border-box;
+    border: 0;
+    outline: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: var(--paragraph-p16-regular-font-size);
+    font-weight: var(--paragraph-p16-regular-font-weight);
+    line-height: var(--paragraph-p16-regular-line-height);
+    letter-spacing: var(--paragraph-p16-regular-letter-spacing);
+    font-style: var(--paragraph-p16-regular-font-style);
+}
+
+.raport-search-input::placeholder {
+    color: var(--primarypr-50);
+    opacity: 0.7;
+}
+
+.raport-search-input:focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+.raport-search-icon {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    z-index: 1;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    transform: translateY(-50%);
+    display: block;
+    fill: none;
+    stroke: var(--primarypr-50);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.raport-table-card {
+    width: 100%;
+    margin-top: 33px;
+    background: var(--primarypr-00);
+    border: 1px solid var(--secondarysc-50);
+    border-radius: 15px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+/* Header dan row HARUS memakai grid yang sama */
+.raport-table-head,
+.raport-table-row {
+    display: grid;
+
+    grid-template-columns:
+        64px
+        minmax(145px, 1.25fr)
+        minmax(230px, 2fr)
+        minmax(110px, 1fr)
+        minmax(145px, 1.25fr)
+        minmax(120px, 1fr);
+
+    column-gap: 0;
+    align-items: center;
+    width: 100%;
+    min-width: 920px;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+.raport-table-head {
+    min-height: 63px;
+    padding-left: 16px;
+    padding-right: 16px;
+    background: var(--primarypr-10);
+    border-bottom: 1px solid var(--secondarysc-50);
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 500;
+}
+
+.raport-table-head > div {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   TABLE ROW
+   ========================================================= */
+
+.raport-table-row {
+    min-height: 78px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-bottom: 1px solid var(--secondarysc-00);
+    background: var(--primarypr-00);
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.raport-table-row > div {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.raport-table-row:last-child {
+    border-bottom: 0;
+}
+
+.raport-table-head > div:nth-child(1),
+.raport-table-row > div:nth-child(1) {
+    text-align: left;
+}
+
+.raport-table-head > div:nth-child(2),
+.raport-table-row > div:nth-child(2),
+.raport-table-head > div:nth-child(3),
+.raport-table-row > div:nth-child(3),
+.raport-table-head > div:nth-child(4),
+.raport-table-row > div:nth-child(4),
+.raport-table-head > div:nth-child(5),
+.raport-table-row > div:nth-child(5) {
+    text-align: left;
+}
+
+/* =========================================================
+   BADGE KELAS
+   ========================================================= */
+
+.raport-table-row > div:nth-child(4) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.raport-class-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 41px;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 12px;
+    background: var(--primarypr-20);
+    color: var(--primarypr-00);
+    flex: 0 0 auto;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   KOLOM AKSI
+   ========================================================= */
+
+.raport-table-head > div:nth-child(6),
+.raport-table-row > div:nth-child(6) {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.raport-actions {
+    width: 100%;
+    min-width: 0;
+    height: 28px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    box-sizing: border-box;
+}
+
+.raport-actions button {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    flex: 0 0 28px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+.raport-actions button:hover {
+    opacity: 0.78;
+    transform: translateY(-1px);
+}
+
+.raport-actions .raport-button-icon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    margin: 0;
+    padding: 0;
+    display: block;
+    flex: 0 0 20px;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    box-sizing: border-box;
+}
+
+/* Preview */
+.raport-actions button:first-child .raport-button-icon {
+    stroke: var(--secondarysec-80);
+}
+
+/* Download */
+.raport-actions button:last-child .raport-button-icon {
+    stroke: var(--primarypr-30);
+}
+
+/* =========================================================
+   RESPONSIVE TABLE
+   ========================================================= */
+
+@media (min-width: 1101px) {
+    .raport-table-head,
+    .raport-table-row {
+        min-width: 0;
+    }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .raport-page {
+        padding: 8px 0 32px;
+    }
+
+    .raport-filter-fields {
+        column-gap: 24px;
+    }
+
+    .raport-table-card {
+        overflow-x: auto;
+    }
+
+    .raport-table-head,
+    .raport-table-row {
+        min-width: 920px;
+    }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .raport-page {
+        padding: 8px 0 30px;
+    }
+
+    .raport-heading {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .raport-filter-card {
+        min-height: 0;
+        padding: 18px 16px;
+    }
+
+    .raport-filter-fields {
+        grid-template-columns: 1fr;
+        row-gap: 16px;
+    }
+
+    .raport-filter-actions {
+        flex-wrap: wrap;
+    }
+
+    .raport-preview-button,
+    .raport-pdf-button {
+        flex: 1 1 150px;
+    }
+
+    .raport-search-card {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        margin-top: 22px;
+        padding: 16px;
+    }
+
+    .raport-search-box {
+        min-width: 0;
+        height: 42px;
+        min-height: 42px;
+    }
+
+    .raport-search-input {
+        min-width: 0;
+        font-size: 14px;
+    }
+
+    .raport-search-icon {
+        right: 14px;
+        width: 22px;
+        height: 22px;
+    }
+
+    .raport-table-card {
+        margin-top: 20px;
+        overflow-x: auto;
+    }
+
+    .raport-table-head,
+    .raport-table-row {
+        min-width: 920px;
+    }
+}
+
+/* =========================================================
+   HP KECIL
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .raport-page {
+        padding: 8px 0 30px;
+    }
+
+    .raport-heading h1 {
+        font-size: 19px;
+    }
+
+    .raport-heading p {
+        font-size: 13px;
+    }
+
+    .raport-filter-card,
+    .raport-search-card {
+        border-radius: 12px;
+    }
+
+    .raport-search-card {
+        margin-top: 20px;
+        padding: 12px;
+    }
+
+    .raport-search-box {
+        height: 40px;
+        min-height: 40px;
+        border-radius: 10px;
+    }
+
+    .raport-search-input {
+        padding: 0 42px 0 10px;
+        font-size: 13px;
+    }
+
+    .raport-search-icon {
+        right: 12px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .raport-filter-actions .raport-button-icon {
+        width: 19px;
+        height: 19px;
+        flex-basis: 19px;
+    }
+
+    .raport-actions {
+        gap: 10px;
+    }
+
+    .raport-table-head,
+    .raport-table-row {
+        min-width: 920px;
+    }
+}
