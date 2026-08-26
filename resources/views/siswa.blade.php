@@ -3,24 +3,25 @@
 @section('title', 'Data Siswa | Cyber Olympus E-Raport System')
 
 @push('styles')
-    <link
-        rel="stylesheet"
-        href="{{ asset('css/pages/siswa.css') }}"
-    >
+
+<link
+    rel="stylesheet"
+    href="{{ asset('css/pages/siswa.css') }}"
+>
+
 @endpush
 
 @section('content')
 
 <section
     id="data-siswa"
-    aria-labelledby="siswa-page-title"
     class="siswa-content"
+    aria-labelledby="siswa-page-title"
 >
 
     {{-- =====================================================
          HEADING
          ===================================================== --}}
-
     <div class="siswa-heading">
 
         <div class="siswa-heading-text">
@@ -43,9 +44,10 @@
         >
 
             <svg
-                aria-hidden="true"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
             >
+
                 <path
                     d="M12 5v14M5 12h14"
                     fill="none"
@@ -53,6 +55,7 @@
                     stroke-linecap="round"
                     stroke-width="2"
                 />
+
             </svg>
 
             <span>
@@ -67,10 +70,9 @@
     {{-- =====================================================
          SEARCH
          ===================================================== --}}
-
     <section
-        aria-label="Pencarian siswa"
         class="siswa-search-card"
+        aria-label="Pencarian siswa"
     >
 
         <form
@@ -88,22 +90,22 @@
 
 
             <input
-                autocomplete="off"
                 id="student-search"
                 name="search"
-                placeholder="Cari siswa berdasarkan NISN, Nama Siswa atau Kelas..."
                 type="search"
+                placeholder="Cari siswa berdasarkan NISN, Nama Siswa atau Kelas..."
+                autocomplete="off"
             >
 
 
             <button
-                aria-label="Cari siswa"
                 type="submit"
+                aria-label="Cari siswa"
             >
 
                 <svg
-                    aria-hidden="true"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                 >
 
                     <circle
@@ -133,27 +135,24 @@
 
 
     {{-- =====================================================
-         TABLE
+         TABLE DATA SISWA
          ===================================================== --}}
-
     <section
-        aria-label="Daftar siswa"
         class="siswa-table-card"
+        aria-label="Daftar siswa"
     >
 
         <div class="siswa-table-scroll">
 
             <div
-                aria-label="Data siswa"
                 class="siswa-table"
                 role="table"
+                aria-label="Data siswa"
             >
 
-
-                {{-- ===============================
+                {{-- =================================================
                      TABLE HEADER
-                     =============================== --}}
-
+                     ================================================= --}}
                 <div
                     class="siswa-table-header"
                     role="row"
@@ -186,18 +185,15 @@
                 </div>
 
 
-                {{-- ===============================
+                {{-- =================================================
                      TABLE BODY
-                     =============================== --}}
-
+                     ================================================= --}}
                 <div
                     class="siswa-table-body"
                     role="rowgroup"
                 >
 
-
                     {{-- Adit Pratama --}}
-
                     <div
                         class="siswa-table-row"
                         data-kelas-id="1"
@@ -251,8 +247,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -282,8 +278,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -305,7 +301,6 @@
 
 
                     {{-- Dimas Ikwani --}}
-
                     <div
                         class="siswa-table-row"
                         data-kelas-id="1"
@@ -341,8 +336,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -372,8 +367,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -395,7 +390,6 @@
 
 
                     {{-- Siti Aisyah --}}
-
                     <div
                         class="siswa-table-row"
                         data-kelas-id="2"
@@ -431,8 +425,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -462,8 +456,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -485,7 +479,6 @@
 
 
                     {{-- Nabila Putri --}}
-
                     <div
                         class="siswa-table-row"
                         data-kelas-id="2"
@@ -521,8 +514,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -552,8 +545,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -575,7 +568,6 @@
 
 
                     {{-- Fajar Ramadhan --}}
-
                     <div
                         class="siswa-table-row"
                         data-kelas-id="3"
@@ -611,8 +603,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -642,8 +634,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -665,7 +657,6 @@
 
 
                     {{-- Aulia Rahma --}}
-
                     <div
                         class="siswa-table-row"
                         data-kelas-id="4"
@@ -701,8 +692,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -732,8 +723,8 @@
                             >
 
                                 <svg
-                                    aria-hidden="true"
                                     viewBox="0 0 24 24"
+                                    aria-hidden="true"
                                 >
 
                                     <path
@@ -767,7 +758,6 @@
 {{-- =========================================================
      MODAL TAMBAH / EDIT SISWA
      ========================================================= --}}
-
 <div
     class="siswa-modal"
     id="siswa-modal"
@@ -810,8 +800,8 @@
             >
 
                 <svg
-                    aria-hidden="true"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                 >
 
                     <path
@@ -834,6 +824,7 @@
             id="siswa-form"
         >
 
+            {{-- NISN --}}
             <div class="siswa-form-group">
 
                 <label for="siswa-nisn">
@@ -841,14 +832,14 @@
                 </label>
 
                 <input
-                    autocomplete="off"
                     id="siswa-nisn"
+                    name="nisn"
+                    type="text"
                     inputmode="numeric"
                     maxlength="15"
-                    name="nisn"
                     placeholder="Masukkan NISN"
+                    autocomplete="off"
                     required
-                    type="text"
                 >
 
                 <small class="siswa-form-help">
@@ -858,6 +849,7 @@
             </div>
 
 
+            {{-- NAMA --}}
             <div class="siswa-form-group">
 
                 <label for="siswa-name">
@@ -865,18 +857,19 @@
                 </label>
 
                 <input
-                    autocomplete="off"
                     id="siswa-name"
-                    maxlength="40"
                     name="namaSiswa"
-                    placeholder="Masukkan nama siswa"
-                    required
                     type="text"
+                    maxlength="40"
+                    placeholder="Masukkan nama siswa"
+                    autocomplete="off"
+                    required
                 >
 
             </div>
 
 
+            {{-- JENIS KELAMIN --}}
             <div class="siswa-form-group">
 
                 <label for="siswa-jk">
@@ -892,9 +885,9 @@
                     >
 
                         <option
+                            value=""
                             disabled
                             selected
-                            value=""
                         >
                             Pilih jenis kelamin
                         </option>
@@ -914,6 +907,7 @@
             </div>
 
 
+            {{-- KELAS --}}
             <div class="siswa-form-group">
 
                 <label for="siswa-kelas">
@@ -929,9 +923,9 @@
                     >
 
                         <option
+                            value=""
                             disabled
                             selected
-                            value=""
                         >
                             Pilih kelas
                         </option>
@@ -963,6 +957,7 @@
             </div>
 
 
+            {{-- FORM ACTION --}}
             <div class="siswa-form-actions">
 
                 <button
@@ -972,6 +967,7 @@
                 >
                     Batal
                 </button>
+
 
                 <button
                     class="siswa-form-submit"
@@ -993,7 +989,6 @@
 {{-- =========================================================
      MODAL KONFIRMASI HAPUS
      ========================================================= --}}
-
 <div
     class="siswa-modal"
     id="delete-modal"
@@ -1016,8 +1011,8 @@
         <div class="delete-modal-icon">
 
             <svg
-                aria-hidden="true"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
             >
 
                 <path
@@ -1063,6 +1058,7 @@
                 Batal
             </button>
 
+
             <button
                 class="siswa-form-delete-confirm"
                 id="delete-form-confirm-btn"
@@ -1082,829 +1078,8 @@
 
 @push('scripts')
 
-<script>
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    /* =====================================================
-       ELEMENT
-       ===================================================== */
-
-    const addButton =
-        document.querySelector('#siswa-add-button');
-
-    const modal =
-        document.querySelector('#siswa-modal');
-
-    const deleteModal =
-        document.querySelector('#delete-modal');
-
-    const form =
-        document.querySelector('#siswa-form');
-
-    const closeButton =
-        document.querySelector('#siswa-modal-close');
-
-    const cancelButton =
-        document.querySelector('#siswa-form-cancel');
-
-    const submitButton =
-        document.querySelector('#siswa-form-submit-btn');
-
-    const deleteCancelButton =
-        document.querySelector('#delete-form-cancel');
-
-    const deleteConfirmButton =
-        document.querySelector('#delete-form-confirm-btn');
-
-    const tableBody =
-        document.querySelector('.siswa-table-body');
-
-    const searchForm =
-        document.querySelector('#siswa-search-form');
-
-    const searchInput =
-        document.querySelector('#student-search');
-
-    const nisnInput =
-        document.querySelector('#siswa-nisn');
-
-    const nameInput =
-        document.querySelector('#siswa-name');
-
-    const jkInput =
-        document.querySelector('#siswa-jk');
-
-    const kelasInput =
-        document.querySelector('#siswa-kelas');
-
-    const modalTitle =
-        document.querySelector('#siswa-modal-title');
-
-    const modalDescription =
-        document.querySelector('#siswa-modal-desc');
-
-    const deleteStudentName =
-        document.querySelector('#delete-student-name');
-
-
-    let editingRow = null;
-
-    let deletingRow = null;
-
-
-    /* =====================================================
-       MODAL TAMBAH / EDIT
-       ===================================================== */
-
-    function openStudentModal(edit = false) {
-
-        if (!modal) {
-            return;
-        }
-
-
-        modalTitle.textContent =
-            edit
-                ? 'Edit Data Siswa'
-                : 'Tambah Data Siswa';
-
-
-        modalDescription.textContent =
-            edit
-                ? 'Ubah rincian data siswa di bawah ini.'
-                : 'Lengkapi data siswa yang akan ditambahkan.';
-
-
-        submitButton.textContent =
-            edit
-                ? 'Simpan Perubahan'
-                : 'Simpan Data Siswa';
-
-
-        modal.hidden = false;
-
-        document.body.classList.add(
-            'siswa-modal-open'
-        );
-
-    }
-
-
-    function closeStudentModal() {
-
-        if (!modal) {
-            return;
-        }
-
-
-        modal.hidden = true;
-
-        document.body.classList.remove(
-            'siswa-modal-open'
-        );
-
-
-        if (form) {
-            form.reset();
-        }
-
-
-        editingRow = null;
-
-    }
-
-
-    /* =====================================================
-       TAMBAH SISWA
-       ===================================================== */
-
-    if (addButton) {
-
-        addButton.addEventListener(
-            'click',
-            function () {
-
-                if (form) {
-                    form.reset();
-                }
-
-                editingRow = null;
-
-                openStudentModal(false);
-
-                setTimeout(
-                    function () {
-
-                        if (nisnInput) {
-                            nisnInput.focus();
-                        }
-
-                    },
-                    100
-                );
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       CLOSE MODAL
-       ===================================================== */
-
-    if (closeButton) {
-
-        closeButton.addEventListener(
-            'click',
-            closeStudentModal
-        );
-
-    }
-
-
-    if (cancelButton) {
-
-        cancelButton.addEventListener(
-            'click',
-            closeStudentModal
-        );
-
-    }
-
-
-    if (modal) {
-
-        modal
-            .querySelectorAll(
-                '[data-siswa-modal-close]'
-            )
-            .forEach(
-                function (element) {
-
-                    element.addEventListener(
-                        'click',
-                        closeStudentModal
-                    );
-
-                }
-            );
-
-    }
-
-
-    /* =====================================================
-       KELAS
-       ===================================================== */
-
-    function getSelectedClassName() {
-
-        if (!kelasInput) {
-            return '';
-        }
-
-
-        const selectedOption =
-            kelasInput.options[
-                kelasInput.selectedIndex
-            ];
-
-
-        if (!selectedOption) {
-            return '';
-        }
-
-
-        return (
-            selectedOption.textContent
-                .split(' — ')[0]
-                .trim()
-        );
-
-    }
-
-
-    /* =====================================================
-       UPDATE NOMOR
-       ===================================================== */
-
-    function updateNumbers() {
-
-        if (!tableBody) {
-            return;
-        }
-
-
-        tableBody
-            .querySelectorAll(
-                '.siswa-table-row'
-            )
-            .forEach(
-                function (row, index) {
-
-                    const number =
-                        row.querySelector(
-                            '.cell-no'
-                        );
-
-                    if (number) {
-                        number.textContent =
-                            index + 1;
-                    }
-
-                }
-            );
-
-    }
-
-
-    /* =====================================================
-       EDIT / DELETE TABLE
-       ===================================================== */
-
-    if (tableBody) {
-
-        tableBody.addEventListener(
-            'click',
-            function (event) {
-
-                const editButton =
-                    event.target.closest(
-                        '.edit-btn'
-                    );
-
-                const deleteButton =
-                    event.target.closest(
-                        '.delete-btn'
-                    );
-
-
-                /* =========================================
-                   EDIT
-                   ========================================= */
-
-                if (editButton) {
-
-                    editingRow =
-                        editButton.closest(
-                            '.siswa-table-row'
-                        );
-
-
-                    if (!editingRow) {
-                        return;
-                    }
-
-
-                    const nisn =
-                        editingRow.querySelector(
-                            '.cell-nisn'
-                        );
-
-                    const name =
-                        editingRow.querySelector(
-                            '.cell-nama'
-                        );
-
-                    const jk =
-                        editingRow.querySelector(
-                            '.cell-jk'
-                        );
-
-
-                    if (nisnInput) {
-                        nisnInput.value =
-                            nisn.textContent.trim();
-                    }
-
-
-                    if (nameInput) {
-                        nameInput.value =
-                            name.textContent.trim();
-                    }
-
-
-                    if (jkInput) {
-                        jkInput.value =
-                            jk.textContent.trim();
-                    }
-
-
-                    if (kelasInput) {
-                        kelasInput.value =
-                            editingRow.dataset.kelasId || '';
-                    }
-
-
-                    openStudentModal(true);
-
-                    return;
-
-                }
-
-
-                /* =========================================
-                   DELETE
-                   ========================================= */
-
-                if (deleteButton) {
-
-                    deletingRow =
-                        deleteButton.closest(
-                            '.siswa-table-row'
-                        );
-
-
-                    if (!deletingRow) {
-                        return;
-                    }
-
-
-                    const studentName =
-                        deletingRow.querySelector(
-                            '.cell-nama'
-                        );
-
-
-                    if (deleteStudentName) {
-
-                        deleteStudentName.textContent =
-                            studentName
-                                .textContent
-                                .trim();
-
-                    }
-
-
-                    deleteModal.hidden = false;
-
-                    document.body.classList.add(
-                        'siswa-modal-open'
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       SIMPAN TAMBAH / EDIT
-       ===================================================== */
-
-    if (form) {
-
-        form.addEventListener(
-            'submit',
-            function (event) {
-
-                event.preventDefault();
-
-
-                const nisn =
-                    nisnInput.value.trim();
-
-                const name =
-                    nameInput.value.trim();
-
-                const jk =
-                    jkInput.value;
-
-                const kelas =
-                    kelasInput.value;
-
-
-                if (
-                    !nisn ||
-                    !name ||
-                    !jk ||
-                    !kelas
-                ) {
-                    showAppToast('NISN, nama, jenis kelamin, dan kelas wajib diisi.');
-                    return;
-                }
-
-
-                const className =
-                    getSelectedClassName();
-
-
-                /* =========================================
-                   EDIT
-                   ========================================= */
-
-                if (editingRow) {
-
-                    editingRow.querySelector(
-                        '.cell-nisn'
-                    ).textContent = nisn;
-
-
-                    editingRow.querySelector(
-                        '.cell-nama'
-                    ).textContent = name;
-
-
-                    editingRow.querySelector(
-                        '.cell-jk'
-                    ).textContent = jk;
-
-
-                    editingRow.querySelector(
-                        '.cell-kelas'
-                    ).textContent = className;
-
-
-                    editingRow.dataset.kelasId =
-                        kelas;
-
-
-                    editingRow
-                        .querySelector('.edit-btn')
-                        .setAttribute(
-                            'aria-label',
-                            'Edit ' + name
-                        );
-
-
-                    editingRow
-                        .querySelector('.delete-btn')
-                        .setAttribute(
-                            'aria-label',
-                            'Hapus ' + name
-                        );
-
-
-                    closeStudentModal();
-
-                    showAppToast('Data siswa berhasil diperbarui.', 'success');
-
-                    return;
-
-                }
-
-
-                /* =========================================
-                   TAMBAH
-                   ========================================= */
-
-                const row =
-                    document.createElement('div');
-
-
-                row.className =
-                    'siswa-table-row';
-
-
-                row.setAttribute(
-                    'role',
-                    'row'
-                );
-
-
-                row.dataset.kelasId =
-                    kelas;
-
-
-                const number =
-                    tableBody.querySelectorAll(
-                        '.siswa-table-row'
-                    ).length + 1;
-
-
-                row.innerHTML = `
-
-                    <div
-                        class="cell-no"
-                        role="cell"
-                    >
-                        ${number}
-                    </div>
-
-                    <div
-                        class="cell-nisn"
-                        role="cell"
-                    >
-                        ${nisn}
-                    </div>
-
-                    <div
-                        class="cell-nama"
-                        role="cell"
-                    >
-                        ${name}
-                    </div>
-
-                    <div
-                        class="cell-jk"
-                        role="cell"
-                    >
-                        ${jk}
-                    </div>
-
-                    <div
-                        class="cell-kelas"
-                        role="cell"
-                    >
-                        ${className}
-                    </div>
-
-                    <div
-                        class="siswa-actions"
-                        role="cell"
-                    >
-
-                        <button
-                            type="button"
-                            class="edit-btn"
-                            aria-label="Edit ${name}"
-                        >
-
-                            <svg
-                                viewBox="0 0 24 24"
-                                aria-hidden="true"
-                            >
-
-                                <path
-                                    d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                />
-
-                                <path
-                                    d="M14.5 7.5l2 2"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                />
-
-                            </svg>
-
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="delete-btn"
-                            aria-label="Hapus ${name}"
-                        >
-
-                            <svg
-                                viewBox="0 0 24 24"
-                                aria-hidden="true"
-                            >
-
-                                <path
-                                    d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                />
-
-                            </svg>
-
-                        </button>
-
-                    </div>
-
-                `;
-
-
-                tableBody.appendChild(row);
-
-
-                closeStudentModal();
-
-                showAppToast('Data siswa berhasil ditambahkan.', 'success');
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       DELETE MODAL
-       ===================================================== */
-
-    function closeDeleteModal() {
-
-        if (!deleteModal) {
-            return;
-        }
-
-
-        deleteModal.hidden = true;
-
-        document.body.classList.remove(
-            'siswa-modal-open'
-        );
-
-
-        deletingRow = null;
-
-    }
-
-
-    if (deleteCancelButton) {
-
-        deleteCancelButton.addEventListener(
-            'click',
-            closeDeleteModal
-        );
-
-    }
-
-
-    if (deleteModal) {
-
-        deleteModal
-            .querySelectorAll(
-                '[data-delete-modal-close]'
-            )
-            .forEach(
-                function (element) {
-
-                    element.addEventListener(
-                        'click',
-                        closeDeleteModal
-                    );
-
-                }
-            );
-
-    }
-
-
-    if (deleteConfirmButton) {
-
-        deleteConfirmButton.addEventListener(
-            'click',
-            function () {
-
-                if (deletingRow) {
-
-                    deletingRow.remove();
-
-                    updateNumbers();
-
-                }
-
-
-                closeDeleteModal();
-
-                showAppToast('Data siswa berhasil dihapus.', 'success');
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       SEARCH
-       ===================================================== */
-
-    if (searchForm) {
-
-        searchForm.addEventListener(
-            'submit',
-            function (event) {
-
-                event.preventDefault();
-
-            }
-        );
-
-    }
-
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            'input',
-            function () {
-
-                const keyword =
-                    searchInput.value
-                        .trim()
-                        .toLowerCase();
-
-
-                const rows =
-                    tableBody.querySelectorAll(
-                        '.siswa-table-row'
-                    );
-
-
-                rows.forEach(
-                    function (row) {
-
-                        const text =
-                            row.textContent
-                                .toLowerCase();
-
-
-                        row.style.display =
-                            text.includes(keyword)
-                                ? ''
-                                : 'none';
-
-                    }
-                );
-
-
-                /*
-                 * Nomor tetap mengikuti data asli.
-                 * Tidak mengubah nomor ketika search.
-                 */
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       ESCAPE
-       ===================================================== */
-
-    document.addEventListener(
-        'keydown',
-        function (event) {
-
-            if (event.key !== 'Escape') {
-                return;
-            }
-
-
-            if (
-                modal &&
-                !modal.hidden
-            ) {
-                closeStudentModal();
-            }
-
-
-            if (
-                deleteModal &&
-                !deleteModal.hidden
-            ) {
-                closeDeleteModal();
-            }
-
-        }
-    );
-
-});
-
-</script>
+<script
+    src="{{ asset('js/siswa.js') }}"
+></script>
 
 @endpush
