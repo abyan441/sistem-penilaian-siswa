@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,36 +13,61 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Nama tabel database.
+     */
+    protected $table = 'users';
+
+    /**
+     * Kolom yang dapat diisi secara massal.
      */
     protected $fillable = [
-        'name',
-        'email',
+        'username',
         'password',
+        'nama_lengkap',
+        'email',
+        'role',
+        'status',
+        'nip',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Kolom yang disembunyikan ketika model diserialisasi.
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Casting atribut.
      */
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Menggunakan username sebagai identifier autentikasi.
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'username';
+    }
+
+    /**
+     * Relasi ke data guru-mata pelajaran.
+     */
+    public function guruMapel()
+    {
+        return $this->hasMany(GuruMapel::class, 'guru_id');
+    }
+
+    /**
+     * Relasi ke kelas yang diwalikan.
+     */
+    public function waliKelas()
+    {
+        return $this->hasOne(Kelas::class, 'wali_kelas_id');
     }
 }

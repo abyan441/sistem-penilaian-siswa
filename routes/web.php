@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MataPelajaranController;
 
 
 /*
@@ -53,9 +54,28 @@ Route::get('/kelas', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/mata-pelajaran', function () {
-    return view('mapel');
-})->name('mapel');
+Route::get(
+    '/mata-pelajaran',
+    [MataPelajaranController::class, 'index']
+)->name('mapel');
+
+
+Route::post(
+    '/mata-pelajaran',
+    [MataPelajaranController::class, 'store']
+)->name('mapel.store');
+
+
+Route::put(
+    '/mata-pelajaran/{id}',
+    [MataPelajaranController::class, 'update']
+)->name('mapel.update');
+
+
+Route::delete(
+    '/mata-pelajaran/{id}',
+    [MataPelajaranController::class, 'destroy']
+)->name('mapel.destroy');
 
 
 /*
@@ -79,13 +99,11 @@ Route::get('/raport', function () {
     return view('raport');
 })->name('raport');
 
+
 /*
 |--------------------------------------------------------------------------
 | Preview / Cetak Raport
 |--------------------------------------------------------------------------
-|
-| {id} digunakan untuk menentukan raport/siswa yang akan ditampilkan.
-|
 */
 
 Route::get('/raport/{id}/preview', function ($id) {

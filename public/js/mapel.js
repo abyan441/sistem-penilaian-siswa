@@ -1,19 +1,56 @@
 document.addEventListener("DOMContentLoaded", function () {
     /* =====================================================
-     DATA MATA PELAJARAN
-     ===================================================== */
+       KONFIGURASI
+       ===================================================== */
+
+    const config = window.mapelConfig || {};
+
+    const storeUrl = config.storeUrl || "/mata-pelajaran";
+
+    const updateUrl = config.updateUrl || "/mata-pelajaran";
+
+    const csrfToken = config.csrfToken || "";
+
+    /* =====================================================
+       ELEMENT
+       ===================================================== */
+
     const tableBody = document.querySelector(".mapel-table-body");
+
     const totalMapel = document.querySelector("#total-mapel");
+
     const averageKkm = document.querySelector("#average-kkm");
+
     const lowestKkm = document.querySelector("#lowest-kkm");
+
     const addButton = document.querySelector("#mapel-add-button");
+
+    /* =====================================================
+       HELPER
+       ===================================================== */
 
     function getRows() {
         if (!tableBody) {
             return [];
         }
 
-        return Array.from(tableBody.querySelectorAll(".mapel-table-row"));
+        return Array.from(
+            tableBody.querySelectorAll(".mapel-table-row[data-mapel-id]"),
+        );
+    }
+
+    function badgeClass(kkm) {
+        return Number(kkm) <= 70 ? "kkm-low" : "kkm-high";
+    }
+
+    function refreshRowNumbers() {
+        getRows().forEach(function (row, index) {
+            const no = row.querySelector(".cell-no");
+
+            if (no) {
+                no.textContent = String(index + 1);
+            }
+        });
     }
 
     function updateStats() {
@@ -50,29 +87,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function refreshRowNumbers() {
-        getRows().forEach(function (row, index) {
-            const no = row.querySelector(".cell-no");
-
-            if (no) {
-                no.textContent = String(index + 1);
-            }
-        });
-    }
-
-    function badgeClass(kkm) {
-        return Number(kkm) <= 70 ? "kkm-low" : "kkm-high";
-    }
-
     function updateRowContent(row) {
         if (!row) {
             return;
         }
 
         const kodeCell = row.querySelector(".cell-kode");
+
         const namaCell = row.querySelector(".cell-nama");
+
         const badge = row.querySelector(".kkm-badge");
+
         const editButton = row.querySelector(".mapel-edit-btn");
+
         const deleteButton = row.querySelector(".mapel-delete-btn");
 
         if (kodeCell) {
@@ -104,78 +131,106 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function createMapelRow(kode, nama, kkm) {
+    function createMapelRow(data) {
         const row = document.createElement("div");
 
         row.className = "mapel-table-row";
+
         row.setAttribute("role", "row");
 
-        row.dataset.mapelId = String(Date.now());
-        row.dataset.kode = kode.trim().toUpperCase();
-        row.dataset.nama = nama.trim();
-        row.dataset.kkm = String(kkm);
+        row.dataset.mapelId = String(data.id);
+
+        row.dataset.kode = data.kode_mapel || "";
+
+        row.dataset.nama = data.nama_pelajaran || "";
+
+        row.dataset.kkm = String(data.kkm ?? 0);
 
         row.innerHTML = `
-      <div class="cell-no" role="cell"></div>
+            <div
+                class="cell-no"
+                role="cell"
+            ></div>
 
-      <div class="cell-kode" role="cell"></div>
+            <div
+                class="cell-kode"
+                role="cell"
+            ></div>
 
-      <div class="cell-nama" role="cell"></div>
+            <div
+                class="cell-nama"
+                role="cell"
+            ></div>
 
-      <div class="cell-kkm" role="cell">
-        <span class="kkm-badge"></span>
-      </div>
+            <div
+                class="cell-kkm"
+                role="cell"
+            >
+                <span class="kkm-badge"></span>
+            </div>
 
-      <div class="mapel-actions" role="cell">
+            <div
+                class="mapel-actions"
+                role="cell"
+            >
 
-        <button
-          class="mapel-edit-btn"
-          type="button"
-          title="Edit"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
-              fill="none"
-              stroke="currentColor"
-              stroke-linejoin="round"
-              stroke-width="2"
-            ></path>
+                <button
+                    class="mapel-edit-btn"
+                    type="button"
+                    title="Edit"
+                >
 
-            <path
-              d="M14.5 7.5l2 2"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            ></path>
-          </svg>
-        </button>
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
 
-        <button
-          class="mapel-delete-btn"
-          type="button"
-          title="Hapus"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-            ></path>
-          </svg>
-        </button>
+                        <path
+                            d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                        ></path>
 
-      </div>
-    `;
+                        <path
+                            d="M14.5 7.5l2 2"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        ></path>
+
+                    </svg>
+
+                </button>
+
+
+                <button
+                    class="mapel-delete-btn"
+                    type="button"
+                    title="Hapus"
+                >
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                        ></path>
+
+                    </svg>
+
+                </button>
+
+            </div>
+        `;
 
         updateRowContent(row);
 
@@ -183,10 +238,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =====================================================
-     MODAL TAMBAH MATA PELAJARAN
-     ===================================================== */
+       MODAL TAMBAH
+       ===================================================== */
 
     const mapelModal = document.querySelector("#mapel-modal");
+
     const mapelForm = document.querySelector("#mapel-form");
 
     const mapelModalClose = document.querySelector("#mapel-modal-close");
@@ -234,21 +290,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (addButton) {
-        addButton.addEventListener("click", function () {
-            openMapelModal();
-        });
+        addButton.addEventListener("click", openMapelModal);
     }
 
     if (mapelModalClose) {
-        mapelModalClose.addEventListener("click", function () {
-            closeMapelModal();
-        });
+        mapelModalClose.addEventListener("click", closeMapelModal);
     }
 
     if (mapelFormCancel) {
-        mapelFormCancel.addEventListener("click", function () {
-            closeMapelModal();
-        });
+        mapelFormCancel.addEventListener("click", closeMapelModal);
     }
 
     if (mapelModal) {
@@ -259,29 +309,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape" && mapelModal && !mapelModal.hidden) {
-            closeMapelModal();
-        }
-    });
-
     /* =====================================================
-     SUBMIT TAMBAH MATA PELAJARAN
-     ===================================================== */
+       TAMBAH DATA
+       ===================================================== */
 
-    if (mapelForm && tableBody) {
-        mapelForm.addEventListener("submit", function (event) {
+    if (mapelForm) {
+        mapelForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const kode = mapelKodeInput
-                ? mapelKodeInput.value.trim().toUpperCase()
-                : "";
+            const kode = mapelKodeInput.value.trim().toUpperCase();
 
-            const nama = mapelNamaInput ? mapelNamaInput.value.trim() : "";
+            const nama = mapelNamaInput.value.trim();
 
-            const kkm = mapelKkmInput ? Number(mapelKkmInput.value) : NaN;
-
-            /* VALIDASI KODE */
+            const kkm = Number(mapelKkmInput.value);
 
             if (!kode) {
                 showAppToast("Kode mata pelajaran wajib diisi.");
@@ -299,8 +339,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            /* VALIDASI NAMA */
-
             if (!nama) {
                 showAppToast("Nama mata pelajaran wajib diisi.");
 
@@ -317,8 +355,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            /* VALIDASI KKM */
-
             if (!Number.isFinite(kkm) || kkm < 0 || kkm > 100) {
                 showAppToast("KKM harus berupa angka 0-100.");
 
@@ -327,56 +363,64 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            /* CEK DUPLIKAT */
+            try {
+                const response = await fetch(storeUrl, {
+                    method: "POST",
 
-            const existingRows = getRows();
+                    headers: {
+                        "Content-Type": "application/json",
 
-            const duplicateKode = existingRows.some(function (row) {
-                return (row.dataset.kode || "").toUpperCase() === kode;
-            });
+                        Accept: "application/json",
 
-            if (duplicateKode) {
-                showAppToast("Kode mata pelajaran tersebut sudah digunakan.");
+                        "X-CSRF-TOKEN": csrfToken,
 
-                mapelKodeInput.focus();
+                        "X-Requested-With": "XMLHttpRequest",
+                    },
 
-                return;
-            }
+                    body: JSON.stringify({
+                        kode_mapel: kode,
+                        nama_pelajaran: nama,
+                        kkm: kkm,
+                    }),
+                });
 
-            const duplicateNama = existingRows.some(function (row) {
-                return (
-                    (row.dataset.nama || "").toLowerCase() ===
-                    nama.toLowerCase()
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(getErrorMessage(result));
+                }
+
+                const emptyRow = tableBody.querySelector(".mapel-empty-row");
+
+                if (emptyRow) {
+                    emptyRow.remove();
+                }
+
+                const row = createMapelRow(result.data);
+
+                tableBody.appendChild(row);
+
+                refreshRowNumbers();
+
+                updateStats();
+
+                closeMapelModal();
+
+                showAppToast(
+                    result.message || "Mata pelajaran berhasil ditambahkan.",
+                    "success",
                 );
-            });
-
-            if (duplicateNama) {
-                showAppToast("Nama mata pelajaran tersebut sudah digunakan.");
-
-                mapelNamaInput.focus();
-
-                return;
+            } catch (error) {
+                showAppToast(
+                    error.message || "Gagal menambahkan mata pelajaran.",
+                );
             }
-
-            /* BUAT BARIS BARU */
-
-            const row = createMapelRow(kode, nama, kkm);
-
-            tableBody.appendChild(row);
-
-            refreshRowNumbers();
-
-            updateStats();
-
-            closeMapelModal();
-
-            showAppToast("Mata pelajaran berhasil ditambahkan.", "success");
         });
     }
 
     /* =====================================================
-     MODAL EDIT + KONFIRMASI HAPUS
-     ===================================================== */
+       MODAL EDIT
+       ===================================================== */
 
     const editModal = document.querySelector("#mapel-edit-modal");
 
@@ -392,22 +436,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const editKkm = document.querySelector("#mapel-edit-kkm");
 
-    const deleteModal = document.querySelector("#mapel-delete-modal");
-
-    const deleteCancel = document.querySelector("#mapel-delete-cancel");
-
-    const deleteConfirm = document.querySelector("#mapel-delete-confirm");
-
-    const deleteClose = document.querySelector("#mapel-delete-close");
-
-    const deleteName = document.querySelector("#mapel-delete-name");
-
     let editingRow = null;
-    let deletingRow = null;
-
-    /* =====================================================
-     EDIT
-     ===================================================== */
 
     function openEditModal(row) {
         editingRow = row;
@@ -433,11 +462,147 @@ document.addEventListener("DOMContentLoaded", function () {
         editingRow = null;
 
         editForm.reset();
+
+        document.body.classList.remove("mapel-modal-open");
+    }
+
+    if (editClose) {
+        editClose.addEventListener("click", closeEditModal);
+    }
+
+    if (editCancel) {
+        editCancel.addEventListener("click", closeEditModal);
     }
 
     /* =====================================================
-     HAPUS
-     ===================================================== */
+       UPDATE DATA
+       ===================================================== */
+
+    if (editForm) {
+        editForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            if (!editingRow) {
+                return;
+            }
+
+            const id = editingRow.dataset.mapelId;
+
+            const kode = editKode.value.trim().toUpperCase();
+
+            const nama = editNama.value.trim();
+
+            const kkm = Number(editKkm.value);
+
+            if (!kode) {
+                showAppToast("Kode mata pelajaran wajib diisi.");
+
+                editKode.focus();
+
+                return;
+            }
+
+            if (kode.length > 5) {
+                showAppToast("Kode mata pelajaran maksimal 5 karakter.");
+
+                editKode.focus();
+
+                return;
+            }
+
+            if (!nama) {
+                showAppToast("Nama mata pelajaran wajib diisi.");
+
+                editNama.focus();
+
+                return;
+            }
+
+            if (nama.length > 45) {
+                showAppToast("Nama mata pelajaran maksimal 45 karakter.");
+
+                editNama.focus();
+
+                return;
+            }
+
+            if (!Number.isFinite(kkm) || kkm < 0 || kkm > 100) {
+                showAppToast("KKM harus berupa angka 0-100.");
+
+                editKkm.focus();
+
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    updateUrl + "/" + encodeURIComponent(id),
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type": "application/json",
+
+                            Accept: "application/json",
+
+                            "X-CSRF-TOKEN": csrfToken,
+
+                            "X-Requested-With": "XMLHttpRequest",
+                        },
+
+                        body: JSON.stringify({
+                            kode_mapel: kode,
+                            nama_pelajaran: nama,
+                            kkm: kkm,
+                        }),
+                    },
+                );
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(getErrorMessage(result));
+                }
+
+                editingRow.dataset.kode = result.data.kode_mapel;
+
+                editingRow.dataset.nama = result.data.nama_pelajaran;
+
+                editingRow.dataset.kkm = String(result.data.kkm);
+
+                updateRowContent(editingRow);
+
+                updateStats();
+
+                closeEditModal();
+
+                showAppToast(
+                    result.message || "Mata pelajaran berhasil diperbarui.",
+                    "success",
+                );
+            } catch (error) {
+                showAppToast(
+                    error.message || "Gagal memperbarui mata pelajaran.",
+                );
+            }
+        });
+    }
+
+    /* =====================================================
+       MODAL HAPUS
+       ===================================================== */
+
+    const deleteModal = document.querySelector("#mapel-delete-modal");
+
+    const deleteCancel = document.querySelector("#mapel-delete-cancel");
+
+    const deleteConfirm = document.querySelector("#mapel-delete-confirm");
+
+    const deleteClose = document.querySelector("#mapel-delete-close");
+
+    const deleteName = document.querySelector("#mapel-delete-name");
+
+    let deletingRow = null;
 
     function openDeleteModal(row) {
         deletingRow = row;
@@ -455,23 +620,9 @@ document.addEventListener("DOMContentLoaded", function () {
         deleteModal.hidden = true;
 
         deletingRow = null;
+
+        document.body.classList.remove("mapel-modal-open");
     }
-
-    /* =====================================================
-     TOMBOL MODAL EDIT
-     ===================================================== */
-
-    if (editClose) {
-        editClose.addEventListener("click", closeEditModal);
-    }
-
-    if (editCancel) {
-        editCancel.addEventListener("click", closeEditModal);
-    }
-
-    /* =====================================================
-     TOMBOL MODAL HAPUS
-     ===================================================== */
 
     if (deleteClose) {
         deleteClose.addEventListener("click", closeDeleteModal);
@@ -482,8 +633,98 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =====================================================
-     KLIK OVERLAY MODAL
-     ===================================================== */
+       KONFIRMASI HAPUS
+       ===================================================== */
+
+    if (deleteConfirm) {
+        deleteConfirm.addEventListener("click", async function () {
+            if (!deletingRow) {
+                return;
+            }
+
+            const id = deletingRow.dataset.mapelId;
+
+            try {
+                const response = await fetch(
+                    updateUrl + "/" + encodeURIComponent(id),
+                    {
+                        method: "DELETE",
+
+                        headers: {
+                            Accept: "application/json",
+
+                            "X-CSRF-TOKEN": csrfToken,
+
+                            "X-Requested-With": "XMLHttpRequest",
+                        },
+                    },
+                );
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(getErrorMessage(result));
+                }
+
+                deletingRow.remove();
+
+                refreshRowNumbers();
+
+                updateStats();
+
+                closeDeleteModal();
+
+                showAppToast(
+                    result.message || "Mata pelajaran berhasil dihapus.",
+                    "success",
+                );
+            } catch (error) {
+                showAppToast(
+                    error.message || "Gagal menghapus mata pelajaran.",
+                );
+            }
+        });
+    }
+
+    /* =====================================================
+       EVENT TABEL
+       ===================================================== */
+
+    if (tableBody) {
+        tableBody.addEventListener("click", function (event) {
+            const target = event.target;
+
+            if (!(target instanceof Element)) {
+                return;
+            }
+
+            const editButton = target.closest(".mapel-edit-btn");
+
+            const deleteButton = target.closest(".mapel-delete-btn");
+
+            if (editButton) {
+                const row = editButton.closest(".mapel-table-row");
+
+                if (row) {
+                    openEditModal(row);
+                }
+
+                return;
+            }
+
+            if (deleteButton) {
+                const row = deleteButton.closest(".mapel-table-row");
+
+                if (row) {
+                    openDeleteModal(row);
+                }
+            }
+        });
+    }
+
+    /* =====================================================
+       OVERLAY
+       ===================================================== */
 
     [editModal, deleteModal].forEach(function (modal) {
         if (!modal) {
@@ -502,8 +743,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* =====================================================
-     ESC UNTUK MENUTUP MODAL
-     ===================================================== */
+       ESC
+       ===================================================== */
 
     document.addEventListener("keydown", function (event) {
         if (event.key !== "Escape") {
@@ -517,181 +758,35 @@ document.addEventListener("DOMContentLoaded", function () {
         if (deleteModal && !deleteModal.hidden) {
             closeDeleteModal();
         }
+
+        if (mapelModal && !mapelModal.hidden) {
+            closeMapelModal();
+        }
     });
 
     /* =====================================================
-     SUBMIT EDIT
-     ===================================================== */
+       ERROR HANDLER
+       ===================================================== */
 
-    if (editForm) {
-        editForm.addEventListener("submit", function (event) {
-            event.preventDefault();
+    function getErrorMessage(result) {
+        if (result && result.message) {
+            return result.message;
+        }
 
-            if (!editingRow) {
-                return;
+        if (result && result.errors) {
+            const firstError = Object.values(result.errors)[0];
+
+            if (Array.isArray(firstError) && firstError.length) {
+                return firstError[0];
             }
+        }
 
-            const kode = editKode.value.trim().toUpperCase();
-
-            const nama = editNama.value.trim();
-
-            const kkm = Number(editKkm.value);
-
-            /* VALIDASI KODE */
-
-            if (!kode) {
-                showAppToast("Kode mata pelajaran wajib diisi.");
-
-                editKode.focus();
-
-                return;
-            }
-
-            if (kode.length > 5) {
-                showAppToast("Kode mata pelajaran maksimal 5 karakter.");
-
-                editKode.focus();
-
-                return;
-            }
-
-            /* VALIDASI NAMA */
-
-            if (!nama) {
-                showAppToast("Nama mata pelajaran wajib diisi.");
-
-                editNama.focus();
-
-                return;
-            }
-
-            if (nama.length > 45) {
-                showAppToast("Nama mata pelajaran maksimal 45 karakter.");
-
-                editNama.focus();
-
-                return;
-            }
-
-            /* VALIDASI KKM */
-
-            if (!Number.isFinite(kkm) || kkm < 0 || kkm > 100) {
-                showAppToast("KKM harus berupa angka 0-100.");
-
-                editKkm.focus();
-
-                return;
-            }
-
-            /* CEK DUPLIKAT */
-
-            const duplicate = getRows().some(function (row) {
-                if (row === editingRow) {
-                    return false;
-                }
-
-                return (
-                    (row.dataset.kode || "").toUpperCase() === kode ||
-                    (row.dataset.nama || "").toLowerCase() ===
-                        nama.toLowerCase()
-                );
-            });
-
-            if (duplicate) {
-                showAppToast(
-                    "Kode atau nama mata pelajaran tersebut sudah digunakan.",
-                );
-
-                return;
-            }
-
-            /* UPDATE DATA */
-
-            editingRow.dataset.kode = kode;
-
-            editingRow.dataset.nama = nama;
-
-            editingRow.dataset.kkm = String(kkm);
-
-            updateRowContent(editingRow);
-
-            updateStats();
-
-            closeEditModal();
-
-            document.body.classList.remove("mapel-modal-open");
-
-            showAppToast("Mata pelajaran berhasil diperbarui.", "success");
-        });
+        return "Terjadi kesalahan.";
     }
 
     /* =====================================================
-     KONFIRMASI HAPUS
-     ===================================================== */
-
-    if (deleteConfirm) {
-        deleteConfirm.addEventListener("click", function () {
-            if (!deletingRow) {
-                return;
-            }
-
-            deletingRow.remove();
-
-            refreshRowNumbers();
-
-            updateStats();
-
-            closeDeleteModal();
-
-            document.body.classList.remove("mapel-modal-open");
-
-            showAppToast("Mata pelajaran berhasil dihapus.", "success");
-        });
-    }
-
-    /* =====================================================
-     EVENT TABEL
-     ===================================================== */
-
-    if (tableBody) {
-        tableBody.addEventListener("click", function (event) {
-            const target = event.target;
-
-            if (!(target instanceof Element)) {
-                return;
-            }
-
-            const editButton = target.closest(".mapel-edit-btn");
-
-            const deleteButton = target.closest(".mapel-delete-btn");
-
-            /* EDIT */
-
-            if (editButton) {
-                const row = editButton.closest(".mapel-table-row");
-
-                if (row) {
-                    openEditModal(row);
-                }
-
-                return;
-            }
-
-            /* HAPUS */
-
-            if (deleteButton) {
-                const row = deleteButton.closest(".mapel-table-row");
-
-                if (row) {
-                    openDeleteModal(row);
-                }
-            }
-        });
-    }
-
-    /* =====================================================
-     INISIALISASI
-     ===================================================== */
+       INISIALISASI
+       ===================================================== */
 
     refreshRowNumbers();
 
