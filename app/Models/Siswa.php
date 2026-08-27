@@ -23,9 +23,15 @@ class Siswa extends Model
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * Siswa memiliki satu kelas.
+     */
     public function kelas()
     {
-        return $this->belongsTo(Kelas::class, 'kelas_id');
+        return $this->belongsTo(
+            Kelas::class,
+            'kelas_id'
+        );
     }
 
     /*
@@ -34,11 +40,19 @@ class Siswa extends Model
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * Mengambil data siswa beserta kelas.
+     */
     public static function dataHalaman()
     {
         return [
             'siswa' => self::with('kelas')
-                ->join('kelas', 'siswa.kelas_id', '=', 'kelas.id')
+                ->join(
+                    'kelas',
+                    'siswa.kelas_id',
+                    '=',
+                    'kelas.id'
+                )
                 ->select('siswa.*')
                 ->orderBy('kelas.nama_kelas')
                 ->orderBy('siswa.nama_siswa')

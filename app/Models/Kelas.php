@@ -32,7 +32,10 @@ class Kelas extends Model
      */
     public function waliKelas()
     {
-        return $this->belongsTo(User::class, 'wali_kelas_id');
+        return $this->belongsTo(
+            User::class,
+            'wali_kelas_id'
+        );
     }
 
     /**
@@ -40,7 +43,10 @@ class Kelas extends Model
      */
     public function siswa()
     {
-        return $this->hasMany(Siswa::class, 'kelas_id');
+        return $this->hasMany(
+            Siswa::class,
+            'kelas_id'
+        );
     }
 
     /*
@@ -75,7 +81,7 @@ class Kelas extends Model
     }
 
     /**
-     * Mengambil seluruh guru yang dapat menjadi wali kelas.
+     * Mengambil seluruh guru aktif yang dapat menjadi wali kelas.
      */
     public static function semuaWaliKelas()
     {
@@ -84,6 +90,69 @@ class Kelas extends Model
             ->where('status', 'aktif')
             ->orderBy('nama_lengkap')
             ->get();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | KELAS WALI KELAS
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Mengambil kelas yang menjadi tanggung jawab
+     * seorang wali kelas berdasarkan user ID.
+     *
+     * Fungsi ini akan digunakan untuk membatasi
+     * akses input nilai.
+     */
+    public static function kelasWali($waliKelasId)
+    {
+        return static::query()
+            ->where('wali_kelas_id', $waliKelasId)
+            ->with([
+                'waliKelas',
+                'siswa' => function ($query) {
+                    $query
+                        ->orderBy('nama_siswa')
+                        ->orderBy('nisn');
+                },
+            ])
+            ->withCount('siswa')
+            ->first();
+    }
+
+    /**
+     * Mengambil kelas wali kelas dan memastikan
+     * kelas tersebut memang dimiliki oleh user.
+     *
+     * Jika tidak ditemukan, akan menghasilkan 404.
+     */
+    public static function kelasWaliOrFail($waliKelasId)
+    {
+        return static::query()
+            ->where('wali_kelas_id', $waliKelasId)
+            ->with([
+                'waliKelas',
+                'siswa' => function ($query) {
+                    $query
+                        ->orderBy('nama_siswa')
+                        ->orderBy('nisn');
+                },
+            ])
+            ->withCount('siswa')
+            ->firstOrFail();
+    }
+
+    /**
+     * Mengecek apakah suatu kelas merupakan kelas
+     * yang diwalikan oleh user tertentu.
+     */
+    public static function adalahKelasWali($kelasId, $waliKelasId): bool
+    {
+        return static::query()
+            ->where('id', $kelasId)
+            ->where('wali_kelas_id', $waliKelasId)
+            ->exists();
     }
 
     /*
@@ -100,8 +169,14 @@ class Kelas extends Model
      */
     protected static function validasiData(array $data, $id = null)
     {
-        $namaKelas = strtoupper(trim($data['nama_kelas'] ?? ''));
-        $tahunAjaran = trim($data['tahun_ajaran'] ?? '');
+        $namaKelas = strtoupper(
+            trim($data['nama_kelas'] ?? '')
+        );
+
+        $tahunAjaran = trim(
+            $data['tahun_ajaran'] ?? ''
+        );
+
         $waliKelasId = $data['wali_kelas_id'] ?? null;
 
         /*
@@ -248,9 +323,13 @@ class Kelas extends Model
      */
     public static function ubahKelas($id, array $data)
     {
-        $kelas = static::query()->findOrFail($id);
+        $kelas = static::query()
+            ->findOrFail($id);
 
-        $data = static::validasiData($data, $kelas->id);
+        $data = static::validasiData(
+            $data,
+            $kelas->id
+        );
 
         $kelas->update($data);
 
@@ -327,7 +406,9 @@ class Kelas extends Model
         $totalSiswa = Siswa::query()->count();
 
         $rataRata = $totalKelas > 0
-            ? (int) round($totalSiswa / $totalKelas)
+            ? (int) round(
+                $totalSiswa / $totalKelas
+            )
             : 0;
 
         return [

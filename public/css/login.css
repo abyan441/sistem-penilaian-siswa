@@ -1,0 +1,368 @@
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
+
+.halaman-login {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    padding: 32px 48px;
+    position: relative;
+    background-color: var(--primarypr-00);
+    min-height: 100vh;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+.halaman-login .background {
+    display: flex;
+    min-width: 320px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    flex: 1;
+    flex-grow: 1;
+    border-radius: 24px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: 50% 50%;
+    height: calc(100vh - 64px);
+    max-height: 720px;
+}
+
+.halaman-login .rectangle {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff33;
+    border-radius: 12px;
+    border: 1px solid;
+    border-color: var(--secondarysc-50);
+    backdrop-filter: blur(2px) saturate(70%) brightness(100%);
+    -webkit-backdrop-filter: blur(2px) saturate(70%) brightness(100%);
+}
+
+.halaman-login .frame {
+    height: 100%;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+    flex: 1;
+    flex-grow: 1;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+
+.halaman-login .portrait-female {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+    align-self: flex-end;
+}
+
+/* =========================================================
+   LOGIN FORM
+   ========================================================= */
+
+.halaman-login .login-form {
+    display: flex;
+    flex-direction: column;
+    min-width: 320px;
+    align-items: center;
+    gap: 30px;
+    padding: 24px 30px;
+    position: relative;
+    flex: 1;
+    flex-grow: 1;
+    background-color: var(--primarypr-00);
+    border-radius: 12px;
+}
+
+.halaman-login .div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+    display: flex;
+    position: relative;
+}
+
+.halaman-login .text-wrapper {
+    position: relative;
+    align-self: stretch;
+    margin-top: -1px;
+    font-family: var(--heading-h3-bold-font-family);
+    font-weight: var(--heading-h3-bold-font-weight);
+    color: #000000;
+    font-size: var(--heading-h3-bold-font-size);
+    letter-spacing: var(--heading-h3-bold-letter-spacing);
+    line-height: var(--heading-h3-bold-line-height);
+    font-style: var(--heading-h3-bold-font-style);
+}
+
+.halaman-login .p {
+    position: relative;
+    align-self: stretch;
+    font-family: var(--paragraph-p12-medium-font-family);
+    font-weight: var(--paragraph-p12-medium-font-weight);
+    color: var(--secondarysc-50);
+    font-size: var(--paragraph-p12-medium-font-size);
+    letter-spacing: var(--paragraph-p12-medium-letter-spacing);
+    line-height: var(--paragraph-p12-medium-line-height);
+    font-style: var(--paragraph-p12-medium-font-style);
+}
+
+/* =========================================================
+   FORM INPUT
+   ========================================================= */
+
+.halaman-login .frame-2 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+    display: flex;
+    position: relative;
+}
+
+.halaman-login .input-login {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+}
+
+.halaman-login .state-default-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 15px;
+    position: relative;
+    flex: 1;
+    flex-grow: 1;
+    background-color: var(--primarypr-00);
+    border-radius: 12px;
+    border: 0.5px solid;
+    border-color: var(--secondarysc-50);
+}
+
+.halaman-login .vector {
+    position: relative;
+    width: 20px;
+    height: 13px;
+    aspect-ratio: 1.54;
+}
+
+.halaman-login .mdi-password-outline {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    aspect-ratio: 1;
+}
+
+.halaman-login .img {
+    position: absolute;
+    width: 83.33%;
+    height: 95.83%;
+    top: 4.17%;
+    left: 16.67%;
+}
+
+/* =========================================================
+   INPUT EMAIL & PASSWORD
+   ========================================================= */
+
+.halaman-login .email,
+.halaman-login .password {
+    position: relative;
+    flex: 1;
+    margin-top: -0.5px;
+    font-family: var(--label-l16-regular-font-family);
+    font-weight: var(--label-l16-regular-font-weight);
+    color: var(--secondarysc-50);
+    font-size: var(--label-l16-regular-font-size);
+    letter-spacing: var(--label-l16-regular-letter-spacing);
+    line-height: var(--label-l16-regular-line-height);
+    font-style: var(--label-l16-regular-font-style);
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+}
+
+.halaman-login .email::placeholder,
+.halaman-login .password::placeholder {
+    color: var(--secondarysc-50);
+    opacity: 1;
+}
+
+.halaman-login .state-default-type:focus-within {
+    border-color: var(--primarypr-30);
+    box-shadow: 0 0 0 2px rgba(136, 189, 164, 0.35);
+}
+
+/* =========================================================
+   LOGIN ERROR
+   ========================================================= */
+
+.halaman-login .login-error {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(220, 53, 69, 0.25);
+    border-radius: 10px;
+    background: rgba(220, 53, 69, 0.08);
+    color: #b42318;
+    box-sizing: border-box;
+    font-family: var(--paragraph-p12-medium-font-family);
+    font-size: 13px;
+    line-height: 19px;
+}
+
+.halaman-login .login-error strong {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.halaman-login .login-error ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.halaman-login .login-error li {
+    margin: 0;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.halaman-login .login-form form {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    width: 100%;
+    gap: 30px;
+}
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+.halaman-login .button-dashboard {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+    background-color: var(--primarypr-30);
+    border-radius: 9px;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+.halaman-login .dashboard {
+    position: relative;
+    flex: 1;
+    margin-top: -1px;
+    font-family: var(--label-l16-regular-font-family);
+    font-weight: var(--label-l16-regular-font-weight);
+    color: var(--primarypr-00);
+    font-size: var(--label-l16-regular-font-size);
+    text-align: center;
+    letter-spacing: var(--label-l16-regular-letter-spacing);
+    line-height: var(--label-l16-regular-line-height);
+    font-style: var(--label-l16-regular-font-style);
+}
+
+.halaman-login .button-dashboard:hover {
+    background-color: var(--primarypr-40);
+}
+
+.halaman-login .button-dashboard:active {
+    background-color: var(--primarypr-30);
+    transform: translateY(1px);
+}
+
+.halaman-login .button-dashboard:focus-visible {
+    outline: 2px solid var(--primarypr-40) !important;
+    outline-offset: 3px;
+}
+
+/* =========================================================
+   RESPONSIVE TABLET
+   ========================================================= */
+
+@media (max-width: 820px) {
+    .halaman-login {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 22px 38px;
+        gap: 16px;
+    }
+
+    .halaman-login .background {
+        width: 100%;
+        min-width: 0;
+        flex: 0 0 auto;
+        height: 180px;
+        max-height: 180px;
+    }
+
+    .halaman-login .portrait-female {
+        height: 100%;
+        width: auto;
+        object-fit: contain;
+        object-position: bottom center;
+    }
+
+    .halaman-login .login-form {
+        width: 100%;
+        min-width: 0;
+        flex: 0 0 auto;
+        padding: 0;
+        gap: 20px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE HP
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .halaman-login {
+        padding: 12px 28px;
+        gap: 12px;
+    }
+
+    .halaman-login .background {
+        height: 150px;
+        max-height: 150px;
+    }
+}

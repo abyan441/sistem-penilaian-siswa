@@ -1,12 +1,39 @@
 document.addEventListener("DOMContentLoaded", function () {
-    /* =====================================================
-       KONFIGURASI
-       ===================================================== */
+    "use strict";
+
+    /*
+     * =====================================================
+     * ELEMENT
+     * =====================================================
+     */
 
     const form = document.getElementById("grade-form");
+    const semesterSelect = document.getElementById("semester-select");
+    const mapelSelect = document.getElementById("mapel-select");
+    const tableBody = document.getElementById("nilai-table-body");
     const toast = document.getElementById("nilai-toast");
     const toastClose = toast ? toast.querySelector(".nilai-toast-close") : null;
+    const saveButton = document.getElementById("save-grade-button");
+
     let toastTimeout;
+
+    /*
+     * =====================================================
+     * KONFIGURASI
+     * =====================================================
+     */
+
+    const config = window.inputNilaiConfig || {};
+
+    const dataUrl = config.dataUrl || "/input-nilai/data";
+    const storeUrl = config.storeUrl || "/input-nilai";
+    const csrfToken = config.csrfToken || "";
+
+    /*
+     * =====================================================
+     * TOAST
+     * =====================================================
+     */
 
     function hideToast() {
         if (!toast) {
@@ -26,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         window.clearTimeout(toastTimeout);
+
         toast.hidden = false;
 
         window.requestAnimationFrame(function () {
@@ -39,15 +67,11 @@ document.addEventListener("DOMContentLoaded", function () {
         toastClose.addEventListener("click", hideToast);
     }
 
-    if (!form) {
-        return;
-    }
-
-    const students = ["bondet", "dina", "dodo", "ereh", "rina", "moana"];
-
-    /* =====================================================
-       PREDIKAT NILAI
-       ===================================================== */
+    /*
+     * =====================================================
+     * PREDIKAT
+     * =====================================================
+     */
 
     function getPredicate(score) {
         if (score >= 90) {
@@ -65,9 +89,25 @@ document.addEventListener("DOMContentLoaded", function () {
         return "D";
     }
 
-    /* =====================================================
-       UPDATE PREDIKAT CLASS
-       ===================================================== */
+    /*
+     * =====================================================
+     * HITUNG NILAI AKHIR
+     * =====================================================
+     */
+
+    function calculateFinalScore(tugas, uts, uas) {
+        const nilaiTugas = Number(tugas) || 0;
+        const nilaiUts = Number(uts) || 0;
+        const nilaiUas = Number(uas) || 0;
+
+        return Math.round(nilaiTugas * 0.3 + nilaiUts * 0.3 + nilaiUas * 0.4);
+    }
+
+    /*
+     * =====================================================
+     * UPDATE PREDIKAT
+     * =====================================================
+     */
 
     function updatePredicateClass(badge, predicate) {
         if (!badge) {
@@ -84,55 +124,66 @@ document.addEventListener("DOMContentLoaded", function () {
         badge.classList.add("predikat-" + predicate.toLowerCase());
     }
 
-    /* =====================================================
-       UPDATE NILAI SISWA
-       ===================================================== */
+    /*
+     * =====================================================
+     * NORMALISASI INPUT
+     * =====================================================
+     */
 
-    function updateStudent(student) {
-        const taskInput = form.elements[student + "-task"];
+    function normalizeInput(input) {
+        if (!input) {
+            return 0;
+        }
 
-        const utsInput = form.elements[student + "-uts"];
+        let value = Number(input.value);
 
-        const uasInput = form.elements[student + "-uas"];
+        if (!Number.isFinite(value)) {
+            input.value = "0";
+            return 0;
+        }
 
-        if (!taskInput || !utsInput || !uasInput) {
+        if (value < 0) {
+            value = 0;
+        }
+
+        if (value > 100) {
+            value = 100;
+        }
+
+        input.value = value;
+
+        return value;
+    }
+
+    /*
+     * =====================================================
+     * UPDATE SATU BARIS
+     * =====================================================
+     */
+
+    function updateRow(row) {
+        if (!row) {
             return;
         }
 
-        const task = Number(taskInput.value) || 0;
-
-        const uts = Number(utsInput.value) || 0;
-
-        const uas = Number(uasInput.value) || 0;
-
-        /*
-         * Bobot:
-         * Tugas = 30%
-         * UTS   = 30%
-         * UAS   = 40%
-         */
-
-        const score = Math.round(task * 0.3 + uts * 0.3 + uas * 0.4);
-
-        const predicate = getPredicate(score);
-
-        const output = document.querySelector(
-            '[data-student="' + student + '"]',
-        );
-
-        const badge = document.querySelector(
-            '[data-predicate="' + student + '"]',
-        );
-
+        const tugasInput = row.querySelector(".nilai-input-tugas");
+        const utsInput = row.querySelector(".nilai-input-uts");
+        const uasInput = row.querySelector(".nilai-input-uas");
+        const output = row.querySelector(".nilai-akhir");
+        const badge = row.querySelector(".predikat-badge");
         const badgeText = badge ? badge.querySelector("span") : null;
 
-        /* NILAI AKHIR */
+        const tugas = normalizeInput(tugasInput);
+        const uts = normalizeInput(utsInput);
+        const uas = normalizeInput(uasInput);
+
+        const score = calculateFinalScore(tugas, uts, uas);
+
+        const predicate = getPredicate(score);
 
         if (output) {
             output.textContent = String(score);
         }
-
-        /* PREDIKAT */
 
         if (badgeText) {
             badgeText.textContent = predicate;
@@ -141,118 +192,467 @@ document.addEventListener("DOMContentLoaded", function () {
         updatePredicateClass(badge, predicate);
     }
 
-    /* =====================================================
-       VALIDASI INPUT 0 - 100
-       ===================================================== */
+    /*
+     * =====================================================
+     * UPDATE SEMUA BARIS
+     * =====================================================
+     */
 
-    function normalizeInput(input) {
-        if (!input) {
+    function updateAllRows() {
+        if (!tableBody) {
             return;
         }
 
-        let value = Number(input.value);
+        const rows = tableBody.querySelectorAll(".nilai-row");
 
-        if (!Number.isFinite(value)) {
-            input.value = "";
+        rows.forEach(function (row) {
+            updateRow(row);
+        });
+    }
 
+    /*
+     * =====================================================
+     * EMPTY STATE
+     * =====================================================
+     */
+
+    function showEmptyState(message) {
+        if (!tableBody) {
             return;
         }
 
-        if (value < 0) {
-            input.value = "0";
+        tableBody.innerHTML = "";
 
+        const emptyState = document.createElement("div");
+        emptyState.className = "nilai-empty-state";
+
+        const text = document.createElement("span");
+        text.textContent = message;
+
+        emptyState.appendChild(text);
+        tableBody.appendChild(emptyState);
+    }
+
+    /*
+     * =====================================================
+     * LOADING STATE
+     * =====================================================
+     */
+
+    function showLoadingState() {
+        showEmptyState("Memuat data siswa...");
+    }
+
+    /*
+     * =====================================================
+     * RENDER SISWA
+     * =====================================================
+     */
+
+    function renderStudents(students) {
+        if (!tableBody) {
             return;
         }
 
-        if (value > 100) {
-            input.value = "100";
+        if (!Array.isArray(students)) {
+            showEmptyState("Data siswa tidak tersedia.");
+            return;
+        }
+
+        if (students.length === 0) {
+            showEmptyState("Belum ada siswa pada kelas wali Anda.");
+            return;
+        }
+
+        tableBody.innerHTML = "";
+
+        students.forEach(function (student, index) {
+            const row = document.createElement("div");
+
+            row.className = "nilai-row";
+            row.dataset.studentId = student.id;
+
+            const no = document.createElement("span");
+
+            no.className = "nilai-no";
+            no.setAttribute("role", "rowheader");
+            no.textContent = index + 1;
+
+            const studentName = document.createElement("span");
+
+            studentName.className = "nilai-student-name";
+
+            studentName.setAttribute("role", "gridcell");
+
+            studentName.textContent = student.nama_siswa || "";
+
+            const tugasWrapper = createInputWrapper(
+                "tugas",
+                student.nama_siswa,
+                student.nilai_tugas,
+            );
+
+            const utsWrapper = createInputWrapper(
+                "uts",
+                student.nama_siswa,
+                student.nilai_uts,
+            );
+
+            const uasWrapper = createInputWrapper(
+                "uas",
+                student.nama_siswa,
+                student.nilai_uas,
+            );
+
+            const output = document.createElement("output");
+
+            output.className = "nilai-akhir";
+
+            output.setAttribute(
+                "aria-label",
+                "Nilai akhir " + (student.nama_siswa || ""),
+            );
+
+            output.textContent = student.nilai_akhir ?? 0;
+
+            const predicate = String(student.predikat || "D").toUpperCase();
+
+            const badge = document.createElement("span");
+
+            badge.className =
+                "predikat-badge predikat-" + predicate.toLowerCase();
+
+            const badgeText = document.createElement("span");
+
+            badgeText.textContent = predicate;
+
+            badge.appendChild(badgeText);
+
+            row.appendChild(no);
+            row.appendChild(studentName);
+            row.appendChild(tugasWrapper);
+            row.appendChild(utsWrapper);
+            row.appendChild(uasWrapper);
+            row.appendChild(output);
+            row.appendChild(badge);
+
+            tableBody.appendChild(row);
+
+            updateRow(row);
+        });
+    }
+
+    /*
+     * =====================================================
+     * INPUT NILAI
+     * =====================================================
+     */
+
+    function createInputWrapper(type, studentName, value) {
+        const wrapper = document.createElement("div");
+
+        wrapper.className = "nilai-input-wrapper";
+
+        const input = document.createElement("input");
+
+        input.className = "nilai-input nilai-input-" + type;
+
+        input.setAttribute(
+            "aria-label",
+            "Nilai " + type.toUpperCase() + " " + (studentName || ""),
+        );
+
+        input.setAttribute("inputmode", "decimal");
+
+        input.setAttribute("max", "100");
+
+        input.setAttribute("min", "0");
+
+        input.setAttribute("step", "0.01");
+
+        input.setAttribute("type", "number");
+
+        input.value = value ?? 0;
+
+        wrapper.appendChild(input);
+
+        return wrapper;
+    }
+
+    /*
+     * =====================================================
+     * FILTER
+     * =====================================================
+     */
+
+    function hasCompleteFilter() {
+        return Boolean(
+            semesterSelect &&
+            semesterSelect.value &&
+            mapelSelect &&
+            mapelSelect.value,
+        );
+    }
+
+    /*
+     * =====================================================
+     * LOAD DATA
+     * =====================================================
+     */
+
+    async function loadData() {
+        if (!hasCompleteFilter()) {
+            showEmptyState(
+                "Pilih mata pelajaran untuk menampilkan data siswa.",
+            );
+            return;
+        }
+
+        showLoadingState();
+
+        const params = new URLSearchParams();
+
+        params.append("semester", semesterSelect.value);
+
+        params.append("mapel_id", mapelSelect.value);
+
+        try {
+            const response = await fetch(dataUrl + "?" + params.toString(), {
+                method: "GET",
+
+                headers: {
+                    Accept: "application/json",
+                },
+            });
+
+            let result;
+
+            try {
+                result = await response.json();
+            } catch (jsonError) {
+                throw new Error(
+                    "Server tidak mengembalikan data JSON yang valid.",
+                );
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    result.message || "Gagal mengambil data siswa.",
+                );
+            }
+
+            if (!result.success) {
+                throw new Error(result.message || "Data siswa tidak tersedia.");
+            }
+
+            const siswa =
+                result.data && Array.isArray(result.data.siswa)
+                    ? result.data.siswa
+                    : [];
+
+            renderStudents(siswa);
+        } catch (error) {
+            showEmptyState(
+                error.message || "Terjadi kesalahan saat mengambil data siswa.",
+            );
+
+            console.error("Input Nilai - Load Data:", error);
         }
     }
 
-    /* =====================================================
-       INPUT EVENT
-       ===================================================== */
+    /*
+     * =====================================================
+     * FILTER CHANGE
+     * =====================================================
+     */
 
-    form.addEventListener("input", function (event) {
-        const target = event.target;
+    if (semesterSelect) {
+        semesterSelect.addEventListener("change", loadData);
+    }
 
-        if (!target.matches(".nilai-input")) {
-            return;
-        }
+    if (mapelSelect) {
+        mapelSelect.addEventListener("change", loadData);
+    }
 
-        normalizeInput(target);
+    /*
+     * =====================================================
+     * INPUT NILAI
+     * =====================================================
+     */
 
-        const name = target.name || "";
+    if (tableBody) {
+        tableBody.addEventListener("input", function (event) {
+            const input = event.target;
 
-        const separatorIndex = name.lastIndexOf("-");
+            if (!input.classList.contains("nilai-input")) {
+                return;
+            }
 
-        if (separatorIndex === -1) {
-            return;
-        }
+            const row = input.closest(".nilai-row");
 
-        const student = name.substring(0, separatorIndex);
-
-        if (students.includes(student)) {
-            updateStudent(student);
-        }
-    });
-
-    /* =====================================================
-       CHANGE EVENT
-       ===================================================== */
-
-    form.addEventListener("change", function (event) {
-        const target = event.target;
-
-        if (!target.matches(".nilai-input")) {
-            return;
-        }
-
-        normalizeInput(target);
-
-        const name = target.name || "";
-
-        const separatorIndex = name.lastIndexOf("-");
-
-        if (separatorIndex === -1) {
-            return;
-        }
-
-        const student = name.substring(0, separatorIndex);
-
-        if (students.includes(student)) {
-            updateStudent(student);
-        }
-    });
-
-    /* =====================================================
-       SUBMIT / SIMPAN NILAI
-       ===================================================== */
-
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        students.forEach(function (student) {
-            updateStudent(student);
+            updateRow(row);
         });
 
-        /*
-         * Untuk tahap convert HTML ke Laravel,
-         * data belum dikirim ke database.
-         *
-         * Saat backend database sudah dibuat,
-         * bagian ini dapat diubah menjadi
-         * fetch()/POST ke route Laravel.
-         */
+        tableBody.addEventListener("change", function (event) {
+            const input = event.target;
 
-        showToast();
-    });
+            if (!input.classList.contains("nilai-input")) {
+                return;
+            }
 
-    /* =====================================================
-       INITIAL CALCULATION
-       ===================================================== */
+            const row = input.closest(".nilai-row");
 
-    students.forEach(function (student) {
-        updateStudent(student);
-    });
+            updateRow(row);
+        });
+    }
+
+    /*
+     * =====================================================
+     * SIMPAN NILAI
+     * =====================================================
+     */
+
+    if (form) {
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            if (!semesterSelect || !semesterSelect.value) {
+                alert("Silakan pilih semester terlebih dahulu.");
+                return;
+            }
+
+            if (!mapelSelect || !mapelSelect.value) {
+                alert("Silakan pilih mata pelajaran terlebih dahulu.");
+                return;
+            }
+
+            if (!tableBody) {
+                return;
+            }
+
+            const rows = tableBody.querySelectorAll(".nilai-row");
+
+            if (rows.length === 0) {
+                alert("Tidak ada siswa yang dapat disimpan.");
+                return;
+            }
+
+            updateAllRows();
+
+            const nilai = [];
+
+            rows.forEach(function (row) {
+                const siswaId = row.dataset.studentId;
+
+                const tugasInput = row.querySelector(".nilai-input-tugas");
+
+                const utsInput = row.querySelector(".nilai-input-uts");
+
+                const uasInput = row.querySelector(".nilai-input-uas");
+
+                if (!siswaId) {
+                    return;
+                }
+
+                nilai.push({
+                    siswa_id: Number(siswaId),
+
+                    nilai_tugas: Number(tugasInput?.value) || 0,
+
+                    nilai_uts: Number(utsInput?.value) || 0,
+
+                    nilai_uas: Number(uasInput?.value) || 0,
+                });
+            });
+
+            if (nilai.length === 0) {
+                alert("Tidak ada data nilai siswa yang valid.");
+                return;
+            }
+
+            const payload = {
+                semester: semesterSelect.value,
+
+                mapel_id: Number(mapelSelect.value),
+
+                nilai: nilai,
+            };
+
+            const buttonTextElement = saveButton
+                ? saveButton.querySelector("span")
+                : null;
+
+            const originalText = buttonTextElement
+                ? buttonTextElement.textContent
+                : "Simpan Nilai";
+
+            if (saveButton) {
+                saveButton.disabled = true;
+            }
+
+            if (buttonTextElement) {
+                buttonTextElement.textContent = "Menyimpan...";
+            }
+
+            try {
+                const response = await fetch(storeUrl, {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+
+                        Accept: "application/json",
+
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+
+                    body: JSON.stringify(payload),
+                });
+
+                let result;
+
+                try {
+                    result = await response.json();
+                } catch (jsonError) {
+                    throw new Error(
+                        "Server tidak mengembalikan respons JSON yang valid.",
+                    );
+                }
+
+                if (!response.ok) {
+                    throw new Error(result.message || "Gagal menyimpan nilai.");
+                }
+
+                if (!result.success) {
+                    throw new Error(result.message || "Nilai gagal disimpan.");
+                }
+
+                showToast();
+
+                await loadData();
+            } catch (error) {
+                alert(
+                    error.message || "Terjadi kesalahan saat menyimpan nilai.",
+                );
+
+                console.error("Simpan nilai:", error);
+            } finally {
+                if (saveButton) {
+                    saveButton.disabled = false;
+                }
+
+                if (buttonTextElement) {
+                    buttonTextElement.textContent = originalText;
+                }
+            }
+        });
+    }
+
+    /*
+     * =====================================================
+     * INITIAL
+     * =====================================================
+     */
+
+    showEmptyState("Pilih mata pelajaran untuk menampilkan data siswa.");
 });

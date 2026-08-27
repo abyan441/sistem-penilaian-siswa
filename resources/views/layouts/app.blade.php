@@ -23,9 +23,7 @@
     </title>
 
 
-    {{-- =====================================================
-         GLOBAL CSS
-         ===================================================== --}}
+    {{-- GLOBAL CSS --}}
 
     <link
         rel="stylesheet"
@@ -38,9 +36,7 @@
     >
 
 
-    {{-- =====================================================
-         LAYOUT CSS
-         ===================================================== --}}
+    {{-- LAYOUT CSS --}}
 
     <link
         rel="stylesheet"
@@ -58,15 +54,9 @@
     >
 
 
-    {{-- =====================================================
-         BASE LAYOUT
-         ===================================================== --}}
+    {{-- BASE LAYOUT --}}
 
     <style>
-
-        /* =================================================
-           HTML & BODY
-           ================================================= */
 
         html,
         body {
@@ -83,85 +73,59 @@
         }
 
 
-        /* =================================================
-           LAYOUT UTAMA
-           ================================================= */
-
         .dashboard {
-            background-color: var(--primarypr-10);
-
             width: 100%;
             height: 100vh;
 
+            margin: 0;
+            padding: 0;
+
             display: flex;
+
+            background-color: var(--primarypr-10);
 
             overflow: hidden;
         }
 
 
-        /* =================================================
-           AREA KONTEN UTAMA
-           ================================================= */
-
         .dashboard .frame-4 {
-            display: flex;
-
             flex: 1 1 auto;
 
             width: auto;
             min-width: 0;
-
             height: 100vh;
 
+            margin: 0;
+            padding: 0 0 40px 0;
+
+            display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
 
             gap: 10px;
 
-            padding:
-                0 0 40px 0;
-
-            overflow-y: auto;
-            overflow-x: hidden;
-
             box-sizing: border-box;
+
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
-
-        /* =================================================
-           PADDING KONTEN
-
-           Sama dengan Dashboard:
-           Desktop  : 24px
-           Tablet   : 18px
-           HP       : 12px
-           HP kecil : 10px
-           ================================================= */
 
         .dashboard .frame-4 > *:not(.frame-5) {
             width: 100%;
 
+            box-sizing: border-box;
+
             padding-left: 24px;
             padding-right: 24px;
-
-            box-sizing: border-box;
         }
 
-
-        /* =================================================
-           TABLET
-           769px - 1100px
-           ================================================= */
 
         @media (min-width: 769px) and (max-width: 1100px) {
 
             .dashboard .frame-4 {
                 width: auto;
-
                 min-width: 0;
-
-                flex:
-                    1 1 auto;
 
                 height: 100vh;
 
@@ -179,14 +143,6 @@
         }
 
 
-        /* =================================================
-           MOBILE
-           <= 768px
-
-           Ini bagian penting yang sebelumnya hanya ada
-           di dashboard.css.
-           ================================================= */
-
         @media (max-width: 768px) {
 
             html,
@@ -200,12 +156,13 @@
 
             .dashboard {
                 width: 100%;
-
                 height: 100dvh;
                 min-height: 100dvh;
 
-                display: flex;
+                margin: 0;
+                padding: 0;
 
+                display: flex;
                 flex-direction: column;
 
                 overflow: hidden;
@@ -214,22 +171,20 @@
 
             .dashboard .frame-4 {
                 width: 100%;
-
                 min-width: 0;
 
                 height: auto;
                 min-height: 0;
 
-                flex:
-                    1 1 auto;
+                flex: 1 1 auto;
 
-                overflow-y: auto;
-                overflow-x: hidden;
-
-                padding:
-                    0 0 24px;
+                margin: 0;
+                padding: 0 0 24px 0;
 
                 gap: 10px;
+
+                overflow-x: hidden;
+                overflow-y: auto;
             }
 
 
@@ -244,11 +199,6 @@
 
         }
 
-
-        /* =================================================
-           EXTRA SMALL PHONE
-           <= 480px
-           ================================================= */
 
         @media (max-width: 480px) {
 
@@ -267,10 +217,6 @@
     </style>
 
 
-    {{-- =====================================================
-         CSS KHUSUS HALAMAN
-         ===================================================== --}}
-
     @stack('styles')
 
 </head>
@@ -278,84 +224,35 @@
 
 <body>
 
-
-    {{-- =====================================================
-         LAYOUT UTAMA
-         ===================================================== --}}
-
     <main class="dashboard">
-
-
-        {{-- =================================================
-             SIDEBAR
-             ================================================= --}}
 
         @include('layouts.sidebar')
 
-
-        {{-- =================================================
-             AREA UTAMA
-             ================================================= --}}
-
         <section class="frame-4">
 
-
-            {{-- =================================================
-                 HEADER
-                 ================================================= --}}
-
             @include('layouts.header')
-
-
-            {{-- =================================================
-                 GARIS PEMBATAS
-                 ================================================= --}}
 
             <div
                 class="line"
                 aria-hidden="true"
             ></div>
 
-
-            {{-- =================================================
-                 KONTEN HALAMAN
-                 ================================================= --}}
-
             @yield('content')
-
 
         </section>
 
     </main>
 
 
-    {{-- =====================================================
-         JAVASCRIPT LAYOUT
-         ===================================================== --}}
+    <script src="{{ asset('js/sidebar.js') }}"></script>
 
-    <script
-        src="{{ asset('js/sidebar.js') }}"
-    ></script>
+    <script src="{{ asset('js/header.js') }}"></script>
 
-    <script
-        src="{{ asset('js/header.js') }}"
-    ></script>
+    <script src="{{ asset('js/account-modal.js') }}"></script>
 
-    <script
-        src="{{ asset('js/account-modal.js') }}"
-    ></script>
-
-    <script
-        src="{{ asset('js/notifications.js') }}"
-    ></script>
-
-
-    {{-- =====================================================
-         JAVASCRIPT KHUSUS HALAMAN
-         ===================================================== --}}
+    <script src="{{ asset('js/notifications.js') }}"></script>
 
     @stack('scripts')
-
 
 </body>
 
