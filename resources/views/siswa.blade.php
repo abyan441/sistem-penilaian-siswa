@@ -36,7 +36,6 @@
 
         </div>
 
-
         <button
             class="siswa-add-button"
             id="siswa-add-button"
@@ -88,7 +87,6 @@
                 Cari siswa
             </label>
 
-
             <input
                 id="student-search"
                 name="search"
@@ -96,7 +94,6 @@
                 placeholder="Cari siswa berdasarkan NISN, Nama Siswa atau Kelas..."
                 autocomplete="off"
             >
-
 
             <button
                 type="submit"
@@ -150,9 +147,7 @@
                 aria-label="Data siswa"
             >
 
-                {{-- =================================================
-                     TABLE HEADER
-                     ================================================= --}}
+                {{-- TABLE HEADER --}}
                 <div
                     class="siswa-table-header"
                     role="row"
@@ -185,564 +180,183 @@
                 </div>
 
 
-                {{-- =================================================
-                     TABLE BODY
-                     ================================================= --}}
+                {{-- TABLE BODY --}}
                 <div
                     class="siswa-table-body"
                     role="rowgroup"
                 >
 
-                    {{-- Adit Pratama --}}
-                    <div
-                        class="siswa-table-row"
-                        data-kelas-id="1"
-                        role="row"
-                    >
+                    @forelse ($siswa as $index => $item)
 
                         <div
-                            class="cell-no"
-                            role="cell"
+                            class="siswa-table-row"
+                            data-siswa-id="{{ $item->id }}"
+                            data-kelas-id="{{ $item->kelas_id }}"
+                            role="row"
                         >
-                            1
+
+                            {{-- NO --}}
+                            <div
+                                class="cell-no"
+                                role="cell"
+                            >
+                                {{ $index + 1 }}
+                            </div>
+
+
+                            {{-- NISN --}}
+                            <div
+                                class="cell-nisn"
+                                role="cell"
+                            >
+                                {{ $item->nisn }}
+                            </div>
+
+
+                            {{-- NAMA --}}
+                            <div
+                                class="cell-nama"
+                                role="cell"
+                            >
+                                {{ $item->nama_siswa }}
+                            </div>
+
+
+                            {{-- JENIS KELAMIN --}}
+                            <div
+                                class="cell-jk"
+                                role="cell"
+                            >
+                                {{ $item->jenis_kelamin }}
+                            </div>
+
+
+                            {{-- KELAS --}}
+                            <div
+                                class="cell-kelas"
+                                role="cell"
+                            >
+                                {{ $item->kelas?->nama_kelas ?? '-' }}
+                            </div>
+
+
+                            {{-- AKSI --}}
+                            <div
+                                class="siswa-actions"
+                                role="cell"
+                            >
+
+                                <button
+                                    class="edit-btn"
+                                    type="button"
+                                    aria-label="Edit {{ $item->nama_siswa }}"
+                                >
+
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true"
+                                    >
+
+                                        <path
+                                            d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                        />
+
+                                        <path
+                                            d="M14.5 7.5l2 2"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        />
+
+                                    </svg>
+
+                                </button>
+
+
+                                <button
+                                    class="delete-btn"
+                                    type="button"
+                                    aria-label="Hapus {{ $item->nama_siswa }}"
+                                >
+
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true"
+                                    >
+
+                                        <path
+                                            d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                        />
+
+                                    </svg>
+
+                                </button>
+
+                            </div>
+
                         </div>
+
+                    @empty
 
                         <div
-                            class="cell-nisn"
-                            role="cell"
-                        >
-                            0012345678
-                        </div>
-
-                        <div
-                            class="cell-nama"
-                            role="cell"
-                        >
-                            Adit Pratama
-                        </div>
-
-                        <div
-                            class="cell-jk"
-                            role="cell"
-                        >
-                            L
-                        </div>
-
-                        <div
-                            class="cell-kelas"
-                            role="cell"
-                        >
-                            7A
-                        </div>
-
-                        <div
-                            class="siswa-actions"
-                            role="cell"
+                            class="siswa-table-row"
+                            role="row"
                         >
 
-                            <button
-                                class="edit-btn"
-                                type="button"
-                                aria-label="Edit Adit Pratama"
+                            <div
+                                class="cell-no"
+                                role="cell"
                             >
+                                -
+                            </div>
 
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                    <path
-                                        d="M14.5 7.5l2 2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-
-                            <button
-                                class="delete-btn"
-                                type="button"
-                                aria-label="Hapus Adit Pratama"
+                            <div
+                                class="cell-nisn"
+                                role="cell"
                             >
+                                -
+                            </div>
 
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    {{-- Dimas Ikwani --}}
-                    <div
-                        class="siswa-table-row"
-                        data-kelas-id="1"
-                        role="row"
-                    >
-
-                        <div class="cell-no" role="cell">
-                            2
-                        </div>
-
-                        <div class="cell-nisn" role="cell">
-                            0012345679
-                        </div>
-
-                        <div class="cell-nama" role="cell">
-                            Dimas Ikwani
-                        </div>
-
-                        <div class="cell-jk" role="cell">
-                            L
-                        </div>
-
-                        <div class="cell-kelas" role="cell">
-                            7A
-                        </div>
-
-                        <div class="siswa-actions" role="cell">
-
-                            <button
-                                class="edit-btn"
-                                type="button"
-                                aria-label="Edit Dimas Ikwani"
+                            <div
+                                class="cell-nama"
+                                role="cell"
                             >
+                                Belum ada data siswa.
+                            </div>
 
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                    <path
-                                        d="M14.5 7.5l2 2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-
-                            <button
-                                class="delete-btn"
-                                type="button"
-                                aria-label="Hapus Dimas Ikwani"
+                            <div
+                                class="cell-jk"
+                                role="cell"
                             >
+                                -
+                            </div>
 
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    {{-- Siti Aisyah --}}
-                    <div
-                        class="siswa-table-row"
-                        data-kelas-id="2"
-                        role="row"
-                    >
-
-                        <div class="cell-no" role="cell">
-                            3
-                        </div>
-
-                        <div class="cell-nisn" role="cell">
-                            0012345680
-                        </div>
-
-                        <div class="cell-nama" role="cell">
-                            Siti Aisyah
-                        </div>
-
-                        <div class="cell-jk" role="cell">
-                            P
-                        </div>
-
-                        <div class="cell-kelas" role="cell">
-                            7B
-                        </div>
-
-                        <div class="siswa-actions" role="cell">
-
-                            <button
-                                class="edit-btn"
-                                type="button"
-                                aria-label="Edit Siti Aisyah"
+                            <div
+                                class="cell-kelas"
+                                role="cell"
                             >
+                                -
+                            </div>
 
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                    <path
-                                        d="M14.5 7.5l2 2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-
-                            <button
-                                class="delete-btn"
-                                type="button"
-                                aria-label="Hapus Siti Aisyah"
+                            <div
+                                class="siswa-actions"
+                                role="cell"
                             >
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
+                                -
+                            </div>
 
                         </div>
 
-                    </div>
-
-
-                    {{-- Nabila Putri --}}
-                    <div
-                        class="siswa-table-row"
-                        data-kelas-id="2"
-                        role="row"
-                    >
-
-                        <div class="cell-no" role="cell">
-                            4
-                        </div>
-
-                        <div class="cell-nisn" role="cell">
-                            0012345681
-                        </div>
-
-                        <div class="cell-nama" role="cell">
-                            Nabila Putri
-                        </div>
-
-                        <div class="cell-jk" role="cell">
-                            P
-                        </div>
-
-                        <div class="cell-kelas" role="cell">
-                            7B
-                        </div>
-
-                        <div class="siswa-actions" role="cell">
-
-                            <button
-                                class="edit-btn"
-                                type="button"
-                                aria-label="Edit Nabila Putri"
-                            >
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                    <path
-                                        d="M14.5 7.5l2 2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-
-                            <button
-                                class="delete-btn"
-                                type="button"
-                                aria-label="Hapus Nabila Putri"
-                            >
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    {{-- Fajar Ramadhan --}}
-                    <div
-                        class="siswa-table-row"
-                        data-kelas-id="3"
-                        role="row"
-                    >
-
-                        <div class="cell-no" role="cell">
-                            5
-                        </div>
-
-                        <div class="cell-nisn" role="cell">
-                            0012345682
-                        </div>
-
-                        <div class="cell-nama" role="cell">
-                            Fajar Ramadhan
-                        </div>
-
-                        <div class="cell-jk" role="cell">
-                            L
-                        </div>
-
-                        <div class="cell-kelas" role="cell">
-                            8A
-                        </div>
-
-                        <div class="siswa-actions" role="cell">
-
-                            <button
-                                class="edit-btn"
-                                type="button"
-                                aria-label="Edit Fajar Ramadhan"
-                            >
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                    <path
-                                        d="M14.5 7.5l2 2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-
-                            <button
-                                class="delete-btn"
-                                type="button"
-                                aria-label="Hapus Fajar Ramadhan"
-                            >
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    {{-- Aulia Rahma --}}
-                    <div
-                        class="siswa-table-row"
-                        data-kelas-id="4"
-                        role="row"
-                    >
-
-                        <div class="cell-no" role="cell">
-                            6
-                        </div>
-
-                        <div class="cell-nisn" role="cell">
-                            0012345683
-                        </div>
-
-                        <div class="cell-nama" role="cell">
-                            Aulia Rahma
-                        </div>
-
-                        <div class="cell-jk" role="cell">
-                            P
-                        </div>
-
-                        <div class="cell-kelas" role="cell">
-                            8B
-                        </div>
-
-                        <div class="siswa-actions" role="cell">
-
-                            <button
-                                class="edit-btn"
-                                type="button"
-                                aria-label="Edit Aulia Rahma"
-                            >
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                    <path
-                                        d="M14.5 7.5l2 2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-
-                            <button
-                                class="delete-btn"
-                                type="button"
-                                aria-label="Hapus Aulia Rahma"
-                            >
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-
-                                    <path
-                                        d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                    />
-
-                                </svg>
-
-                            </button>
-
-                        </div>
-
-                    </div>
+                    @endforelse
 
                 </div>
 
@@ -930,21 +544,16 @@
                             Pilih kelas
                         </option>
 
-                        <option value="1">
-                            7A — Tahun Ajaran 2026/2027
-                        </option>
+                        @foreach ($kelas as $itemKelas)
 
-                        <option value="2">
-                            7B — Tahun Ajaran 2026/2027
-                        </option>
+                            <option value="{{ $itemKelas->id }}">
+                                {{ $itemKelas->nama_kelas }}
+                                —
+                                Tahun Ajaran
+                                {{ $itemKelas->tahun_ajaran }}
+                            </option>
 
-                        <option value="3">
-                            8A — Tahun Ajaran 2026/2027
-                        </option>
-
-                        <option value="4">
-                            8B — Tahun Ajaran 2026/2027
-                        </option>
+                        @endforeach
 
                     </select>
 

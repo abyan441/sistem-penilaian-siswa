@@ -4,15 +4,11 @@ document.addEventListener("DOMContentLoaded", function () {
        ===================================================== */
 
     const addButton = document.querySelector("#siswa-add-button");
-
     const modal = document.querySelector("#siswa-modal");
-
     const deleteModal = document.querySelector("#delete-modal");
-
     const form = document.querySelector("#siswa-form");
 
     const closeButton = document.querySelector("#siswa-modal-close");
-
     const cancelButton = document.querySelector("#siswa-form-cancel");
 
     const submitButton = document.querySelector("#siswa-form-submit-btn");
@@ -26,26 +22,41 @@ document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.querySelector(".siswa-table-body");
 
     const searchForm = document.querySelector("#siswa-search-form");
-
     const searchInput = document.querySelector("#student-search");
 
     const nisnInput = document.querySelector("#siswa-nisn");
-
     const nameInput = document.querySelector("#siswa-name");
-
     const jkInput = document.querySelector("#siswa-jk");
-
     const kelasInput = document.querySelector("#siswa-kelas");
 
     const modalTitle = document.querySelector("#siswa-modal-title");
-
     const modalDescription = document.querySelector("#siswa-modal-desc");
 
     const deleteStudentName = document.querySelector("#delete-student-name");
 
     let editingRow = null;
-
     let deletingRow = null;
+
+    /* =====================================================
+       CSRF TOKEN
+       ===================================================== */
+
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute("content");
+
+    /* =====================================================
+       TOAST
+       ===================================================== */
+
+    function showToast(message, type = "success") {
+        if (typeof showAppToast === "function") {
+            showAppToast(message, type);
+            return;
+        }
+
+        alert(message);
+    }
 
     /* =====================================================
        MODAL TAMBAH / EDIT
@@ -118,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =====================================================
-       CLOSE MODAL
+       CLOSE MODAL TAMBAH / EDIT
        ===================================================== */
 
     if (closeButton) {
@@ -176,13 +187,134 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =====================================================
+       MEMBUAT ROW SISWA BARU
+       ===================================================== */
+
+    function createStudentRow(data) {
+        const row = document.createElement("div");
+
+        row.className = "siswa-table-row";
+
+        row.setAttribute("role", "row");
+
+        /*
+         * ID DATABASE SISWA
+         *
+         * Harus menggunakan data-siswa-id
+         * agar sama dengan row yang berasal dari Blade.
+         */
+        row.dataset.siswaId = data.id;
+
+        row.dataset.kelasId = data.kelas_id;
+
+        row.innerHTML = `
+            <div
+                class="cell-no"
+                role="cell"
+            >
+                -
+            </div>
+
+            <div
+                class="cell-nisn"
+                role="cell"
+            >
+                ${escapeHtml(data.nisn)}
+            </div>
+
+            <div
+                class="cell-nama"
+                role="cell"
+            >
+                ${escapeHtml(data.nama_siswa)}
+            </div>
+
+            <div
+                class="cell-jk"
+                role="cell"
+            >
+                ${escapeHtml(data.jenis_kelamin)}
+            </div>
+
+            <div
+                class="cell-kelas"
+                role="cell"
+            >
+                ${escapeHtml(data.kelas)}
+            </div>
+
+            <div
+                class="siswa-actions"
+                role="cell"
+            >
+
+                <button
+                    type="button"
+                    class="edit-btn"
+                    aria-label="Edit ${escapeHtml(data.nama_siswa)}"
+                >
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                        />
+
+                        <path
+                            d="M14.5 7.5l2 2"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+
+                    </svg>
+
+                </button>
+
+                <button
+                    type="button"
+                    class="delete-btn"
+                    aria-label="Hapus ${escapeHtml(data.nama_siswa)}"
+                >
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+
+                        <path
+                            d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                        />
+
+                    </svg>
+
+                </button>
+
+            </div>
+        `;
+
+        return row;
+    }
+
+    /* =====================================================
        EDIT / DELETE TABLE
        ===================================================== */
 
     if (tableBody) {
         tableBody.addEventListener("click", function (event) {
             const editButton = event.target.closest(".edit-btn");
-
             const deleteButton = event.target.closest(".delete-btn");
 
             /* =================================================
@@ -197,9 +329,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 const nisn = editingRow.querySelector(".cell-nisn");
-
                 const name = editingRow.querySelector(".cell-nama");
-
                 const jk = editingRow.querySelector(".cell-jk");
 
                 if (nisnInput && nisn) {
@@ -234,6 +364,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
+                /*
+                 * Pastikan row mempunyai ID database.
+                 */
+                const siswaId = deletingRow.dataset.siswaId;
+
+                if (!siswaId) {
+                    console.error(
+                        "ID siswa tidak ditemukan pada row:",
+                        deletingRow,
+                    );
+
+                    showToast("ID siswa tidak ditemukan.", "error");
+
+                    return;
+                }
+
                 const studentName = deletingRow.querySelector(".cell-nama");
 
                 if (deleteStudentName && studentName) {
@@ -255,200 +401,171 @@ document.addEventListener("DOMContentLoaded", function () {
        ===================================================== */
 
     if (form) {
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
 
             const nisn = nisnInput ? nisnInput.value.trim() : "";
-
             const name = nameInput ? nameInput.value.trim() : "";
-
             const jk = jkInput ? jkInput.value : "";
-
             const kelas = kelasInput ? kelasInput.value : "";
 
             if (!nisn || !name || !jk || !kelas) {
-                showAppToast(
+                showToast(
                     "NISN, nama, jenis kelamin, dan kelas wajib diisi.",
+                    "error",
                 );
 
                 return;
             }
 
-            const className = getSelectedClassName();
+            const payload = {
+                nisn: nisn,
+                nama_siswa: name,
+                jenis_kelamin: jk,
+                kelas_id: kelas,
+            };
 
-            /* =================================================
-               EDIT
-               ================================================= */
+            try {
+                let url = "/siswa";
+                let method = "POST";
 
-            if (editingRow) {
-                const nisnCell = editingRow.querySelector(".cell-nisn");
+                /* =================================================
+                   EDIT
+                   ================================================= */
 
-                const nameCell = editingRow.querySelector(".cell-nama");
+                if (editingRow) {
+                    /*
+                     * AMBIL ID DARI data-siswa-id
+                     */
+                    const siswaId = editingRow.dataset.siswaId;
 
-                const jkCell = editingRow.querySelector(".cell-jk");
+                    if (!siswaId) {
+                        showToast("ID siswa tidak ditemukan.", "error");
 
-                const kelasCell = editingRow.querySelector(".cell-kelas");
+                        return;
+                    }
 
-                const editButton = editingRow.querySelector(".edit-btn");
+                    url = `/siswa/${siswaId}`;
 
-                const deleteButton = editingRow.querySelector(".delete-btn");
-
-                if (nisnCell) {
-                    nisnCell.textContent = nisn;
+                    method = "PUT";
                 }
 
-                if (nameCell) {
-                    nameCell.textContent = name;
+                const response = await fetch(url, {
+                    method: method,
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+
+                    body: JSON.stringify(payload),
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || "Terjadi kesalahan.");
                 }
 
-                if (jkCell) {
-                    jkCell.textContent = jk;
+                /* =================================================
+                   EDIT BERHASIL
+                   ================================================= */
+
+                if (editingRow) {
+                    /*
+                     * Pastikan ID database tetap tersimpan.
+                     */
+                    editingRow.dataset.siswaId = result.data.id;
+
+                    editingRow.dataset.kelasId = result.data.kelas_id;
+
+                    const nisnCell = editingRow.querySelector(".cell-nisn");
+
+                    const nameCell = editingRow.querySelector(".cell-nama");
+
+                    const jkCell = editingRow.querySelector(".cell-jk");
+
+                    const kelasCell = editingRow.querySelector(".cell-kelas");
+
+                    if (nisnCell) {
+                        nisnCell.textContent = result.data.nisn;
+                    }
+
+                    if (nameCell) {
+                        nameCell.textContent = result.data.nama_siswa;
+                    }
+
+                    if (jkCell) {
+                        jkCell.textContent = result.data.jenis_kelamin;
+                    }
+
+                    if (kelasCell) {
+                        kelasCell.textContent = result.data.kelas;
+                    }
+
+                    const editButton = editingRow.querySelector(".edit-btn");
+
+                    const deleteButton =
+                        editingRow.querySelector(".delete-btn");
+
+                    if (editButton) {
+                        editButton.setAttribute(
+                            "aria-label",
+                            "Edit " + result.data.nama_siswa,
+                        );
+                    }
+
+                    if (deleteButton) {
+                        deleteButton.setAttribute(
+                            "aria-label",
+                            "Hapus " + result.data.nama_siswa,
+                        );
+                    }
+
+                    closeStudentModal();
+
+                    showToast(result.message, "success");
+
+                    return;
                 }
 
-                if (kelasCell) {
-                    kelasCell.textContent = className;
+                /* =================================================
+                   TAMBAH BERHASIL
+                   ================================================= */
+
+                if (!tableBody) {
+                    return;
                 }
 
-                editingRow.dataset.kelasId = kelas;
+                /*
+                 * Jika sebelumnya tabel kosong,
+                 * hapus row kosong.
+                 */
+                const emptyRow = tableBody.querySelector(".siswa-empty-row");
 
-                if (editButton) {
-                    editButton.setAttribute("aria-label", "Edit " + name);
+                if (emptyRow) {
+                    emptyRow.remove();
                 }
 
-                if (deleteButton) {
-                    deleteButton.setAttribute("aria-label", "Hapus " + name);
-                }
+                const newRow = createStudentRow(result.data);
+
+                tableBody.appendChild(newRow);
+
+                updateNumbers();
 
                 closeStudentModal();
 
-                showAppToast("Data siswa berhasil diperbarui.", "success");
+                showToast(result.message, "success");
+            } catch (error) {
+                console.error("Siswa error:", error);
 
-                return;
+                showToast(
+                    error.message ||
+                        "Terjadi kesalahan saat menyimpan data siswa.",
+                    "error",
+                );
             }
-
-            /* =================================================
-               TAMBAH
-               ================================================= */
-
-            if (!tableBody) {
-                return;
-            }
-
-            const row = document.createElement("div");
-
-            row.className = "siswa-table-row";
-
-            row.setAttribute("role", "row");
-
-            row.dataset.kelasId = kelas;
-
-            const number =
-                tableBody.querySelectorAll(".siswa-table-row").length + 1;
-
-            row.innerHTML = `
-                <div
-                    class="cell-no"
-                    role="cell"
-                >
-                    ${escapeHtml(number)}
-                </div>
-
-                <div
-                    class="cell-nisn"
-                    role="cell"
-                >
-                    ${escapeHtml(nisn)}
-                </div>
-
-                <div
-                    class="cell-nama"
-                    role="cell"
-                >
-                    ${escapeHtml(name)}
-                </div>
-
-                <div
-                    class="cell-jk"
-                    role="cell"
-                >
-                    ${escapeHtml(jk)}
-                </div>
-
-                <div
-                    class="cell-kelas"
-                    role="cell"
-                >
-                    ${escapeHtml(className)}
-                </div>
-
-                <div
-                    class="siswa-actions"
-                    role="cell"
-                >
-
-                    <button
-                        type="button"
-                        class="edit-btn"
-                        aria-label="Edit ${escapeHtml(name)}"
-                    >
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
-
-                            <path
-                                d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                            />
-
-                            <path
-                                d="M14.5 7.5l2 2"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            />
-
-                        </svg>
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="delete-btn"
-                        aria-label="Hapus ${escapeHtml(name)}"
-                    >
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
-
-                            <path
-                                d="M5 7h14M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                            />
-
-                        </svg>
-
-                    </button>
-
-                </div>
-            `;
-
-            tableBody.appendChild(row);
-
-            closeStudentModal();
-
-            showAppToast("Data siswa berhasil ditambahkan.", "success");
         });
     }
 
@@ -480,17 +597,79 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
+    /* =====================================================
+       DELETE DATABASE
+       ===================================================== */
+
     if (deleteConfirmButton) {
-        deleteConfirmButton.addEventListener("click", function () {
-            if (deletingRow) {
+        deleteConfirmButton.addEventListener("click", async function () {
+            if (!deletingRow) {
+                return;
+            }
+
+            /*
+             * AMBIL ID DATABASE DARI data-siswa-id
+             *
+             * Blade:
+             * data-siswa-id="{{ $item->id }}"
+             *
+             * JavaScript:
+             * dataset.siswaId
+             */
+            const siswaId = deletingRow.dataset.siswaId;
+
+            if (!siswaId) {
+                console.error(
+                    "ID siswa tidak ditemukan pada row:",
+                    deletingRow,
+                );
+
+                showToast("ID siswa tidak ditemukan.", "error");
+
+                return;
+            }
+
+            try {
+                deleteConfirmButton.disabled = true;
+
+                const response = await fetch(`/siswa/${siswaId}`, {
+                    method: "DELETE",
+
+                    headers: {
+                        Accept: "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.message || "Gagal menghapus data siswa.",
+                    );
+                }
+
+                /*
+                 * Hapus row dari tabel hanya
+                 * setelah database berhasil dihapus.
+                 */
                 deletingRow.remove();
 
                 updateNumbers();
+
+                closeDeleteModal();
+
+                showToast(result.message, "success");
+            } catch (error) {
+                console.error("Delete siswa error:", error);
+
+                showToast(
+                    error.message || "Gagal menghapus data siswa.",
+                    "error",
+                );
+            } finally {
+                deleteConfirmButton.disabled = false;
             }
-
-            closeDeleteModal();
-
-            showAppToast("Data siswa berhasil dihapus.", "success");
         });
     }
 
@@ -519,7 +698,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =====================================================
-       ESCAPE
+       ESCAPE / TUTUP MODAL DENGAN ESC
        ===================================================== */
 
     document.addEventListener("keydown", function (event) {
@@ -543,7 +722,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function escapeHtml(value) {
         const div = document.createElement("div");
 
-        div.textContent = value;
+        div.textContent = value ?? "";
 
         return div.innerHTML;
     }

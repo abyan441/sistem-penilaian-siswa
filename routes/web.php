@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\SiswaController;
 
 
 /*
@@ -34,15 +35,24 @@ Route::put('/guru/{id}', [GuruController::class, 'update'])
 Route::delete('/guru/{id}', [GuruController::class, 'destroy'])
     ->name('guru.destroy');
 
+
 /*
 |--------------------------------------------------------------------------
 | Data Siswa
 |--------------------------------------------------------------------------
 */
 
-Route::get('/siswa', function () {
-    return view('siswa');
-})->name('siswa');
+Route::get('/siswa', [SiswaController::class, 'index'])
+    ->name('siswa');
+
+Route::post('/siswa', [SiswaController::class, 'store'])
+    ->name('siswa.store');
+
+Route::put('/siswa/{id}', [SiswaController::class, 'update'])
+    ->name('siswa.update');
+
+Route::delete('/siswa/{id}', [SiswaController::class, 'destroy'])
+    ->name('siswa.destroy');
 
 
 /*
@@ -67,18 +77,15 @@ Route::get(
     [MataPelajaranController::class, 'index']
 )->name('mapel');
 
-
 Route::post(
     '/mata-pelajaran',
     [MataPelajaranController::class, 'store']
 )->name('mapel.store');
 
-
 Route::put(
     '/mata-pelajaran/{id}',
     [MataPelajaranController::class, 'update']
 )->name('mapel.update');
-
 
 Route::delete(
     '/mata-pelajaran/{id}',

@@ -15,6 +15,12 @@ class Kelas extends Model
     protected $table = 'kelas';
 
     /**
+     * Laravel tidak menggunakan created_at
+     * dan updated_at pada tabel kelas.
+     */
+    public $timestamps = false;
+
+    /**
      * Kolom yang dapat diisi melalui mass assignment.
      */
     protected $fillable = [
