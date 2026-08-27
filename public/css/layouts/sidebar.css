@@ -123,19 +123,33 @@
     box-sizing: border-box;
 }
 
+/* ---------------------------------------------------------
+   SEMUA TOMBOL NAVIGASI
+   --------------------------------------------------------- */
+
 .dashboard .button-dashboard,
 .dashboard .div-2 {
+    display: flex;
     align-items: center;
+    gap: 8px;
+
     position: relative;
     align-self: stretch;
+
     width: 100%;
+    min-height: 40px;
+
     flex: 0 0 auto;
-    display: flex;
-    gap: 8px;
+
     padding: 10px;
+
     border-radius: 9px;
+
     color: var(--primarypr-00);
     text-decoration: none;
+
+    box-sizing: border-box;
+
     transition:
         background-color 0.25s ease,
         filter 0.25s ease;
@@ -149,26 +163,46 @@
     background-color: var(--primarypr-40);
 }
 
+/* ---------------------------------------------------------
+   ICON NAVIGASI
+   --------------------------------------------------------- */
+
 .dashboard .img-2 {
     position: relative;
+
     width: 17px;
     height: 17px;
+
+    flex: 0 0 17px;
+
     aspect-ratio: 1;
+
     object-fit: contain;
+
     transition: filter 0.25s ease;
 }
 
+/* ---------------------------------------------------------
+   TEXT NAVIGASI
+   --------------------------------------------------------- */
+
 .dashboard .text-wrapper-3,
 .dashboard .text-wrapper-4 {
+    position: relative;
+
     flex: 1;
+
+    margin: 0;
+
     font-family: var(--label-l16-regular-font-family);
     font-weight: var(--label-l16-regular-font-weight);
     font-size: var(--label-l16-regular-font-size);
     line-height: var(--label-l16-regular-line-height);
     letter-spacing: var(--label-l16-regular-letter-spacing);
     font-style: var(--label-l16-regular-font-style);
+
     color: var(--primarypr-00);
-    position: relative;
+
     transition: color 0.25s ease;
 }
 
@@ -177,32 +211,140 @@
 }
 
 /* ---------------------------------------------------------
-   LOGOUT SIDEBAR
+   LOGOUT FORM
    --------------------------------------------------------- */
 
-.dashboard .button-logout {
-    all: unset;
-    box-sizing: border-box;
+.dashboard .logout-form {
+    display: flex;
+    align-items: stretch;
+
+    position: relative;
+
     width: 100%;
-    margin-top: auto;
-    background-color: var(--primarypr-40);
+    min-width: 0;
+
+    align-self: stretch;
+
+    flex: 0 0 auto;
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   LOGOUT BUTTON
+   --------------------------------------------------------- */
+
+/*
+   Logout dibuat memiliki ukuran yang SAMA PERSIS
+   dengan tombol navigasi lainnya.
+
+   - min-height : 40px
+   - padding    : 10px
+   - gap        : 8px
+   - radius     : 9px
+   - width      : 100%
+*/
+
+.dashboard .button-logout {
     display: flex;
     align-items: center;
+
+    position: relative;
+    align-self: stretch;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+
+    flex: 0 0 auto;
+
     gap: 8px;
+
+    margin: 0;
     padding: 10px;
+
+    border: 0;
     border-radius: 9px;
-    cursor: pointer;
+
+    background-color: var(--primarypr-40);
     color: var(--primarypr-00);
+
+    box-sizing: border-box;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+
+    appearance: none;
+
     transition:
         background-color 0.25s ease,
-        color 0.25s ease,
-        transform 0.2s ease;
+        filter 0.25s ease;
 }
+
+/* ---------------------------------------------------------
+   ICON LOGOUT
+   --------------------------------------------------------- */
+
+.dashboard .button-logout .img-2 {
+    position: relative;
+
+    width: 17px;
+    height: 17px;
+
+    flex: 0 0 17px;
+
+    aspect-ratio: 1;
+
+    object-fit: contain;
+
+    transition: filter 0.25s ease;
+}
+
+/* ---------------------------------------------------------
+   TEXT LOGOUT
+   --------------------------------------------------------- */
+
+.dashboard .button-logout .text-wrapper-4 {
+    display: block;
+
+    position: relative;
+
+    flex: 1;
+
+    min-width: 0;
+
+    margin-top: -1px;
+    margin-bottom: 0;
+
+    font-family: var(--label-l16-regular-font-family);
+    font-weight: var(--label-l16-regular-font-weight);
+    font-size: var(--label-l16-regular-font-size);
+    line-height: var(--label-l16-regular-line-height);
+    letter-spacing: var(--label-l16-regular-letter-spacing);
+    font-style: var(--label-l16-regular-font-style);
+
+    color: var(--primarypr-00);
+
+    text-align: left;
+}
+
+/* ---------------------------------------------------------
+   LOGOUT HOVER
+   --------------------------------------------------------- */
 
 .dashboard .button-logout:hover {
     background-color: #dc3545;
-    color: #ffffff;
-    transform: translateY(-1px);
+    color: var(--primarypr-00);
+    filter: none;
 }
 
 .dashboard .button-logout:hover .img-2 {
@@ -210,7 +352,7 @@
 }
 
 /* ---------------------------------------------------------
-   INTERAKSI
+   FOCUS
    --------------------------------------------------------- */
 
 .dashboard .button-dashboard:focus-visible,
@@ -219,6 +361,10 @@
     outline: 2px solid var(--primarypr-00);
     outline-offset: 2px;
 }
+
+/* ---------------------------------------------------------
+   HOVER NAVIGASI
+   --------------------------------------------------------- */
 
 .dashboard .button-dashboard:hover,
 .dashboard .div-2:hover {
@@ -254,44 +400,67 @@
     .dashboard .frame {
         position: relative;
         z-index: 100;
+
         width: 100%;
         min-width: 0;
+
         height: auto;
         min-height: 70px;
+
         flex: 0 0 auto;
+
         display: flex;
         flex-direction: column;
         align-items: stretch;
+
         gap: 0;
+
         padding: 7px 10px;
+
         background-color: var(--primarypr-40);
+
         box-sizing: border-box;
+
         overflow: visible;
+
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
         transition:
             box-shadow 0.25s ease,
             padding 0.25s ease;
     }
 
+    /* -----------------------------------------------------
+       BRAND MOBILE
+       ----------------------------------------------------- */
+
     .dashboard .frame > .div {
         width: 100%;
         height: 54px;
         min-height: 54px;
+
         display: flex;
         align-items: center;
         justify-content: flex-start;
+
         gap: 8px;
+
         padding: 0 52px 0 2px;
+
         box-sizing: border-box;
     }
 
     .dashboard .hugeicons-school {
         width: 36px;
         height: 36px;
+
         min-width: 36px;
         min-height: 36px;
+
         flex: 0 0 36px;
+
         padding: 6px;
+
         border-radius: 9px;
     }
 
@@ -303,7 +472,9 @@
     .dashboard .frame-2 .text-wrapper,
     .dashboard .frame-2 .text-wrapper-2 {
         display: block;
+
         width: 100%;
+
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -319,36 +490,58 @@
         line-height: 14px;
     }
 
+    /* -----------------------------------------------------
+       LINE
+       ----------------------------------------------------- */
+
     .dashboard .frame > .line {
         display: none;
     }
 
+    /* -----------------------------------------------------
+       MOBILE MENU TOGGLE
+       ----------------------------------------------------- */
+
     .dashboard .mobile-menu-toggle {
         position: absolute;
+
         top: 15px;
         right: 10px;
+
         z-index: 120;
+
         width: 40px;
         height: 40px;
+
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+
         gap: 5px;
+
         padding: 0;
+
         border: 0;
         border-radius: 9px;
+
         background: var(--primarypr-30);
+
         cursor: pointer;
+
         box-sizing: border-box;
     }
 
     .dashboard .mobile-menu-toggle span {
         display: block;
+
         width: 20px;
         height: 2px;
+
         border-radius: 2px;
+
         background-color: var(--primarypr-00);
+
         transition:
             transform 0.2s ease,
             opacity 0.2s ease;
@@ -366,19 +559,31 @@
         transform: translateY(-7px) rotate(-45deg);
     }
 
+    /* -----------------------------------------------------
+       MOBILE NAVIGATION
+       ----------------------------------------------------- */
+
     .dashboard .frame-3 {
         width: 100%;
         min-width: 0;
+
         display: flex;
         flex-direction: column;
         align-items: stretch;
+
         gap: 6px;
+
         padding: 0;
+
         max-height: 0;
+
         opacity: 0;
         visibility: hidden;
+
         overflow: hidden;
+
         transform: translateY(-8px);
+
         transition:
             max-height 0.28s ease,
             opacity 0.2s ease,
@@ -387,27 +592,83 @@
             visibility 0.28s ease;
     }
 
+    /* -----------------------------------------------------
+       OPEN MENU
+       ----------------------------------------------------- */
+
     .dashboard .frame.mobile-menu-open .frame-3 {
         max-height: 500px;
+
         opacity: 1;
         visibility: visible;
+
         overflow: visible;
+
         transform: translateY(0);
+
         padding-top: 7px;
         padding-bottom: 3px;
+    }
+
+    /* -----------------------------------------------------
+       MOBILE NAVIGATION BUTTONS
+       ----------------------------------------------------- */
+
+    .dashboard .frame-3 .button-dashboard,
+    .dashboard .frame-3 .div-2,
+    .dashboard .frame-3 .logout-form {
+        width: 100%;
+        min-width: 0;
+
+        flex: 0 0 auto;
+
+        box-sizing: border-box;
     }
 
     .dashboard .frame-3 .button-dashboard,
     .dashboard .frame-3 .div-2,
     .dashboard .frame-3 .button-logout {
-        width: 100%;
-        min-width: 0;
         min-height: 40px;
-        flex: 0 0 auto;
+
         padding: 10px 12px;
+
         border-radius: 9px;
+
         box-sizing: border-box;
+
         white-space: nowrap;
+    }
+
+    .dashboard .frame-3 .button-logout {
+        width: 100%;
+    }
+
+    /* -----------------------------------------------------
+       ICON LOGOUT MOBILE
+       ----------------------------------------------------- */
+
+    .dashboard .frame-3 .button-logout .img-2 {
+        width: 17px;
+        height: 17px;
+
+        flex: 0 0 17px;
+    }
+
+    /* -----------------------------------------------------
+       FONT LOGOUT MOBILE
+       Sama dengan tombol navigasi lainnya
+       ----------------------------------------------------- */
+
+    .dashboard .frame-3 .button-logout .text-wrapper-4 {
+        font-family: var(--label-l16-regular-font-family);
+        font-weight: var(--label-l16-regular-font-weight);
+        font-size: var(--label-l16-regular-font-size);
+        line-height: var(--label-l16-regular-line-height);
+        letter-spacing: var(--label-l16-regular-letter-spacing);
+        font-style: var(--label-l16-regular-font-style);
+
+        margin-top: -1px;
+        margin-bottom: 0;
     }
 }
 
@@ -419,13 +680,16 @@
     .dashboard .frame {
         height: 64px;
         min-height: 64px;
+
         flex-basis: 64px;
+
         padding: 5px 9px;
     }
 
     .dashboard .frame > .div {
         height: 52px;
         min-height: 52px;
+
         padding-left: 1px;
         padding-right: 50px;
     }
@@ -433,14 +697,17 @@
     .dashboard .hugeicons-school {
         width: 34px;
         height: 34px;
+
         min-width: 34px;
         min-height: 34px;
+
         flex-basis: 34px;
     }
 
     .dashboard .mobile-menu-toggle {
         top: 12px;
         right: 9px;
+
         width: 38px;
         height: 38px;
     }
@@ -455,22 +722,36 @@
         line-height: 13px;
     }
 
+    /* -----------------------------------------------------
+       OPEN MENU - EXTRA SMALL
+       ----------------------------------------------------- */
+
     .dashboard .frame.mobile-menu-open {
         position: relative;
         z-index: 100;
+
         width: 100%;
         min-width: 0;
+
         height: auto;
         min-height: 70px;
+
         flex: 0 0 auto;
+
         display: flex;
         flex-direction: column;
         align-items: stretch;
+
         gap: 0;
+
         padding: 7px 10px;
+
         background-color: var(--primarypr-40);
+
         box-sizing: border-box;
+
         overflow: visible;
+
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
@@ -478,21 +759,29 @@
         width: 100%;
         height: 54px;
         min-height: 54px;
+
         display: flex;
         align-items: center;
         justify-content: flex-start;
+
         gap: 8px;
+
         padding: 0 52px 0 2px;
+
         box-sizing: border-box;
     }
 
     .dashboard .frame.mobile-menu-open .hugeicons-school {
         width: 36px;
         height: 36px;
+
         min-width: 36px;
         min-height: 36px;
+
         flex: 0 0 36px;
+
         padding: 6px;
+
         border-radius: 9px;
     }
 
@@ -504,7 +793,9 @@
     .dashboard .frame.mobile-menu-open .frame-2 .text-wrapper,
     .dashboard .frame.mobile-menu-open .frame-2 .text-wrapper-2 {
         display: block;
+
         width: 100%;
+
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -523,6 +814,7 @@
     .dashboard .frame.mobile-menu-open .mobile-menu-toggle {
         top: 15px;
         right: 10px;
+
         width: 40px;
         height: 40px;
     }
@@ -530,25 +822,75 @@
     .dashboard .frame.mobile-menu-open .frame-3 {
         width: 100%;
         min-width: 0;
+
         gap: 6px;
+
         padding: 7px 0 3px;
+
         max-height: 500px;
+
         opacity: 1;
         visibility: visible;
+
         overflow: visible;
+
         transform: translateY(0);
     }
 
     .dashboard .frame.mobile-menu-open .frame-3 .button-dashboard,
     .dashboard .frame.mobile-menu-open .frame-3 .div-2,
-    .dashboard .frame.mobile-menu-open .frame-3 .button-logout {
+    .dashboard .frame.mobile-menu-open .frame-3 .logout-form {
         width: 100%;
         min-width: 0;
-        min-height: 40px;
+
         flex: 0 0 auto;
-        padding: 10px 12px;
-        border-radius: 9px;
+
         box-sizing: border-box;
+    }
+
+    .dashboard .frame.mobile-menu-open .frame-3 .button-dashboard,
+    .dashboard .frame.mobile-menu-open .frame-3 .div-2,
+    .dashboard .frame.mobile-menu-open .frame-3 .button-logout {
+        min-height: 40px;
+
+        padding: 10px 12px;
+
+        border-radius: 9px;
+
+        box-sizing: border-box;
+
         white-space: nowrap;
+    }
+
+    .dashboard .frame.mobile-menu-open .frame-3 .button-logout {
+        width: 100%;
+    }
+
+    /* -----------------------------------------------------
+       ICON LOGOUT EXTRA SMALL
+       ----------------------------------------------------- */
+
+    .dashboard .frame.mobile-menu-open .frame-3 .button-logout .img-2 {
+        width: 17px;
+        height: 17px;
+
+        flex: 0 0 17px;
+    }
+
+    /* -----------------------------------------------------
+       FONT LOGOUT EXTRA SMALL
+       Sama dengan tombol navigasi lainnya
+       ----------------------------------------------------- */
+
+    .dashboard .frame.mobile-menu-open .frame-3 .button-logout .text-wrapper-4 {
+        font-family: var(--label-l16-regular-font-family);
+        font-weight: var(--label-l16-regular-font-weight);
+        font-size: var(--label-l16-regular-font-size);
+        line-height: var(--label-l16-regular-line-height);
+        letter-spacing: var(--label-l16-regular-letter-spacing);
+        font-style: var(--label-l16-regular-font-style);
+
+        margin-top: -1px;
+        margin-bottom: 0;
     }
 }
