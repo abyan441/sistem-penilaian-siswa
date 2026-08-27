@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\SiswaController;
-
+use App\Http\Controllers\KelasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +15,6 @@ use App\Http\Controllers\SiswaController;
 Route::get('/', function () {
     return view('dashboard');
 })->name('dashboard');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +34,6 @@ Route::put('/guru/{id}', [GuruController::class, 'update'])
 Route::delete('/guru/{id}', [GuruController::class, 'destroy'])
     ->name('guru.destroy');
 
-
 /*
 |--------------------------------------------------------------------------
 | Data Siswa
@@ -54,17 +52,26 @@ Route::put('/siswa/{id}', [SiswaController::class, 'update'])
 Route::delete('/siswa/{id}', [SiswaController::class, 'destroy'])
     ->name('siswa.destroy');
 
-
 /*
 |--------------------------------------------------------------------------
 | Data Kelas
 |--------------------------------------------------------------------------
 */
 
-Route::get('/kelas', function () {
-    return view('kelas');
-})->name('kelas');
+Route::get('/kelas', [KelasController::class, 'index'])
+    ->name('kelas');
 
+Route::post('/kelas', [KelasController::class, 'store'])
+    ->name('kelas.store');
+
+Route::put('/kelas/{id}', [KelasController::class, 'update'])
+    ->name('kelas.update');
+
+Route::delete('/kelas/{id}', [KelasController::class, 'destroy'])
+    ->name('kelas.destroy');
+
+Route::get('/kelas/{id}/detail', [KelasController::class, 'detail'])
+    ->name('kelas.detail');
 
 /*
 |--------------------------------------------------------------------------
@@ -92,7 +99,6 @@ Route::delete(
     [MataPelajaranController::class, 'destroy']
 )->name('mapel.destroy');
 
-
 /*
 |--------------------------------------------------------------------------
 | Input Nilai
@@ -103,7 +109,6 @@ Route::get('/input-nilai', function () {
     return view('input-nilai');
 })->name('input-nilai');
 
-
 /*
 |--------------------------------------------------------------------------
 | Raport
@@ -113,7 +118,6 @@ Route::get('/input-nilai', function () {
 Route::get('/raport', function () {
     return view('raport');
 })->name('raport');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -126,7 +130,6 @@ Route::get('/raport/{id}/preview', function ($id) {
         'id' => $id,
     ]);
 })->name('raport.preview');
-
 
 /*
 |--------------------------------------------------------------------------
