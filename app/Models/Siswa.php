@@ -39,8 +39,15 @@ class Siswa extends Model
     public static function dataHalaman()
     {
         return [
-            'siswa' => self::with('kelas')->get(),
-            'kelas' => Kelas::all(),
+            'siswa' => self::with('kelas')
+                ->join('kelas', 'siswa.kelas_id', '=', 'kelas.id')
+                ->select('siswa.*')
+                ->orderBy('kelas.nama_kelas', 'asc')
+                ->orderBy('siswa.nama_siswa', 'asc')
+                ->get(),
+
+            'kelas' => Kelas::orderBy('nama_kelas', 'asc')
+                ->get(),
         ];
     }
 

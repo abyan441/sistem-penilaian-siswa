@@ -4,52 +4,55 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class MataPelajaran extends Model
 {
     use HasFactory;
 
-    /**
-     * Nama tabel database.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | KONFIGURASI MODEL
+    |--------------------------------------------------------------------------
+    */
+
     protected $table = 'mata_pelajaran';
 
-    /**
-     * Primary key.
-     */
     protected $primaryKey = 'id';
 
-    /**
-     * Kolom yang dapat diisi melalui mass assignment.
-     */
+    public $timestamps = false;
+
     protected $fillable = [
         'kode_mapel',
         'nama_pelajaran',
         'kkm',
     ];
 
-    /**
-     * Tabel tidak menggunakan created_at dan updated_at.
-     */
-    public $timestamps = false;
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELASI
+    |--------------------------------------------------------------------------
+    */
 
     /**
-     * Relasi ke guru_mapel.
+     * Relasi Mata Pelajaran dengan GuruMapel.
      */
     public function guruMapel()
     {
         return $this->hasMany(GuruMapel::class, 'mapel_id');
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | DATA HALAMAN
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * =====================================================
-     * DATA HALAMAN
-     * =====================================================
-     *
-     * Mengambil seluruh data yang dibutuhkan halaman
-     * Mata Pelajaran.
-     *
-     * Pengurutan mata pelajaran berdasarkan nama A-Z.
+     * Mengambil seluruh data yang dibutuhkan
+     * oleh halaman Mata Pelajaran.
      */
     public static function dataHalaman()
     {
@@ -61,15 +64,16 @@ class MataPelajaran extends Model
         ];
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | MENGAMBIL DATA
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * =====================================================
-     * MENGAMBIL SELURUH MATA PELAJARAN
-     * =====================================================
-     *
-     * Diurutkan berdasarkan nama mata pelajaran A-Z.
-     *
-     * Jika terdapat nama yang sama, data dengan ID
-     * yang lebih kecil akan ditampilkan terlebih dahulu.
+     * Mengambil seluruh mata pelajaran
+     * dengan urutan nama A-Z.
      */
     public static function semua()
     {
@@ -78,42 +82,54 @@ class MataPelajaran extends Model
             ->get();
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | STATISTIK
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * =====================================================
-     * TOTAL MATA PELAJARAN
-     * =====================================================
+     * Menghitung jumlah seluruh mata pelajaran.
      */
     public static function total()
     {
         return self::count();
     }
 
+
     /**
-     * =====================================================
-     * RATA-RATA KKM
-     * =====================================================
+     * Menghitung rata-rata KKM.
      */
     public static function rataRataKkm()
     {
         return self::avg('kkm');
     }
 
+
     /**
-     * =====================================================
-     * KKM TERENDAH
-     * =====================================================
+     * Mengambil nilai KKM terendah.
      */
     public static function kkmTerendah()
     {
         return self::min('kkm');
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | TAMBAH
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * =====================================================
-     * TAMBAH MATA PELAJARAN
-     * =====================================================
+     * Menambahkan mata pelajaran baru.
+     *
+     * Proses normalisasi data dilakukan di Model:
+     * - kode mata pelajaran menjadi huruf kapital
+     * - spasi di awal/akhir dihapus
      */
-    public static function tambah($data)
+    public static function tambah(array $data)
     {
         return self::create([
             'kode_mapel' => strtoupper(trim($data['kode_mapel'])),
@@ -122,14 +138,25 @@ class MataPelajaran extends Model
         ]);
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | UBAH
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * =====================================================
-     * UBAH MATA PELAJARAN
-     * =====================================================
+     * Memperbarui data mata pelajaran berdasarkan ID.
      */
-    public static function ubah($id, $data)
+    public static function ubah($id, array $data)
     {
-        $mapel = self::findOrFail($id);
+        $mapel = self::find($id);
+
+        if (!$mapel) {
+            throw new \Exception(
+                'Data mata pelajaran tidak ditemukan.'
+            );
+        }
 
         $mapel->update([
             'kode_mapel' => strtoupper(trim($data['kode_mapel'])),
@@ -137,18 +164,122 @@ class MataPelajaran extends Model
             'kkm' => $data['kkm'],
         ]);
 
-        return $mapel;
+        return $mapel->fresh();
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | HAPUS
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * =====================================================
-     * HAPUS MATA PELAJARAN
-     * =====================================================
+     * Menghapus mata pelajaran berdasarkan ID.
      */
     public static function hapus($id)
     {
-        $mapel = self::findOrFail($id);
+        $mapel = self::find($id);
+
+        if (!$mapel) {
+            throw new \Exception(
+                'Data mata pelajaran tidak ditemukan.'
+            );
+        }
 
         return $mapel->delete();
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROSES TAMBAH
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Menangani seluruh proses tambah mata pelajaran.
+     *
+     * Controller hanya meneruskan Request ke method ini.
+     */
+    public static function prosesTambah(Request $request)
+    {
+        $mapel = self::tambah([
+            'kode_mapel' => $request->input('kode_mapel'),
+            'nama_pelajaran' => $request->input('nama_pelajaran'),
+            'kkm' => $request->input('kkm'),
+        ]);
+
+        return [
+            'success' => true,
+            'message' => 'Mata pelajaran berhasil ditambahkan.',
+            'data' => self::formatData($mapel),
+        ];
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROSES UBAH
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Menangani seluruh proses update mata pelajaran.
+     */
+    public static function prosesUbah($id, Request $request)
+    {
+        $mapel = self::ubah($id, [
+            'kode_mapel' => $request->input('kode_mapel'),
+            'nama_pelajaran' => $request->input('nama_pelajaran'),
+            'kkm' => $request->input('kkm'),
+        ]);
+
+        return [
+            'success' => true,
+            'message' => 'Mata pelajaran berhasil diperbarui.',
+            'data' => self::formatData($mapel),
+        ];
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROSES HAPUS
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Menangani seluruh proses hapus mata pelajaran.
+     */
+    public static function prosesHapus($id)
+    {
+        self::hapus($id);
+
+        return [
+            'success' => true,
+            'message' => 'Mata pelajaran berhasil dihapus.',
+        ];
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORMAT DATA
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Menentukan data yang dikirim kembali
+     * ke JavaScript setelah proses CRUD.
+     */
+    private static function formatData(self $mapel)
+    {
+        return [
+            'id' => $mapel->id,
+            'kode_mapel' => $mapel->kode_mapel,
+            'nama_pelajaran' => $mapel->nama_pelajaran,
+            'kkm' => $mapel->kkm,
+        ];
     }
 }

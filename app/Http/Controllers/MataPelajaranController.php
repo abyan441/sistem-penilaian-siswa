@@ -7,62 +7,87 @@ use Illuminate\Http\Request;
 
 class MataPelajaranController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | HALAMAN MATA PELAJARAN
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Menampilkan halaman Mata Pelajaran.
+     *
+     * Controller hanya mengambil data dari Model
+     * dan meneruskannya ke Blade.
      */
     public function index()
     {
-        $data = MataPelajaran::dataHalaman();
-
-        return view('mapel', $data);
+        return view(
+            'mapel',
+            MataPelajaran::dataHalaman()
+        );
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | TAMBAH
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Menambahkan Mata Pelajaran.
+     *
+     * Controller hanya meneruskan Request
+     * kepada Model.
      */
     public function store(Request $request)
     {
-        $mapel = MataPelajaran::tambah(
-            $request->all()
+        return response()->json(
+            MataPelajaran::prosesTambah($request),
+            201
         );
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Mata pelajaran berhasil ditambahkan.',
-            'data' => $mapel,
-        ], 201);
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | UBAH
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Memperbarui Mata Pelajaran.
+     *
+     * Controller hanya meneruskan Request dan ID
+     * kepada Model.
      */
     public function update(Request $request, $id)
     {
-        $mapel = MataPelajaran::ubah(
-            $id,
-            $request->all()
+        return response()->json(
+            MataPelajaran::prosesUbah(
+                $id,
+                $request
+            )
         );
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Mata pelajaran berhasil diperbarui.',
-            'data' => $mapel,
-        ]);
     }
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | HAPUS
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Menghapus Mata Pelajaran.
+     *
+     * Controller hanya meneruskan ID
+     * kepada Model.
      */
     public function destroy($id)
     {
-        MataPelajaran::hapus($id);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Mata pelajaran berhasil dihapus.',
-        ]);
+        return response()->json(
+            MataPelajaran::prosesHapus($id)
+        );
     }
 }
