@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class AkunController extends Controller
@@ -41,8 +41,7 @@ class AkunController extends Controller
             'password.current_password' => 'Password saat ini salah.',
         ]);
 
-        $user->email = $validated['new_email'];
-        $user->save();
+        User::ubahEmail($user, $validated['new_email']);
 
         return back()->with('account_success', 'Email berhasil diperbarui.');
     }
@@ -71,9 +70,7 @@ class AkunController extends Controller
             'new_password.confirmed' => 'Konfirmasi password baru tidak sama.',
         ]);
 
-        $user = $request->user();
-        $user->password = Hash::make($validated['new_password']);
-        $user->save();
+        User::ubahPassword($request->user(), $validated['new_password']);
 
         return back()->with('account_success', 'Password berhasil diperbarui.');
     }
