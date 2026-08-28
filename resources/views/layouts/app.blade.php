@@ -121,6 +121,24 @@
         }
 
 
+        /* =====================================================
+           SIDEBAR GLOBAL - POSISI LOGOUT
+           =====================================================
+
+           Disamakan dengan sidebar pada Preview Raport.
+           Logout selalu terdorong ke bagian paling bawah
+           sidebar pada desktop/tablet.
+        */
+
+        .dashboard .frame-3 .logout-form {
+            margin-top: auto;
+        }
+
+        .dashboard .frame-3 .button-logout {
+            flex-shrink: 0;
+        }
+
+
         @media (min-width: 769px) and (max-width: 1100px) {
 
             .dashboard .frame-4 {
@@ -195,6 +213,10 @@
                 padding-right: 12px;
 
                 box-sizing: border-box;
+            }
+
+            .dashboard .frame-3 .logout-form {
+                margin-top: 0;
             }
 
         }
