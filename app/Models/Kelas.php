@@ -12,7 +12,6 @@ class Kelas extends Model
     use HasFactory;
 
     protected $table = 'kelas';
-
     public $timestamps = false;
 
     protected $fillable = [
@@ -21,44 +20,16 @@ class Kelas extends Model
         'wali_kelas_id',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELATIONSHIP
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Relasi ke guru yang menjadi wali kelas.
-     */
     public function waliKelas()
     {
-        return $this->belongsTo(
-            User::class,
-            'wali_kelas_id'
-        );
+        return $this->belongsTo(User::class, 'wali_kelas_id');
     }
 
-    /**
-     * Relasi ke siswa yang berada di kelas.
-     */
     public function siswa()
     {
-        return $this->hasMany(
-            Siswa::class,
-            'kelas_id'
-        );
+        return $this->hasMany(Siswa::class, 'kelas_id');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | DATA
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Mengambil seluruh data kelas beserta wali kelas
-     * dan jumlah siswa.
-     */
     public static function semuaKelas()
     {
         return static::query()
@@ -69,9 +40,6 @@ class Kelas extends Model
             ->get();
     }
 
-    /**
-     * Mengambil satu kelas berdasarkan ID.
-     */
     public static function kelasById($id)
     {
         return static::query()
@@ -80,9 +48,6 @@ class Kelas extends Model
             ->findOrFail($id);
     }
 
-    /**
-     * Mengambil seluruh guru aktif yang dapat menjadi wali kelas.
-     */
     public static function semuaWaliKelas()
     {
         return User::query()
@@ -92,19 +57,6 @@ class Kelas extends Model
             ->get();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | KELAS WALI KELAS
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Mengambil kelas yang menjadi tanggung jawab
-     * seorang wali kelas berdasarkan user ID.
-     *
-     * Fungsi ini akan digunakan untuk membatasi
-     * akses input nilai.
-     */
     public static function kelasWali($waliKelasId)
     {
         return static::query()
@@ -112,21 +64,13 @@ class Kelas extends Model
             ->with([
                 'waliKelas',
                 'siswa' => function ($query) {
-                    $query
-                        ->orderBy('nama_siswa')
-                        ->orderBy('nisn');
+                    $query->orderBy('nama_siswa')->orderBy('nisn');
                 },
             ])
             ->withCount('siswa')
             ->first();
     }
 
-    /**
-     * Mengambil kelas wali kelas dan memastikan
-     * kelas tersebut memang dimiliki oleh user.
-     *
-     * Jika tidak ditemukan, akan menghasilkan 404.
-     */
     public static function kelasWaliOrFail($waliKelasId)
     {
         return static::query()
@@ -134,19 +78,13 @@ class Kelas extends Model
             ->with([
                 'waliKelas',
                 'siswa' => function ($query) {
-                    $query
-                        ->orderBy('nama_siswa')
-                        ->orderBy('nisn');
+                    $query->orderBy('nama_siswa')->orderBy('nisn');
                 },
             ])
             ->withCount('siswa')
             ->firstOrFail();
     }
 
-    /**
-     * Mengecek apakah suatu kelas merupakan kelas
-     * yang diwalikan oleh user tertentu.
-     */
     public static function adalahKelasWali($kelasId, $waliKelasId): bool
     {
         return static::query()
@@ -155,40 +93,19 @@ class Kelas extends Model
             ->exists();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | VALIDATION & BUSINESS RULE
-    |--------------------------------------------------------------------------
-    */
+    public static function total(): int
+    {
+        return static::query()->count();
+    }
 
-    /**
-     * Memvalidasi dan menyiapkan data kelas.
-     *
-     * Seluruh aturan bisnis kelas ditempatkan di sini
-     * agar Controller hanya bertugas sebagai penghubung.
-     */
     protected static function validasiData(array $data, $id = null)
     {
-        $namaKelas = strtoupper(
-            trim($data['nama_kelas'] ?? '')
-        );
-
-        $tahunAjaran = trim(
-            $data['tahun_ajaran'] ?? ''
-        );
-
+        $namaKelas = strtoupper(trim($data['nama_kelas'] ?? ''));
+        $tahunAjaran = trim($data['tahun_ajaran'] ?? '');
         $waliKelasId = $data['wali_kelas_id'] ?? null;
 
-        /*
-        |--------------------------------------------------------------------------
-        | Nama kelas
-        |--------------------------------------------------------------------------
-        */
-
         if ($namaKelas === '') {
-            throw new InvalidArgumentException(
-                'Nama kelas wajib diisi.'
-            );
+            throw new InvalidArgumentException('Nama kelas wajib diisi.');
         }
 
         if (!preg_match('/^\d[A-Z]$/', $namaKelas)) {
@@ -197,16 +114,8 @@ class Kelas extends Model
             );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Tahun ajaran
-        |--------------------------------------------------------------------------
-        */
-
         if ($tahunAjaran === '') {
-            throw new InvalidArgumentException(
-                'Tahun ajaran wajib diisi.'
-            );
+            throw new InvalidArgumentException('Tahun ajaran wajib diisi.');
         }
 
         if (!preg_match('/^\d{4}\/\d{4}$/', $tahunAjaran)) {
@@ -215,20 +124,8 @@ class Kelas extends Model
             );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Wali kelas
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-            $waliKelasId === null ||
-            $waliKelasId === '' ||
-            !is_numeric($waliKelasId)
-        ) {
-            throw new InvalidArgumentException(
-                'Wali kelas wajib dipilih.'
-            );
+        if ($waliKelasId === null || $waliKelasId === '' || !is_numeric($waliKelasId)) {
+            throw new InvalidArgumentException('Wali kelas wajib dipilih.');
         }
 
         $waliKelasId = (int) $waliKelasId;
@@ -245,36 +142,18 @@ class Kelas extends Model
             );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Nama kelas tidak boleh sama
-        |--------------------------------------------------------------------------
-        */
-
         $queryNama = static::query()
-            ->whereRaw(
-                'UPPER(nama_kelas) = ?',
-                [$namaKelas]
-            );
+            ->whereRaw('UPPER(nama_kelas) = ?', [$namaKelas]);
 
         if ($id !== null) {
             $queryNama->where('id', '!=', $id);
         }
 
         if ($queryNama->exists()) {
-            throw new InvalidArgumentException(
-                'Nama kelas sudah digunakan.'
-            );
+            throw new InvalidArgumentException('Nama kelas sudah digunakan.');
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Satu guru hanya boleh menjadi wali satu kelas
-        |--------------------------------------------------------------------------
-        */
-
-        $queryWali = static::query()
-            ->where('wali_kelas_id', $waliKelasId);
+        $queryWali = static::query()->where('wali_kelas_id', $waliKelasId);
 
         if ($id !== null) {
             $queryWali->where('id', '!=', $id);
@@ -293,15 +172,6 @@ class Kelas extends Model
         ];
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | CREATE
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Menambahkan kelas baru.
-     */
     public static function tambahKelas(array $data)
     {
         $data = static::validasiData($data);
@@ -312,50 +182,18 @@ class Kelas extends Model
             ->loadCount('siswa');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | UPDATE
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Memperbarui data kelas.
-     */
     public static function ubahKelas($id, array $data)
     {
-        $kelas = static::query()
-            ->findOrFail($id);
-
-        $data = static::validasiData(
-            $data,
-            $kelas->id
-        );
-
+        $kelas = static::query()->findOrFail($id);
+        $data = static::validasiData($data, $kelas->id);
         $kelas->update($data);
 
-        return $kelas
-            ->fresh([
-                'waliKelas',
-            ])
-            ->loadCount('siswa');
+        return $kelas->fresh(['waliKelas'])->loadCount('siswa');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | DELETE
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Menghapus kelas.
-     *
-     * Kelas yang masih memiliki siswa tidak boleh dihapus.
-     */
     public static function hapusKelas($id)
     {
-        $kelas = static::query()
-            ->withCount('siswa')
-            ->findOrFail($id);
+        $kelas = static::query()->withCount('siswa')->findOrFail($id);
 
         if ($kelas->siswa_count > 0) {
             throw new RuntimeException(
@@ -366,50 +204,24 @@ class Kelas extends Model
         return $kelas->delete();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | DETAIL
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Mengambil detail kelas beserta daftar siswa.
-     */
     public static function detailKelas($id)
     {
         return static::query()
             ->with([
                 'waliKelas',
                 'siswa' => function ($query) {
-                    $query
-                        ->orderBy('nama_siswa')
-                        ->orderBy('nisn');
+                    $query->orderBy('nama_siswa')->orderBy('nisn');
                 },
             ])
             ->withCount('siswa')
             ->findOrFail($id);
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | SUMMARY
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Mengambil ringkasan data kelas.
-     */
     public static function ringkasan()
     {
-        $totalKelas = static::query()->count();
-
+        $totalKelas = static::total();
         $totalSiswa = Siswa::query()->count();
-
-        $rataRata = $totalKelas > 0
-            ? (int) round(
-                $totalSiswa / $totalKelas
-            )
-            : 0;
+        $rataRata = $totalKelas > 0 ? (int) round($totalSiswa / $totalKelas) : 0;
 
         return [
             'total_kelas' => $totalKelas,
