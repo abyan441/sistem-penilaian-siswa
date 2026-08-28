@@ -225,19 +225,26 @@
    GRID TABEL
    ========================================================= */
 
+/*
+   Pembagian kolom diperbaiki agar:
+   - Status memiliki ruang cukup untuk "Tidak Aktif"
+   - Aksi memiliki ruang cukup untuk 3 ikon
+   - Jarak antar kolom tetap proporsional
+*/
+
 .user-management-content .mp-user-row {
     width: 100%;
 
     display: grid;
 
     grid-template-columns:
-        8%
-        16%
-        20%
-        24%
+        7%
+        15%
+        19%
+        23%
         12%
-        8%
-        12%;
+        10%
+        14%;
 
     align-items: center;
 
@@ -331,7 +338,7 @@
 }
 
 .user-management-content .mp-user-table-header .mp-user-cell:nth-child(7) {
-    padding-right: 28px;
+    padding-right: 20px;
 }
 
 /* =========================================================
@@ -361,8 +368,42 @@
     text-align: center;
 }
 
+/*
+   Status:
+   diberi ruang lebih agar badge "Tidak Aktif"
+   tetap berada di dalam kolom status.
+*/
+
+.user-management-content .mp-user-table-body .mp-user-cell:nth-child(6) {
+    width: 100%;
+    min-width: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: visible;
+}
+
+/*
+   Aksi:
+   ruang diperbesar dan tombol tidak boleh menyusut.
+*/
+
 .user-management-content .mp-user-table-body .mp-user-cell:nth-child(7) {
-    padding-right: 28px;
+    width: 100%;
+    min-width: 0;
+
+    padding-left: 8px;
+    padding-right: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: visible;
 }
 
 /* =========================================================
@@ -458,7 +499,7 @@
     align-items: center;
     justify-content: center;
 
-    gap: 16px;
+    gap: 12px;
 
     padding: 0;
     margin: 0;
