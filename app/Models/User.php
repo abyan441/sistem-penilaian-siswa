@@ -144,6 +144,7 @@ class User extends Authenticatable
     public static function semuaPengguna()
     {
         return self::query()
+            ->orderByRaw("\n                CASE role\n                    WHEN 'admin' THEN 1\n                    WHEN 'kepala_sekolah' THEN 2\n                    WHEN 'guru' THEN 3\n                    ELSE 4\n                END\n            ")
             ->orderBy('nama_lengkap', 'asc')
             ->orderBy('id', 'asc')
             ->get();
