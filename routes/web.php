@@ -11,10 +11,9 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\RaportController;
+use App\Http\Controllers\DashboardController;
 
-Route::get('/', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/guru', [GuruController::class, 'index'])->name('guru');
 Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa');
