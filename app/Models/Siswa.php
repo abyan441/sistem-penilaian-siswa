@@ -42,9 +42,7 @@ class Siswa extends Model
                 ->orderBy(Kelas::query()->select('nama_kelas')->whereColumn('kelas.id', 'siswa.kelas_id'))
                 ->orderBy('nama_siswa')
                 ->get(),
-            'kelas' => Kelas::query()
-                ->orderBy('nama_kelas')
-                ->get(),
+            'kelas' => Kelas::query()->orderBy('nama_kelas')->get(),
         ];
     }
 
@@ -55,6 +53,13 @@ class Siswa extends Model
             ->tahunAjaran($tahunAjaran)
             ->urutNama()
             ->get();
+    }
+
+    public static function untukRaport(int $id): self
+    {
+        return self::query()
+            ->with(['kelas.waliKelas'])
+            ->findOrFail($id);
     }
 
     public static function dataRaport(string $tahunAjaran): array
