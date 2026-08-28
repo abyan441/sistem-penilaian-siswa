@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
 class MataPelajaran extends Model
 {
     use HasFactory;
 
     protected $table = 'mata_pelajaran';
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -30,7 +31,9 @@ class MataPelajaran extends Model
 
     public function scopeUrutNama(Builder $query): Builder
     {
-        return $query->orderBy('nama_pelajaran')->orderBy('id');
+        return $query
+            ->orderBy('nama_pelajaran')
+            ->orderBy('id');
     }
 
     public static function dataHalaman(): array
@@ -45,7 +48,9 @@ class MataPelajaran extends Model
 
     public static function semua()
     {
-        return self::query()->urutNama()->get();
+        return self::query()
+            ->urutNama()
+            ->get();
     }
 
     public static function total(): int
