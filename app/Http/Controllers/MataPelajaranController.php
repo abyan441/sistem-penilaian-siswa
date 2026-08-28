@@ -9,29 +9,13 @@ use Illuminate\Validation\Rule;
 
 class MataPelajaranController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | HALAMAN MATA PELAJARAN
-    |--------------------------------------------------------------------------
-    */
-
     /**
      * Menampilkan halaman Mata Pelajaran.
      */
     public function index()
     {
-        return view(
-            'mapel',
-            MataPelajaran::dataHalaman()
-        );
+        return view('mapel', MataPelajaran::dataHalaman());
     }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TAMBAH
-    |--------------------------------------------------------------------------
-    */
 
     /**
      * Menyimpan data mata pelajaran baru.
@@ -39,37 +23,12 @@ class MataPelajaranController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'kode_mapel' => [
-                'required',
-                'string',
-                'max:5',
-                'unique:mata_pelajaran,kode_mapel',
-            ],
-
-            'nama_pelajaran' => [
-                'required',
-                'string',
-                'max:45',
-            ],
-
-            'kkm' => [
-                'required',
-                'integer',
-                'between:0,100',
-            ],
+            'kode_mapel' => ['required', 'string', 'max:5', 'unique:mata_pelajaran,kode_mapel'],
+            'nama_pelajaran' => ['required', 'string', 'max:45'],
+            'kkm' => ['required', 'integer', 'between:0,100'],
         ]);
 
-        $mapel = MataPelajaran::create([
-            'kode_mapel' => strtoupper(
-                trim($validated['kode_mapel'])
-            ),
-
-            'nama_pelajaran' => trim(
-                $validated['nama_pelajaran']
-            ),
-
-            'kkm' => $validated['kkm'],
-        ]);
+        $mapel = MataPelajaran::tambah($validated);
 
         return response()->json([
             'success' => true,
@@ -78,20 +37,11 @@ class MataPelajaranController extends Controller
         ], 201);
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | UBAH
-    |--------------------------------------------------------------------------
-    */
-
     /**
      * Memperbarui data mata pelajaran.
      */
-    public function update(
-        Request $request,
-        $id
-    ): JsonResponse {
+    public function update(Request $request, int $id): JsonResponse
+    {
         $mapel = MataPelajaran::find($id);
 
         if (!$mapel) {
@@ -106,36 +56,13 @@ class MataPelajaranController extends Controller
                 'required',
                 'string',
                 'max:5',
-                Rule::unique('mata_pelajaran', 'kode_mapel')
-                    ->ignore($mapel->id),
+                Rule::unique('mata_pelajaran', 'kode_mapel')->ignore($mapel->id),
             ],
-
-            'nama_pelajaran' => [
-                'required',
-                'string',
-                'max:45',
-            ],
-
-            'kkm' => [
-                'required',
-                'integer',
-                'between:0,100',
-            ],
+            'nama_pelajaran' => ['required', 'string', 'max:45'],
+            'kkm' => ['required', 'integer', 'between:0,100'],
         ]);
 
-        $mapel->update([
-            'kode_mapel' => strtoupper(
-                trim($validated['kode_mapel'])
-            ),
-
-            'nama_pelajaran' => trim(
-                $validated['nama_pelajaran']
-            ),
-
-            'kkm' => $validated['kkm'],
-        ]);
-
-        $mapel->refresh();
+        $mapel = MataPelajaran::ubah($id, $validated);
 
         return response()->json([
             'success' => true,
@@ -144,41 +71,25 @@ class MataPelajaranController extends Controller
         ]);
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | HAPUS
-    |--------------------------------------------------------------------------
-    */
-
     /**
      * Menghapus data mata pelajaran.
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $mapel = MataPelajaran::find($id);
-
-        if (!$mapel) {
+        if (!MataPelajaran::find($id)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Data mata pelajaran tidak ditemukan.',
             ], 404);
         }
 
-        $mapel->delete();
+        MataPelajaran::hapus($id);
 
         return response()->json([
             'success' => true,
             'message' => 'Mata pelajaran berhasil dihapus.',
         ]);
     }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | FORMAT DATA
-    |--------------------------------------------------------------------------
-    */
 
     /**
      * Format data untuk response JavaScript.
