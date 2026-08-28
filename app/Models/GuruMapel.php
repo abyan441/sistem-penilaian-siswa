@@ -10,65 +10,34 @@ class GuruMapel extends Model
 {
     use HasFactory;
 
-    /**
-     * Nama tabel database.
-     */
     protected $table = 'guru_mapel';
-
-    /**
-     * Primary key.
-     */
     protected $primaryKey = 'id';
-
-    /**
-     * Tabel tidak menggunakan created_at dan updated_at.
-     */
     public $timestamps = false;
 
-    /**
-     * Kolom yang dapat diisi melalui mass assignment.
-     */
     protected $fillable = [
         'guru_id',
         'mapel_id',
     ];
 
-    /**
-     * =====================================================
-     * RELASI KE GURU
-     * =====================================================
-     */
     public function guru()
     {
         return $this->belongsTo(User::class, 'guru_id');
     }
 
-    /**
-     * =====================================================
-     * RELASI KE MATA PELAJARAN
-     * =====================================================
-     */
     public function mataPelajaran()
     {
         return $this->belongsTo(MataPelajaran::class, 'mapel_id');
     }
 
-    /**
-     * =====================================================
-     * RELASI KE NILAI
-     * =====================================================
-     */
     public function nilai()
     {
         return $this->hasMany(Nilai::class, 'guru_mapel_id');
     }
 
     /**
-     * =====================================================
-     * DATA HALAMAN
-     * =====================================================
+     * Data yang dibutuhkan halaman data guru.
      */
-    public static function dataHalaman()
+    public static function dataHalaman(): array
     {
         return [
             'guruMapel' => self::semua(),
@@ -78,56 +47,40 @@ class GuruMapel extends Model
     }
 
     /**
-     * =====================================================
-     * SEMUA DATA GURU + MATA PELAJARAN
-     * =====================================================
+     * Semua penugasan guru mata pelajaran.
      */
     public static function semua()
     {
-        return self::with([
-            'guru',
-            'mataPelajaran',
-        ])
-            ->orderBy('id', 'asc')
+        return self::with(['guru', 'mataPelajaran'])
+            ->orderBy('id')
             ->get();
     }
 
     /**
-     * =====================================================
-     * DAFTAR GURU
-     * =====================================================
-     *
-     * Hanya user dengan role guru yang ditampilkan.
+     * Daftar user yang memiliki role guru.
      */
     public static function daftarGuru()
     {
         return User::where('role', 'guru')
-            ->orderBy('nama_lengkap', 'asc')
-            ->orderBy('id', 'asc')
+            ->orderBy('nama_lengkap')
+            ->orderBy('id')
             ->get();
     }
 
     /**
-     * =====================================================
-     * DAFTAR MATA PELAJARAN
-     * =====================================================
+     * Daftar mata pelajaran untuk pilihan form.
      */
     public static function daftarMataPelajaran()
     {
-        return MataPelajaran::orderBy('nama_pelajaran', 'asc')
-            ->orderBy('id', 'asc')
+        return MataPelajaran::orderBy('nama_pelajaran')
+            ->orderBy('id')
             ->get();
     }
 
     /**
-     * =====================================================
-     * VALIDASI GURU
-     * =====================================================
-     *
-     * Memastikan user yang dipilih benar-benar memiliki
-     * role sebagai guru.
+     * Memastikan user yang dipilih adalah guru.
      */
-    public static function pastikanGuruValid($guruId)
+    public static function pastikanGuruValid(int $guruId): bool
     {
         return User::where('id', $guruId)
             ->where('role', 'guru')
@@ -135,45 +88,38 @@ class GuruMapel extends Model
     }
 
     /**
-     * =====================================================
-     * CEK DUPLIKASI
-     * =====================================================
-     *
-     * Memastikan guru yang sama tidak terdaftar pada
-     * mata pelajaran yang sama lebih dari satu kali.
-     *
-     * Parameter $excludeId digunakan ketika edit data.
+     * Memastikan kombinasi guru dan mata pelajaran tidak duplikat.
      */
-    public static function sudahTerdaftar($guruId, $mapelId, $excludeId = null)
-    {
+    public static function sudahTerdaftar(
+        int $guruId,
+        int $mapelId,
+        ?int $excludeId = null
+    ): bool {
         $query = self::where('guru_id', $guruId)
             ->where('mapel_id', $mapelId);
 
         if ($excludeId !== null) {
-            $query->where('id', '!=', $excludeId);
+            $query->whereKeyNot($excludeId);
         }
 
         return $query->exists();
     }
 
     /**
-     * =====================================================
-     * VALIDASI DATA GURU + MAPEL
-     * =====================================================
+     * Validasi aturan bisnis sebelum tambah atau ubah data.
      */
-    protected static function validasiBisnis($data, $excludeId = null)
+    protected static function validasiBisnis(array $data, ?int $excludeId = null): void
     {
-        if (!self::pastikanGuruValid($data['guru_id'])) {
+        $guruId = (int) $data['guru_id'];
+        $mapelId = (int) $data['mapel_id'];
+
+        if (!self::pastikanGuruValid($guruId)) {
             throw ValidationException::withMessages([
                 'guru_id' => 'User yang dipilih bukan merupakan guru.',
             ]);
         }
 
-        if (self::sudahTerdaftar(
-            $data['guru_id'],
-            $data['mapel_id'],
-            $excludeId
-        )) {
+        if (self::sudahTerdaftar($guruId, $mapelId, $excludeId)) {
             throw ValidationException::withMessages([
                 'mapel_id' => 'Guru tersebut sudah terdaftar pada mata pelajaran yang dipilih.',
             ]);
@@ -181,11 +127,9 @@ class GuruMapel extends Model
     }
 
     /**
-     * =====================================================
-     * TAMBAH GURU MATA PELAJARAN
-     * =====================================================
+     * Menambahkan penugasan guru mata pelajaran.
      */
-    public static function tambah($data)
+    public static function tambah(array $data): self
     {
         self::validasiBisnis($data);
 
@@ -196,11 +140,9 @@ class GuruMapel extends Model
     }
 
     /**
-     * =====================================================
-     * UBAH GURU MATA PELAJARAN
-     * =====================================================
+     * Mengubah penugasan guru mata pelajaran.
      */
-    public static function ubah($id, $data)
+    public static function ubah(int $id, array $data): self
     {
         $guruMapel = self::findOrFail($id);
 
@@ -215,14 +157,10 @@ class GuruMapel extends Model
     }
 
     /**
-     * =====================================================
-     * HAPUS GURU MATA PELAJARAN
-     * =====================================================
+     * Menghapus penugasan guru mata pelajaran.
      */
-    public static function hapus($id)
+    public static function hapus(int $id): bool
     {
-        $guruMapel = self::findOrFail($id);
-
-        return $guruMapel->delete();
+        return self::findOrFail($id)->delete();
     }
 }
