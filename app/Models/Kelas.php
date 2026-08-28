@@ -61,12 +61,9 @@ class Kelas extends Model
     {
         return static::query()
             ->where('wali_kelas_id', $waliKelasId)
-            ->with([
-                'waliKelas',
-                'siswa' => function ($query) {
-                    $query->orderBy('nama_siswa')->orderBy('nisn');
-                },
-            ])
+            ->with(['waliKelas', 'siswa' => static function ($query) {
+                $query->orderBy('nama_siswa')->orderBy('nisn');
+            }])
             ->withCount('siswa')
             ->first();
     }
@@ -75,12 +72,9 @@ class Kelas extends Model
     {
         return static::query()
             ->where('wali_kelas_id', $waliKelasId)
-            ->with([
-                'waliKelas',
-                'siswa' => function ($query) {
-                    $query->orderBy('nama_siswa')->orderBy('nisn');
-                },
-            ])
+            ->with(['waliKelas', 'siswa' => static function ($query) {
+                $query->orderBy('nama_siswa')->orderBy('nisn');
+            }])
             ->withCount('siswa')
             ->firstOrFail();
     }
@@ -98,7 +92,31 @@ class Kelas extends Model
         return static::query()->count();
     }
 
-    protected static function validasiData(array $data, $id = null)
+    public static function tahunAjaranOptions()
+    {
+        return static::query()
+            ->whereNotNull('tahun_ajaran')
+            ->where('tahun_ajaran', '!=', '')
+            ->select('tahun_ajaran')
+            ->distinct()
+            ->orderByDesc('tahun_ajaran')
+            ->pluck('tahun_ajaran');
+    }
+
+    public static function resolveTahunAjaran(?string $tahunAjaran): ?string
+    {
+        if ($tahunAjaran !== null && $tahunAjaran !== '') {
+            return $tahunAjaran;
+        }
+
+        return static::query()
+            ->whereNotNull('tahun_ajaran')
+            ->where('tahun_ajaran', '!=', '')
+            ->orderByDesc('tahun_ajaran')
+            ->value('tahun_ajaran');
+    }
+
+    protected static function validasiData(array $data, $id = null): array
     {
         $namaKelas = strtoupper(trim($data['nama_kelas'] ?? ''));
         $tahunAjaran = trim($data['tahun_ajaran'] ?? '');
@@ -109,9 +127,7 @@ class Kelas extends Model
         }
 
         if (!preg_match('/^\d[A-Z]$/', $namaKelas)) {
-            throw new InvalidArgumentException(
-                'Nama kelas harus menggunakan format seperti 1A, 2B, atau 3C.'
-            );
+            throw new InvalidArgumentException('Nama kelas harus menggunakan format seperti 1A, 2B, atau 3C.');
         }
 
         if ($tahunAjaran === '') {
@@ -119,9 +135,7 @@ class Kelas extends Model
         }
 
         if (!preg_match('/^\d{4}\/\d{4}$/', $tahunAjaran)) {
-            throw new InvalidArgumentException(
-                'Tahun ajaran harus menggunakan format YYYY/YYYY, contoh 2026/2027.'
-            );
+            throw new InvalidArgumentException('Tahun ajaran harus menggunakan format YYYY/YYYY, contoh 2026/2027.');
         }
 
         if ($waliKelasId === null || $waliKelasId === '' || !is_numeric($waliKelasId)) {
@@ -130,21 +144,17 @@ class Kelas extends Model
 
         $waliKelasId = (int) $waliKelasId;
 
-        $waliKelas = User::query()
+        $waliKelasValid = User::query()
             ->where('id', $waliKelasId)
             ->where('role', 'guru')
             ->where('status', 'aktif')
             ->exists();
 
-        if (!$waliKelas) {
-            throw new InvalidArgumentException(
-                'Guru yang dipilih tidak dapat menjadi wali kelas.'
-            );
+        if (!$waliKelasValid) {
+            throw new InvalidArgumentException('Guru yang dipilih tidak dapat menjadi wali kelas.');
         }
 
-        $queryNama = static::query()
-            ->whereRaw('UPPER(nama_kelas) = ?', [$namaKelas]);
-
+        $queryNama = static::query()->whereRaw('UPPER(nama_kelas) = ?', [$namaKelas]);
         if ($id !== null) {
             $queryNama->where('id', '!=', $id);
         }
@@ -154,15 +164,12 @@ class Kelas extends Model
         }
 
         $queryWali = static::query()->where('wali_kelas_id', $waliKelasId);
-
         if ($id !== null) {
             $queryWali->where('id', '!=', $id);
         }
 
         if ($queryWali->exists()) {
-            throw new InvalidArgumentException(
-                'Guru tersebut sudah menjadi wali kelas lain.'
-            );
+            throw new InvalidArgumentException('Guru tersebut sudah menjadi wali kelas lain.');
         }
 
         return [
@@ -174,10 +181,8 @@ class Kelas extends Model
 
     public static function tambahKelas(array $data)
     {
-        $data = static::validasiData($data);
-
         return static::query()
-            ->create($data)
+            ->create(static::validasiData($data))
             ->load('waliKelas')
             ->loadCount('siswa');
     }
@@ -185,8 +190,7 @@ class Kelas extends Model
     public static function ubahKelas($id, array $data)
     {
         $kelas = static::query()->findOrFail($id);
-        $data = static::validasiData($data, $kelas->id);
-        $kelas->update($data);
+        $kelas->update(static::validasiData($data, $kelas->id));
 
         return $kelas->fresh(['waliKelas'])->loadCount('siswa');
     }
@@ -196,9 +200,7 @@ class Kelas extends Model
         $kelas = static::query()->withCount('siswa')->findOrFail($id);
 
         if ($kelas->siswa_count > 0) {
-            throw new RuntimeException(
-                'Kelas tidak dapat dihapus karena masih memiliki siswa.'
-            );
+            throw new RuntimeException('Kelas tidak dapat dihapus karena masih memiliki siswa.');
         }
 
         return $kelas->delete();
@@ -207,26 +209,22 @@ class Kelas extends Model
     public static function detailKelas($id)
     {
         return static::query()
-            ->with([
-                'waliKelas',
-                'siswa' => function ($query) {
-                    $query->orderBy('nama_siswa')->orderBy('nisn');
-                },
-            ])
+            ->with(['waliKelas', 'siswa' => static function ($query) {
+                $query->orderBy('nama_siswa')->orderBy('nisn');
+            }])
             ->withCount('siswa')
             ->findOrFail($id);
     }
 
-    public static function ringkasan()
+    public static function ringkasan(): array
     {
         $totalKelas = static::total();
         $totalSiswa = Siswa::query()->count();
-        $rataRata = $totalKelas > 0 ? (int) round($totalSiswa / $totalKelas) : 0;
 
         return [
             'total_kelas' => $totalKelas,
             'total_siswa' => $totalSiswa,
-            'rata_rata' => $rataRata,
+            'rata_rata' => $totalKelas > 0 ? (int) round($totalSiswa / $totalKelas) : 0,
         ];
     }
 }
