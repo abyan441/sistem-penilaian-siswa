@@ -16,7 +16,14 @@ class LoginController extends Controller
     }
 
     /**
-     * Memproses login guru.
+     * Memproses login user.
+     *
+     * User yang dapat login:
+     * - guru
+     * - admin
+     * - kepala_sekolah
+     *
+     * Semua user harus memiliki status aktif.
      */
     public function login(Request $request)
     {
@@ -37,29 +44,37 @@ class LoginController extends Controller
         ]);
 
         /*
-         * Pastikan yang dapat login adalah guru aktif.
+         * Pastikan akun memiliki role yang diperbolehkan
+         * dan statusnya aktif.
          */
+        $allowedRoles = [
+            'guru',
+            'admin',
+            'kepala_sekolah',
+        ];
+
         $user = \App\Models\User::query()
             ->where('email', $credentials['email'])
-            ->where('role', 'guru')
+            ->whereIn('role', $allowedRoles)
             ->where('status', 'aktif')
             ->first();
 
         if (!$user) {
             return back()
                 ->withErrors([
-                    'email' => 'Akun guru tidak ditemukan atau akun tidak aktif.',
+                    'email' => 'Akun tidak ditemukan, role tidak memiliki akses, atau akun tidak aktif.',
                 ])
                 ->withInput($request->only('email'));
         }
 
         /*
-         * Coba autentikasi.
+         * Coba autentikasi berdasarkan email,
+         * password, role, dan status aktif.
          */
         if (!Auth::attempt([
             'email' => $credentials['email'],
             'password' => $credentials['password'],
-            'role' => 'guru',
+            'role' => $user->role,
             'status' => 'aktif',
         ])) {
             return back()
@@ -70,13 +85,14 @@ class LoginController extends Controller
         }
 
         /*
-         * Regenerasi session untuk keamanan.
+         * Regenerasi session setelah login berhasil
+         * untuk mencegah session fixation.
          */
         $request->session()->regenerate();
 
         /*
-         * Setelah login berhasil,
-         * arahkan ke dashboard.
+         * Setelah login berhasil, arahkan ke halaman
+         * yang sebelumnya ingin diakses atau dashboard.
          */
         return redirect()->intended(
             route('dashboard')
