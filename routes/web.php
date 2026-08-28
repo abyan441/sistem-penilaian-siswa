@@ -12,12 +12,6 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\RaportController;
 
-/*
-|--------------------------------------------------------------------------
-| PUBLIC / GUEST
-|--------------------------------------------------------------------------
-*/
-
 Route::get('/', function () {
     return view('dashboard');
 })->name('dashboard');
@@ -27,21 +21,13 @@ Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa');
 Route::get('/kelas', [KelasController::class, 'index'])->name('kelas');
 Route::get('/kelas/{id}/detail', [KelasController::class, 'detail'])->name('kelas.detail');
 Route::get('/mata-pelajaran', [MataPelajaranController::class, 'index'])->name('mapel');
-
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.process');
-
-/*
-|--------------------------------------------------------------------------
-| GURU + ADMIN + KEPALA SEKOLAH
-|--------------------------------------------------------------------------
-*/
 
 Route::middleware([
     'auth',
     'role:guru,admin,kepala_sekolah',
 ])->group(function () {
-
     Route::post('/guru', [GuruController::class, 'store'])->name('guru.store');
     Route::put('/guru/{id}', [GuruController::class, 'update'])->name('guru.update');
     Route::delete('/guru/{id}', [GuruController::class, 'destroy'])->name('guru.destroy');
@@ -63,50 +49,19 @@ Route::middleware([
     Route::get('/input-nilai/siswa', [NilaiController::class, 'siswa'])->name('input-nilai.siswa');
     Route::post('/input-nilai', [NilaiController::class, 'store'])->name('input-nilai.store');
 
-    /*
-    |--------------------------------------------------------------------------
-    | RAPORT
-    |--------------------------------------------------------------------------
-    | Data halaman raport diambil langsung dari database.
-    |--------------------------------------------------------------------------
-    */
-
     Route::get('/raport', [RaportController::class, 'index'])->name('raport');
     Route::get('/raport/data', [RaportController::class, 'data'])->name('raport.data');
+    Route::get('/raport/{id}/preview', [RaportController::class, 'preview'])->name('raport.preview');
 
-    Route::get('/raport/{id}/preview', function ($id) {
-        return view('raport-preview', ['id' => $id]);
-    })->name('raport.preview');
-
-    /*
-    |--------------------------------------------------------------------------
-    | PENGATURAN AKUN
-    |--------------------------------------------------------------------------
-    | Semua pengguna yang sudah login dapat mengubah email dan password
-    | miliknya sendiri.
-    |--------------------------------------------------------------------------
-    */
-
-    Route::put('/akun/email', [AkunController::class, 'updateEmail'])
-        ->name('akun.email.update');
-
-    Route::put('/akun/password', [AkunController::class, 'updatePassword'])
-        ->name('akun.password.update');
-
+    Route::put('/akun/email', [AkunController::class, 'updateEmail'])->name('akun.email.update');
+    Route::put('/akun/password', [AkunController::class, 'updatePassword'])->name('akun.password.update');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN + KEPALA SEKOLAH
-|--------------------------------------------------------------------------
-*/
 
 Route::middleware([
     'auth',
     'role:admin,kepala_sekolah',
 ])->group(function () {
-
     Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna');
     Route::post('/pengguna', [PenggunaController::class, 'store'])->name('pengguna.store');
     Route::get('/pengguna/{user}', [PenggunaController::class, 'show'])->name('pengguna.show');
