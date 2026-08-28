@@ -10,6 +10,7 @@ use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\AkunController;
+use App\Http\Controllers\RaportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,9 +63,16 @@ Route::middleware([
     Route::get('/input-nilai/siswa', [NilaiController::class, 'siswa'])->name('input-nilai.siswa');
     Route::post('/input-nilai', [NilaiController::class, 'store'])->name('input-nilai.store');
 
-    Route::get('/raport', function () {
-        return view('raport');
-    })->name('raport');
+    /*
+    |--------------------------------------------------------------------------
+    | RAPORT
+    |--------------------------------------------------------------------------
+    | Data halaman raport diambil langsung dari database.
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/raport', [RaportController::class, 'index'])->name('raport');
+    Route::get('/raport/data', [RaportController::class, 'data'])->name('raport.data');
 
     Route::get('/raport/{id}/preview', function ($id) {
         return view('raport-preview', ['id' => $id]);
