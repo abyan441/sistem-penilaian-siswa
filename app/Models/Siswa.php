@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Siswa extends Model
 {
     protected $table = 'siswa';
-
     public $timestamps = false;
 
     protected $fillable = [
@@ -17,88 +16,47 @@ class Siswa extends Model
         'kelas_id',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELATIONSHIPS
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Siswa memiliki satu kelas.
-     */
     public function kelas()
     {
-        return $this->belongsTo(
-            Kelas::class,
-            'kelas_id'
-        );
+        return $this->belongsTo(Kelas::class, 'kelas_id');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | DATA HALAMAN
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Mengambil data siswa beserta kelas.
-     */
-    public static function dataHalaman()
+    public static function dataHalaman(): array
     {
         return [
-            'siswa' => self::with('kelas')
-                ->join(
-                    'kelas',
-                    'siswa.kelas_id',
-                    '=',
-                    'kelas.id'
-                )
+            'siswa' => self::query()
+                ->with('kelas')
+                ->join('kelas', 'siswa.kelas_id', '=', 'kelas.id')
                 ->select('siswa.*')
                 ->orderBy('kelas.nama_kelas')
                 ->orderBy('siswa.nama_siswa')
                 ->get(),
-
-            'kelas' => Kelas::orderBy('nama_kelas')
+            'kelas' => Kelas::query()
+                ->orderBy('nama_kelas')
                 ->get(),
         ];
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | TAMBAH SISWA
-    |--------------------------------------------------------------------------
-    */
-
-    public static function tambah(array $data)
+    public static function total(): int
     {
-        return self::create($data);
+        return self::query()->count();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | UBAH SISWA
-    |--------------------------------------------------------------------------
-    */
-
-    public static function ubah($id, array $data)
+    public static function tambah(array $data): self
     {
-        $siswa = self::findOrFail($id);
+        return self::query()->create($data);
+    }
 
+    public static function ubah(int $id, array $data): self
+    {
+        $siswa = self::query()->findOrFail($id);
         $siswa->update($data);
 
         return $siswa->fresh('kelas');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | HAPUS SISWA
-    |--------------------------------------------------------------------------
-    */
-
-    public static function hapus($id)
+    public static function hapus(int $id): bool
     {
-        $siswa = self::findOrFail($id);
-
-        return $siswa->delete();
+        return (bool) self::query()->findOrFail($id)->delete();
     }
 }
