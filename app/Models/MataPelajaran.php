@@ -4,21 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class MataPelajaran extends Model
 {
     use HasFactory;
 
-    /*
-    |--------------------------------------------------------------------------
-    | KONFIGURASI MODEL
-    |--------------------------------------------------------------------------
-    */
-
     protected $table = 'mata_pelajaran';
-
-    protected $primaryKey = 'id';
-
     public $timestamps = false;
 
     protected $fillable = [
@@ -27,46 +19,20 @@ class MataPelajaran extends Model
         'kkm',
     ];
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | CAST
-    |--------------------------------------------------------------------------
-    */
-
     protected $casts = [
         'kkm' => 'integer',
     ];
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELASI
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Relasi Mata Pelajaran dengan GuruMapel.
-     */
     public function guruMapel()
     {
-        return $this->hasMany(
-            GuruMapel::class,
-            'mapel_id'
-        );
+        return $this->hasMany(GuruMapel::class, 'mapel_id');
     }
 
+    public function scopeUrutNama(Builder $query): Builder
+    {
+        return $query->orderBy('nama_pelajaran')->orderBy('id');
+    }
 
-    /*
-    |--------------------------------------------------------------------------
-    | DATA HALAMAN
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Mengambil seluruh data yang dibutuhkan
-     * oleh halaman Mata Pelajaran.
-     */
     public static function dataHalaman(): array
     {
         return [
@@ -77,55 +43,54 @@ class MataPelajaran extends Model
         ];
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | DATA
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Mengambil seluruh mata pelajaran
-     * berdasarkan nama A-Z.
-     */
     public static function semua()
     {
-        return self::query()
-            ->orderBy('nama_pelajaran', 'asc')
-            ->orderBy('id', 'asc')
-            ->get();
+        return self::query()->urutNama()->get();
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | STATISTIK
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Menghitung jumlah mata pelajaran.
-     */
     public static function total(): int
     {
         return self::query()->count();
     }
 
-
-    /**
-     * Menghitung rata-rata KKM.
-     */
     public static function rataRataKkm(): ?float
     {
-        return self::query()->avg('kkm');
+        $rataRata = self::query()->avg('kkm');
+
+        return $rataRata === null ? null : round((float) $rataRata, 2);
     }
 
-
-    /**
-     * Mengambil nilai KKM terendah.
-     */
     public static function kkmTerendah(): ?int
     {
-        return self::query()->min('kkm');
+        $minimum = self::query()->min('kkm');
+
+        return $minimum === null ? null : (int) $minimum;
+    }
+
+    public static function tambah(array $data): self
+    {
+        return self::query()->create([
+            'kode_mapel' => strtoupper(trim($data['kode_mapel'])),
+            'nama_pelajaran' => trim($data['nama_pelajaran']),
+            'kkm' => $data['kkm'],
+        ]);
+    }
+
+    public static function ubah(int $id, array $data): self
+    {
+        $mapel = self::query()->findOrFail($id);
+
+        $mapel->update([
+            'kode_mapel' => strtoupper(trim($data['kode_mapel'])),
+            'nama_pelajaran' => trim($data['nama_pelajaran']),
+            'kkm' => $data['kkm'],
+        ]);
+
+        return $mapel->refresh();
+    }
+
+    public static function hapus(int $id): void
+    {
+        self::query()->findOrFail($id)->delete();
     }
 }
