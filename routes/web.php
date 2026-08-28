@@ -8,6 +8,7 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PenggunaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -239,7 +240,35 @@ Route::middleware([
     'role:admin,kepala_sekolah',
 ])->group(function () {
 
-    Route::get('/pengguna', function () {
-        return view('pengguna');
-    })->name('pengguna');
+    Route::get(
+        '/pengguna',
+        [PenggunaController::class, 'index']
+    )->name('pengguna');
+
+    Route::post(
+        '/pengguna',
+        [PenggunaController::class, 'store']
+    )->name('pengguna.store');
+
+    Route::get(
+        '/pengguna/{user}',
+        [PenggunaController::class, 'show']
+    )->name('pengguna.show');
+
+    Route::put(
+        '/pengguna/{user}',
+        [PenggunaController::class, 'update']
+    )->name('pengguna.update');
+
+    Route::patch(
+        '/pengguna/{user}/status',
+        [PenggunaController::class, 'updateStatus']
+    )->name('pengguna.status');
+
+    Route::delete(
+        '/pengguna/{user}',
+        [PenggunaController::class, 'destroy']
+    )->name('pengguna.destroy');
 });
+
+

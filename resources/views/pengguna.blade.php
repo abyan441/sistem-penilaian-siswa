@@ -3,10 +3,19 @@
 @section('title', 'Manajemen Pengguna | Cyber Olympus E-Raport System')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/pages/pengguna.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/pages/pengguna.css') }}"
+    >
 @endpush
 
 @section('content')
+
+@php
+    $adaKepalaSekolah = $pengguna
+        ->where('role', 'kepala_sekolah')
+        ->isNotEmpty();
+@endphp
 
 <section
     class="user-management-content"
@@ -15,8 +24,9 @@
 >
 
     {{-- =====================================================
-         HEADER HALAMAN
+         HEADER
          ===================================================== --}}
+
     <header class="mp-div">
 
         <div class="mp-div-2">
@@ -33,7 +43,6 @@
             </p>
 
         </div>
-
 
         <button
             class="mp-button-tambah-siswa"
@@ -78,8 +87,9 @@
 
 
     {{-- =====================================================
-         STATISTIK PENGGUNA
+         STATISTIK
          ===================================================== --}}
+
     <section
         class="mp-div-3"
         aria-label="Ringkasan pengguna"
@@ -92,11 +102,10 @@
             </p>
 
             <p class="mp-text-wrapper-3">
-                6
+                {{ $statistik['totalPengguna'] }}
             </p>
 
         </article>
-
 
         <article class="mp-div-4">
 
@@ -105,11 +114,10 @@
             </p>
 
             <p class="mp-text-wrapper-3">
-                1
+                {{ $statistik['totalAdmin'] }}
             </p>
 
         </article>
-
 
         <article class="mp-div-4">
 
@@ -118,11 +126,10 @@
             </p>
 
             <p class="mp-text-wrapper-3">
-                5
+                {{ $statistik['totalGuru'] }}
             </p>
 
         </article>
-
 
         <article class="mp-div-4">
 
@@ -131,7 +138,7 @@
             </p>
 
             <p class="mp-text-wrapper-3">
-                6
+                {{ $statistik['totalAktif'] }}
             </p>
 
         </article>
@@ -140,8 +147,9 @@
 
 
     {{-- =====================================================
-         TABEL PENGGUNA
+         TABEL
          ===================================================== --}}
+
     <section
         class="mp-div-5"
         aria-labelledby="user-list-title"
@@ -154,7 +162,6 @@
             Daftar Pengguna
         </h2>
 
-
         <div
             class="mp-user-table"
             role="table"
@@ -162,6 +169,7 @@
         >
 
             {{-- HEADER --}}
+
             <div
                 class="mp-navbar mp-user-row mp-user-table-header"
                 role="row"
@@ -220,468 +228,249 @@
 
 
             {{-- BODY --}}
+
             <div
                 class="mp-div-6 mp-user-table-body"
                 role="rowgroup"
             >
 
-                {{-- =================================================
-                     USER 1
-                     ================================================= --}}
-                <div
-                    class="mp-user-row"
-                    role="row"
-                >
-
-                    <div class="mp-user-cell" role="cell">
-                        1
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        Admin Sekolah
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        Admin Sekolah
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        sayaadmin@gmail.com
-                    </div>
+                @forelse ($pengguna as $index => $user)
 
                     <div
-                        class="mp-div-wrapper mp-user-cell"
-                        role="cell"
+                        class="mp-user-row"
+                        role="row"
+                        data-user-id="{{ $user->id }}"
                     >
-                        <span class="mp-text-wrapper-11">
-                            Administrator
-                        </span>
+
+                        <div
+                            class="mp-user-cell"
+                            role="cell"
+                        >
+                            {{ $index + 1 }}
+                        </div>
+
+                        <div
+                            class="mp-user-cell"
+                            role="cell"
+                        >
+                            {{ $user->username }}
+                        </div>
+
+                        <div
+                            class="mp-user-cell"
+                            role="cell"
+                        >
+                            {{ $user->nama_lengkap }}
+                        </div>
+
+                        <div
+                            class="mp-user-cell"
+                            role="cell"
+                        >
+                            {{ $user->email }}
+                        </div>
+
+
+                        {{-- ROLE --}}
+
+                        <div
+                            class="mp-div-wrapper mp-user-cell"
+                            role="cell"
+                        >
+
+                            @if ($user->role === 'admin')
+
+                                <span class="mp-text-wrapper-11">
+                                    Administrator
+                                </span>
+
+                            @elseif ($user->role === 'kepala_sekolah')
+
+                                <span class="mp-text-wrapper-17">
+                                    Kepala Sekolah
+                                </span>
+
+                            @else
+
+                                <span class="mp-text-wrapper-22">
+                                    Guru
+                                </span>
+
+                            @endif
+
+                        </div>
+
+
+                        {{-- STATUS --}}
+
+                        <div
+                            class="mp-div-wrapper-2 mp-user-cell"
+                            role="cell"
+                        >
+
+                            <span
+                                class="mp-text-wrapper-12"
+                                data-status-badge="{{ $user->id }}"
+                            >
+                                {{ $user->status === 'aktif'
+                                    ? 'Aktif'
+                                    : 'Tidak Aktif'
+                                }}
+                            </span>
+
+                        </div>
+
+
+                        {{-- AKSI --}}
+
+                        <div
+                            class="mp-div-7 mp-user-cell"
+                            role="cell"
+                        >
+
+                            {{-- EDIT --}}
+
+                            <button
+                                class="mp-action-button mp-action-edit"
+                                type="button"
+                                aria-label="Ubah pengguna {{ $user->username }}"
+                                data-user-id="{{ $user->id }}"
+                                data-username="{{ $user->username }}"
+                            >
+
+                                <svg
+                                    class="mp-action-icon mp-icon-edit"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+
+                                    <path
+                                        d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"
+                                    />
+
+                                    <path
+                                        d="m14.5 6.5 3 3"
+                                    />
+
+                                </svg>
+
+                            </button>
+
+
+                            {{-- AKTIF / NONAKTIF --}}
+
+                            <button
+                                class="mp-action-button mp-action-status"
+                                type="button"
+                                aria-label="{{ $user->status === 'aktif'
+                                    ? 'Nonaktifkan akun ' . $user->username
+                                    : 'Aktifkan akun ' . $user->username }}"
+                                title="{{ $user->status === 'aktif'
+                                    ? 'Nonaktifkan akun'
+                                    : 'Aktifkan akun' }}"
+                                data-user-id="{{ $user->id }}"
+                                data-username="{{ $user->username }}"
+                                data-status="{{ $user->status }}"
+                            >
+
+                                <svg
+                                    class="mp-action-icon mp-icon-key {{ $user->status === 'tidak_aktif'
+                                        ? 'status-inactive'
+                                        : '' }}"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+
+                                    <path
+                                        d="M21 2l-2 2m-2 2l-2 2m2-2l2 2m-2-2l-6.5 6.5a5.5 5.5 0 1 1-3-3L16.5 2h4.5v4.5z"
+                                    />
+
+                                    <circle
+                                        cx="7.5"
+                                        cy="16.5"
+                                        r="1.5"
+                                    />
+
+                                </svg>
+
+                            </button>
+
+
+                            {{-- DELETE --}}
+
+                            <button
+                                class="mp-action-button mp-action-delete"
+                                type="button"
+                                aria-label="Hapus pengguna {{ $user->username }}"
+                                data-user-id="{{ $user->id }}"
+                                data-username="{{ $user->username }}"
+                            >
+
+                                <svg
+                                    class="mp-action-icon mp-icon-trash"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+
+                                    <polyline
+                                        points="3 6 5 6 21 6"
+                                    />
+
+                                    <path
+                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                                    />
+
+                                    <line
+                                        x1="10"
+                                        y1="11"
+                                        x2="10"
+                                        y2="17"
+                                    />
+
+                                    <line
+                                        x1="14"
+                                        y1="11"
+                                        x2="14"
+                                        y2="17"
+                                    />
+
+                                </svg>
+
+                            </button>
+
+                        </div>
+
                     </div>
+
+                @empty
 
                     <div
-                        class="mp-div-wrapper-2 mp-user-cell"
-                        role="cell"
-                    >
-                        <span class="mp-text-wrapper-12">
-                            Aktif
-                        </span>
-                    </div>
-
-                    <div
-                        class="mp-div-7 mp-user-cell"
-                        role="cell"
+                        class="mp-user-empty"
+                        role="row"
                     >
 
-                        <button
-                            class="mp-action-button mp-action-edit"
-                            type="button"
-                            aria-label="Ubah pengguna Admin Sekolah"
-                            data-username="Admin Sekolah"
+                        <div
+                            class="mp-user-empty-message"
+                            role="cell"
                         >
-
-                            <svg
-                                class="mp-action-icon mp-icon-edit"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            >
-
-                                <path d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"></path>
-
-                                <path d="m14.5 6.5 3 3"></path>
-
-                            </svg>
-
-                        </button>
-
-
-                        <button
-                            class="mp-action-button mp-action-password"
-                            type="button"
-                            aria-label="Ubah kata sandi pengguna Admin Sekolah"
-                            data-username="Admin Sekolah"
-                        >
-
-                            <svg
-                                class="mp-action-icon mp-icon-key"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            >
-
-                                <path d="M21 2l-2 2m-2 2l-2 2m2-2l2 2m-2-2l-6.5 6.5a5.5 5.5 0 1 1-3-3L16.5 2h4.5v4.5z"></path>
-
-                                <circle
-                                    cx="7.5"
-                                    cy="16.5"
-                                    r="1.5"
-                                ></circle>
-
-                            </svg>
-
-                        </button>
-
-
-                        <button
-                            class="mp-action-button mp-action-delete"
-                            type="button"
-                            aria-label="Hapus pengguna Admin Sekolah"
-                            data-username="Admin Sekolah"
-                        >
-
-                            <svg
-                                class="mp-action-icon mp-icon-trash"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            >
-
-                                <polyline points="3 6 5 6 21 6"></polyline>
-
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-
-                                <line
-                                    x1="10"
-                                    y1="11"
-                                    x2="10"
-                                    y2="17"
-                                ></line>
-
-                                <line
-                                    x1="14"
-                                    y1="11"
-                                    x2="14"
-                                    y2="17"
-                                ></line>
-
-                            </svg>
-
-                        </button>
+                            Belum ada data pengguna.
+                        </div>
 
                     </div>
 
-                </div>
-
-
-                {{-- =================================================
-                     USER 2
-                     ================================================= --}}
-                <div class="mp-user-row" role="row">
-
-                    <div class="mp-user-cell" role="cell">2</div>
-
-                    <div class="mp-user-cell" role="cell">
-                        ramuss
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        Saiful Isnan
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        saifulisnan@gmail.com
-                    </div>
-
-                    <div class="mp-div-wrapper-3 mp-user-cell" role="cell">
-                        <span class="mp-text-wrapper-17">
-                            Kepala Sekolah
-                        </span>
-                    </div>
-
-                    <div class="mp-div-wrapper-4 mp-user-cell" role="cell">
-                        <span class="mp-text-wrapper-12">
-                            Aktif
-                        </span>
-                    </div>
-
-                    <div class="mp-div-8 mp-user-cell" role="cell">
-
-                        <button
-                            class="mp-action-button mp-action-edit"
-                            type="button"
-                            aria-label="Ubah pengguna ramuss"
-                            data-username="ramuss"
-                        >
-                            <svg class="mp-action-icon mp-icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"></path>
-                                <path d="m14.5 6.5 3 3"></path>
-                            </svg>
-                        </button>
-
-                        <button
-                            class="mp-action-button mp-action-password"
-                            type="button"
-                            aria-label="Ubah kata sandi pengguna ramuss"
-                            data-username="ramuss"
-                        >
-                            <svg class="mp-action-icon mp-icon-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 2l-2 2m-2 2l-2 2m2-2l2 2m-2-2l-6.5 6.5a5.5 5.5 0 1 1-3-3L16.5 2h4.5v4.5z"></path>
-                                <circle cx="7.5" cy="16.5" r="1.5"></circle>
-                            </svg>
-                        </button>
-
-                        <button
-                            class="mp-action-button mp-action-delete"
-                            type="button"
-                            aria-label="Hapus pengguna ramuss"
-                            data-username="ramuss"
-                        >
-                            <svg class="mp-action-icon mp-icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                {{-- USER 3 --}}
-                <div class="mp-user-row" role="row">
-
-                    <div class="mp-user-cell" role="cell">3</div>
-
-                    <div class="mp-user-cell" role="cell">
-                        usergenshin
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        Dimas Ikwani
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        ikwandimas@gmail.com
-                    </div>
-
-                    <div class="mp-div-wrapper-5 mp-user-cell" role="cell">
-                        <span class="mp-text-wrapper-22">
-                            Guru
-                        </span>
-                    </div>
-
-                    <div class="mp-div-wrapper-6 mp-user-cell" role="cell">
-                        <span class="mp-text-wrapper-12">
-                            Aktif
-                        </span>
-                    </div>
-
-                    <div class="mp-div-9 mp-user-cell" role="cell">
-
-                        <button class="mp-action-button mp-action-edit" type="button" data-username="usergenshin" aria-label="Ubah pengguna usergenshin">
-                            <svg class="mp-action-icon mp-icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"></path>
-                                <path d="m14.5 6.5 3 3"></path>
-                            </svg>
-                        </button>
-
-                        <button class="mp-action-button mp-action-password" type="button" data-username="usergenshin" aria-label="Ubah kata sandi pengguna usergenshin">
-                            <svg class="mp-action-icon mp-icon-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 2l-2 2m-2 2l-2 2m2-2l2 2m-2-2l-6.5 6.5a5.5 5.5 0 1 1-3-3L16.5 2h4.5v4.5z"></path>
-                                <circle cx="7.5" cy="16.5" r="1.5"></circle>
-                            </svg>
-                        </button>
-
-                        <button class="mp-action-button mp-action-delete" type="button" data-username="usergenshin" aria-label="Hapus pengguna usergenshin">
-                            <svg class="mp-action-icon mp-icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                {{-- USER 4 --}}
-                <div class="mp-user-row" role="row">
-
-                    <div class="mp-user-cell" role="cell">4</div>
-
-                    <div class="mp-user-cell" role="cell">
-                        guseee
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        Gus Nanang
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        gusnang321@gmail.com
-                    </div>
-
-                    <div class="mp-div-wrapper-7 mp-user-cell" role="cell">
-                        <span class="mp-text-wrapper-22">
-                            Guru
-                        </span>
-                    </div>
-
-                    <div class="mp-div-wrapper-8 mp-user-cell" role="cell">
-                        <span class="mp-text-wrapper-12">
-                            Aktif
-                        </span>
-                    </div>
-
-                    <div class="mp-div-10 mp-user-cell" role="cell">
-
-                        <button class="mp-action-button mp-action-edit" type="button" data-username="guseee" aria-label="Ubah pengguna guseee">
-                            <svg class="mp-action-icon mp-icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"></path>
-                                <path d="m14.5 6.5 3 3"></path>
-                            </svg>
-                        </button>
-
-                        <button class="mp-action-button mp-action-password" type="button" data-username="guseee" aria-label="Ubah kata sandi pengguna guseee">
-                            <svg class="mp-action-icon mp-icon-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 2l-2 2m-2 2l-2 2m2-2l2 2m-2-2l-6.5 6.5a5.5 5.5 0 1 1-3-3L16.5 2h4.5v4.5z"></path>
-                                <circle cx="7.5" cy="16.5" r="1.5"></circle>
-                            </svg>
-                        </button>
-
-                        <button class="mp-action-button mp-action-delete" type="button" data-username="guseee" aria-label="Hapus pengguna guseee">
-                            <svg class="mp-action-icon mp-icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                {{-- USER 5 --}}
-                <div class="mp-user-row" role="row">
-
-                    <div class="mp-user-cell" role="cell">5</div>
-
-                    <div class="mp-user-cell" role="cell">
-                        byu
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        Bayu Aji
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        byu@gmail.com
-                    </div>
-
-                    <div class="mp-div-wrapper-9 mp-user-cell" role="cell">
-                        <span class="mp-text-wrapper-22">
-                            Guru
-                        </span>
-                    </div>
-
-                    <div class="mp-div-wrapper-10 mp-user-cell" role="cell">
-                        <span class="mp-text-wrapper-12">
-                            Aktif
-                        </span>
-                    </div>
-
-                    <div class="mp-div-11 mp-user-cell" role="cell">
-
-                        <button class="mp-action-button mp-action-edit" type="button" data-username="byu" aria-label="Ubah pengguna byu">
-                            <svg class="mp-action-icon mp-icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"></path>
-                                <path d="m14.5 6.5 3 3"></path>
-                            </svg>
-                        </button>
-
-                        <button class="mp-action-button mp-action-password" type="button" data-username="byu" aria-label="Ubah kata sandi pengguna byu">
-                            <svg class="mp-action-icon mp-icon-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 2l-2 2m-2 2l-2 2m2-2l2 2m-2-2l-6.5 6.5a5.5 5.5 0 1 1-3-3L16.5 2h4.5v4.5z"></path>
-                                <circle cx="7.5" cy="16.5" r="1.5"></circle>
-                            </svg>
-                        </button>
-
-                        <button class="mp-action-button mp-action-delete" type="button" data-username="byu" aria-label="Hapus pengguna byu">
-                            <svg class="mp-action-icon mp-icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                {{-- USER 6 --}}
-                <div class="mp-user-row" role="row">
-
-                    <div class="mp-user-cell" role="cell">6</div>
-
-                    <div class="mp-user-cell" role="cell">
-                        adamjombang
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        Adam Muhibullah
-                    </div>
-
-                    <div class="mp-user-cell" role="cell">
-                        jombangenjoyer@gmail.com
-                    </div>
-
-                    <div class="mp-div-wrapper-11 mp-user-cell" role="cell">
-                        <span class="mp-text-wrapper-22">
-                            Guru
-                        </span>
-                    </div>
-
-                    <div class="mp-div-wrapper-12 mp-user-cell" role="cell">
-                        <span class="mp-text-wrapper-12">
-                            Aktif
-                        </span>
-                    </div>
-
-                    <div class="mp-div-12 mp-user-cell" role="cell">
-
-                        <button class="mp-action-button mp-action-edit" type="button" data-username="adamjombang" aria-label="Ubah pengguna adamjombang">
-                            <svg class="mp-action-icon mp-icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z"></path>
-                                <path d="m14.5 6.5 3 3"></path>
-                            </svg>
-                        </button>
-
-                        <button class="mp-action-button mp-action-password" type="button" data-username="adamjombang" aria-label="Ubah kata sandi pengguna adamjombang">
-                            <svg class="mp-action-icon mp-icon-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 2l-2 2m-2 2l-2 2m2-2l2 2m-2-2l-6.5 6.5a5.5 5.5 0 1 1-3-3L16.5 2h4.5v4.5z"></path>
-                                <circle cx="7.5" cy="16.5" r="1.5"></circle>
-                            </svg>
-                        </button>
-
-                        <button class="mp-action-button mp-action-delete" type="button" data-username="adamjombang" aria-label="Hapus pengguna adamjombang">
-                            <svg class="mp-action-icon mp-icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                        </button>
-
-                    </div>
-
-                </div>
+                @endforelse
 
             </div>
 
@@ -689,12 +478,13 @@
 
     </section>
 
-</main>
+</section>
 
 
 {{-- =====================================================
-     MODAL TAMBAH PENGGUNA
+     MODAL TAMBAH / EDIT
      ===================================================== --}}
+
 <div
     class="user-form-overlay"
     id="user-form-overlay"
@@ -716,21 +506,22 @@
                     Tambah Pengguna
                 </h2>
 
-                <p>
+                <p id="user-form-description">
                     Tambahkan akun pengguna baru ke sistem E-Raport
                 </p>
 
             </div>
 
-
             <button
                 class="user-form-close"
                 id="user-form-close"
                 type="button"
-                aria-label="Tutup form tambah pengguna"
+                aria-label="Tutup form pengguna"
             >
+
                 <span></span>
                 <span></span>
+
             </button>
 
         </div>
@@ -744,9 +535,20 @@
             id="user-form"
         >
 
+            @csrf
+
+            <input
+                type="hidden"
+                id="user-id"
+                name="user_id"
+                value=""
+            >
+
+
             <div class="user-form-grid">
 
                 {{-- USERNAME --}}
+
                 <div class="user-form-field">
 
                     <label for="username">
@@ -760,6 +562,7 @@
                         type="text"
                         placeholder="Masukkan username"
                         maxlength="15"
+                        autocomplete="username"
                         required
                     >
 
@@ -771,11 +574,17 @@
 
 
                 {{-- PASSWORD --}}
+
                 <div class="user-form-field">
 
                     <label for="password">
+
                         Password
-                        <span>*</span>
+
+                        <span id="password-required">
+                            *
+                        </span>
+
                     </label>
 
                     <div class="user-password-wrap">
@@ -786,7 +595,7 @@
                             type="password"
                             placeholder="Masukkan password"
                             maxlength="60"
-                            required
+                            autocomplete="new-password"
                         >
 
                         <button
@@ -823,14 +632,15 @@
 
                     </div>
 
-                    <small>
-                        Password akan disimpan dalam bentuk terenkripsi saat sistem diimplementasikan.
+                    <small id="password-help">
+                        Minimal 8 karakter.
                     </small>
 
                 </div>
 
 
-                {{-- NAMA --}}
+                {{-- NAMA LENGKAP --}}
+
                 <div class="user-form-field">
 
                     <label for="nama_lengkap">
@@ -844,6 +654,7 @@
                         type="text"
                         placeholder="Masukkan nama lengkap"
                         maxlength="40"
+                        autocomplete="name"
                         required
                     >
 
@@ -851,6 +662,7 @@
 
 
                 {{-- EMAIL --}}
+
                 <div class="user-form-field">
 
                     <label for="email">
@@ -864,6 +676,7 @@
                         type="email"
                         placeholder="contoh@email.com"
                         maxlength="30"
+                        autocomplete="email"
                         required
                     >
 
@@ -871,6 +684,7 @@
 
 
                 {{-- ROLE --}}
+
                 <div class="user-form-field">
 
                     <label for="role">
@@ -894,9 +708,15 @@
                                 Pilih role pengguna
                             </option>
 
-                            <option value="kepala_sekolah">
-                                Kepala Sekolah
-                            </option>
+                            {{-- ADMIN TIDAK ADA DI SINI --}}
+
+                            @unless ($adaKepalaSekolah)
+
+                                <option value="kepala_sekolah">
+                                    Kepala Sekolah
+                                </option>
+
+                            @endunless
 
                             <option value="guru">
                                 Guru
@@ -910,6 +730,7 @@
 
 
                 {{-- STATUS --}}
+
                 <div class="user-form-field">
 
                     <label for="status">
@@ -925,10 +746,7 @@
                             required
                         >
 
-                            <option
-                                value="aktif"
-                                selected
-                            >
+                            <option value="aktif">
                                 Aktif
                             </option>
 
@@ -944,13 +762,17 @@
 
 
                 {{-- NIP --}}
+
                 <div class="user-form-field user-form-field-full">
 
                     <label for="nip">
+
                         NIP
+
                         <span class="optional">
                             (Opsional)
                         </span>
+
                     </label>
 
                     <input
@@ -959,6 +781,7 @@
                         type="text"
                         placeholder="Masukkan NIP jika tersedia"
                         maxlength="20"
+                        autocomplete="off"
                     >
 
                     <small>
@@ -970,12 +793,13 @@
             </div>
 
 
-            {{-- FOOTER FORM --}}
             <div class="user-form-footer">
 
                 <p class="user-form-required">
+
                     <span>*</span>
                     Wajib diisi
+
                 </p>
 
                 <div class="user-form-actions">
@@ -1009,5 +833,7 @@
 
 
 @push('scripts')
-    <script src="{{ asset('js/pengguna.js') }}"></script>
+
+<script src="{{ asset('js/pengguna.js') }}"></script>
+
 @endpush

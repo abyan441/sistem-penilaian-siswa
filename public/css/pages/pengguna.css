@@ -528,6 +528,10 @@
     color: var(--secondarysec-80);
 }
 
+.user-management-content .mp-icon-key.status-inactive {
+    color: #dc3545;
+}
+
 .user-management-content .mp-icon-trash {
     color: #dc3545;
 }
