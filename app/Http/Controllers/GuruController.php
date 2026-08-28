@@ -3,110 +3,57 @@
 namespace App\Http\Controllers;
 
 use App\Models\GuruMapel;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GuruController extends Controller
 {
     /**
-     * =====================================================
-     * HALAMAN DATA GURU
-     * =====================================================
-     *
-     * Controller hanya mengambil data dari Model
-     * kemudian mengirimkannya ke Blade.
+     * Menampilkan halaman data guru.
      */
     public function index()
     {
-        $data = GuruMapel::dataHalaman();
-
-        return view('guru', $data);
+        return view('guru', GuruMapel::dataHalaman());
     }
 
-
     /**
-     * =====================================================
-     * TAMBAH GURU MAPEL
-     * =====================================================
-     *
-     * Controller hanya menerima request dan memanggil Model.
+     * Menyimpan guru mata pelajaran baru.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $guruMapel = GuruMapel::tambah([
             'guru_id' => $request->input('guru_id'),
             'mapel_id' => $request->input('mapel_id'),
         ]);
 
-        /*
-         * Ambil kembali data lengkap beserta relasi
-         * supaya JavaScript mendapatkan data terbaru
-         * dari database.
-         */
-        $guruMapel->load([
-            'guru',
-            'mataPelajaran',
-        ]);
-
         return response()->json([
             'success' => true,
             'message' => 'Data guru berhasil ditambahkan.',
-            'data' => [
-                'id' => $guruMapel->id,
-                'guru_id' => $guruMapel->guru_id,
-                'mapel_id' => $guruMapel->mapel_id,
-                'nip' => $guruMapel->guru->nip ?? '-',
-                'nama' => $guruMapel->guru->nama_lengkap ?? '-',
-                'mapel' => $guruMapel->mataPelajaran->nama_pelajaran ?? '-',
-            ],
+            'data' => $this->formatGuruMapel($guruMapel),
         ]);
     }
 
-
     /**
-     * =====================================================
-     * UPDATE GURU MAPEL
-     * =====================================================
-     *
-     * Controller hanya meneruskan data ke Model.
+     * Memperbarui guru mata pelajaran.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): JsonResponse
     {
         $guruMapel = GuruMapel::ubah($id, [
             'guru_id' => $request->input('guru_id'),
             'mapel_id' => $request->input('mapel_id'),
         ]);
 
-        /*
-         * Ambil ulang relasi setelah perubahan database.
-         */
-        $guruMapel->load([
-            'guru',
-            'mataPelajaran',
-        ]);
-
         return response()->json([
             'success' => true,
             'message' => 'Data guru berhasil diperbarui.',
-            'data' => [
-                'id' => $guruMapel->id,
-                'guru_id' => $guruMapel->guru_id,
-                'mapel_id' => $guruMapel->mapel_id,
-                'nip' => $guruMapel->guru->nip ?? '-',
-                'nama' => $guruMapel->guru->nama_lengkap ?? '-',
-                'mapel' => $guruMapel->mataPelajaran->nama_pelajaran ?? '-',
-            ],
+            'data' => $this->formatGuruMapel($guruMapel),
         ]);
     }
 
-
     /**
-     * =====================================================
-     * HAPUS GURU MAPEL
-     * =====================================================
-     *
-     * Controller hanya memanggil Model.
+     * Menghapus guru mata pelajaran.
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
         GuruMapel::hapus($id);
 
@@ -114,5 +61,25 @@ class GuruController extends Controller
             'success' => true,
             'message' => 'Data guru berhasil dihapus.',
         ]);
+    }
+
+    /**
+     * Menyiapkan data guru mata pelajaran untuk response JSON.
+     */
+    private function formatGuruMapel(GuruMapel $guruMapel): array
+    {
+        $guruMapel->loadMissing([
+            'guru',
+            'mataPelajaran',
+        ]);
+
+        return [
+            'id' => $guruMapel->id,
+            'guru_id' => $guruMapel->guru_id,
+            'mapel_id' => $guruMapel->mapel_id,
+            'nip' => $guruMapel->guru->nip ?? '-',
+            'nama' => $guruMapel->guru->nama_lengkap ?? '-',
+            'mapel' => $guruMapel->mataPelajaran->nama_pelajaran ?? '-',
+        ];
     }
 }
