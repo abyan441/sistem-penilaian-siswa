@@ -36,8 +36,22 @@ class RaportController extends Controller
 
     public function preview(Request $request, int $id): View
     {
-        $semester = Nilai::resolveSemester($request->query('semester', 1));
-        $siswa = Siswa::untukRaport($id);
+        $validated = $request->validate([
+            'tahun_ajaran' => ['required', 'string', 'max:20'],
+            'semester' => ['nullable', 'integer', 'in:1,2'],
+        ]);
+
+        $semester = Nilai::resolveSemester($validated['semester'] ?? 1);
+        $tahunAjaran = $validated['tahun_ajaran'];
+
+        $siswa = Siswa::query()
+            ->with(['kelas.waliKelas'])
+            ->whereKey($id)
+            ->whereHas('kelas', function ($query) use ($tahunAjaran) {
+                $query->where('tahun_ajaran', $tahunAjaran);
+            })
+            ->firstOrFail();
+
         $nilai = Nilai::dataRaportSiswa($siswa->id, $semester);
         $kepalaSekolah = User::kepalaSekolahAktif();
         $kelas = $siswa->kelas;
@@ -47,7 +61,7 @@ class RaportController extends Controller
             'kelas' => $kelas,
             'nilai' => $nilai,
             'semester' => $semester,
-            'tahunAjaran' => $kelas?->tahun_ajaran,
+            'tahunAjaran' => $tahunAjaran,
             'rataRata' => Nilai::rataRataRaport($nilai),
             'waliKelas' => $kelas?->waliKelas,
             'kepalaSekolah' => $kepalaSekolah,
