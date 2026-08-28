@@ -50,7 +50,7 @@
 
     <section class="nilai-filter-wrapper" aria-label="Informasi dan filter nilai">
         <div class="nilai-filter-card">
-            <div class="nilai-info-grid">
+            <div class="nilai-info-grid" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;">
 
                 {{-- KELAS --}}
                 @if (!empty($isAdmin))
