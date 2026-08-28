@@ -99,7 +99,7 @@ class GuruMapel extends Model
             ->where('mapel_id', $mapelId);
 
         if ($excludeId !== null) {
-            $query->whereKeyNot($excludeId);
+            $query->where('id', '!=', $excludeId);
         }
 
         return $query->exists();
