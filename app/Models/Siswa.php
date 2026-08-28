@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Siswa extends Model
 {
     protected $table = 'siswa';
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -31,7 +32,9 @@ class Siswa extends Model
 
     public function scopeUrutNama(Builder $query): Builder
     {
-        return $query->orderBy('nama_siswa')->orderBy('nisn');
+        return $query
+            ->orderBy('nama_siswa')
+            ->orderBy('nisn');
     }
 
     public static function dataHalaman(): array
@@ -39,10 +42,16 @@ class Siswa extends Model
         return [
             'siswa' => self::query()
                 ->with('kelas')
-                ->orderBy(Kelas::query()->select('nama_kelas')->whereColumn('kelas.id', 'siswa.kelas_id'))
+                ->orderBy(
+                    Kelas::query()
+                        ->select('nama_kelas')
+                        ->whereColumn('kelas.id', 'siswa.kelas_id')
+                )
                 ->orderBy('nama_siswa')
                 ->get(),
-            'kelas' => Kelas::query()->orderBy('nama_kelas')->get(),
+            'kelas' => Kelas::query()
+                ->orderBy('nama_kelas')
+                ->get(),
         ];
     }
 
