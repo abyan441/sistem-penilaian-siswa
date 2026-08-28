@@ -14,21 +14,12 @@ class RaportController extends Controller
 {
     public function index(Request $request): View
     {
-        $tahunAjaranOptions = Kelas::query()
-            ->select('tahun_ajaran')
-            ->distinct()
-            ->orderByDesc('tahun_ajaran')
-            ->pluck('tahun_ajaran');
-
-        $tahunAjaran = $request->query('tahun_ajaran');
-        if (!$tahunAjaran || !$tahunAjaranOptions->contains($tahunAjaran)) {
-            $tahunAjaran = $tahunAjaranOptions->first();
-        }
-
+        $tahunAjaranOptions = Kelas::tahunAjaranOptions();
+        $tahunAjaran = Kelas::resolveTahunAjaran($request->query('tahun_ajaran'));
         $semester = Nilai::resolveSemester($request->query('semester', 1));
-        $siswa = $tahunAjaran ? Siswa::berdasarkanTahunAjaran($tahunAjaran) : collect();
+        $siswa = Kelas::siswaUntukRaport($tahunAjaran);
 
-        return view('raport', compact('siswa','tahunAjaranOptions','tahunAjaran','semester'));
+        return view('raport', compact('siswa', 'tahunAjaranOptions', 'tahunAjaran', 'semester'));
     }
 
     public function data(Request $request): JsonResponse
@@ -46,18 +37,19 @@ class RaportController extends Controller
     public function preview(Request $request, int $id): View
     {
         $semester = Nilai::resolveSemester($request->query('semester', 1));
-        $siswa = Siswa::query()->with(['kelas.waliKelas'])->findOrFail($id);
-        $nilai = Nilai::untukRaport($siswa->id, $semester);
+        $siswa = Siswa::untukRaport($id);
+        $nilai = Nilai::dataRaportSiswa($siswa->id, $semester);
         $kepalaSekolah = User::kepalaSekolahAktif();
+        $kelas = $siswa->kelas;
 
         return view('raport-preview', [
             'siswa' => $siswa,
-            'kelas' => $siswa->kelas,
+            'kelas' => $kelas,
             'nilai' => $nilai,
             'semester' => $semester,
-            'tahunAjaran' => $siswa->kelas?->tahun_ajaran,
+            'tahunAjaran' => $kelas?->tahun_ajaran,
             'rataRata' => Nilai::rataRataRaport($nilai),
-            'waliKelas' => $siswa->kelas?->waliKelas,
+            'waliKelas' => $kelas?->waliKelas,
             'kepalaSekolah' => $kepalaSekolah,
         ]);
     }
