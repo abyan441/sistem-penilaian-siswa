@@ -14,6 +14,7 @@ use App\Http\Controllers\RaportController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.home');
 
 Route::get('/guru', [GuruController::class, 'index'])->name('guru');
 Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa');
