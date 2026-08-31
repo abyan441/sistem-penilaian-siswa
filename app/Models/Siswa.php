@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use RuntimeException;
 
 class Siswa extends Model
 {
@@ -21,6 +22,11 @@ class Siswa extends Model
     public function kelas()
     {
         return $this->belongsTo(Kelas::class, 'kelas_id');
+    }
+
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class, 'siswa_id');
     }
 
     public function scopeTahunAjaran(Builder $query, string $tahunAjaran): Builder
@@ -106,6 +112,16 @@ class Siswa extends Model
 
     public static function hapus(int $id): bool
     {
-        return (bool) self::query()->findOrFail($id)->delete();
+        $siswa = self::query()
+            ->withCount('nilai')
+            ->findOrFail($id);
+
+        if ($siswa->nilai_count > 0) {
+            throw new RuntimeException(
+                'Siswa tidak dapat dihapus karena masih memiliki data nilai.'
+            );
+        }
+
+        return (bool) $siswa->delete();
     }
 }
