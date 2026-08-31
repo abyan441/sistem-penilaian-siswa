@@ -1,0 +1,93 @@
+/* =========================================================
+   ROLE ACCESS UI
+   Server-side middleware tetap menjadi pengaman utama.
+   CSS ini hanya menyamakan tampilan UI dengan hak akses.
+   ========================================================= */
+
+/* =========================================================
+   GURU & KEPALA SEKOLAH
+   Data master bersifat read-only.
+   ========================================================= */
+
+.dashboard.role-guru .guru-add-button,
+.dashboard.role-kepala_sekolah .guru-add-button,
+.dashboard.role-guru .guru-actions,
+.dashboard.role-kepala_sekolah .guru-actions,
+.dashboard.role-guru #guru-modal,
+.dashboard.role-kepala_sekolah #guru-modal,
+.dashboard.role-guru #delete-modal,
+.dashboard.role-kepala_sekolah #delete-modal {
+    display: none !important;
+}
+
+.dashboard.role-guru .siswa-add-button,
+.dashboard.role-kepala_sekolah .siswa-add-button,
+.dashboard.role-guru .siswa-actions,
+.dashboard.role-kepala_sekolah .siswa-actions,
+.dashboard.role-guru #siswa-modal,
+.dashboard.role-kepala_sekolah #siswa-modal,
+.dashboard.role-guru #delete-modal,
+.dashboard.role-kepala_sekolah #delete-modal {
+    display: none !important;
+}
+
+.dashboard.role-guru .k-button-tambah-siswa,
+.dashboard.role-kepala_sekolah .k-button-tambah-siswa,
+.dashboard.role-guru .kelas-edit-btn,
+.dashboard.role-kepala_sekolah .kelas-edit-btn,
+.dashboard.role-guru #kelas-modal,
+.dashboard.role-kepala_sekolah #kelas-modal {
+    display: none !important;
+}
+
+.dashboard.role-guru .mapel-add-button,
+.dashboard.role-kepala_sekolah .mapel-add-button,
+.dashboard.role-guru .mapel-actions,
+.dashboard.role-kepala_sekolah .mapel-actions,
+.dashboard.role-guru #mapel-modal,
+.dashboard.role-kepala_sekolah #mapel-modal,
+.dashboard.role-guru #mapel-edit-modal,
+.dashboard.role-kepala_sekolah #mapel-edit-modal,
+.dashboard.role-guru #mapel-delete-modal,
+.dashboard.role-kepala_sekolah #mapel-delete-modal {
+    display: none !important;
+}
+
+/*
+ * Detail kelas tetap terlihat untuk Guru dan Kepala Sekolah.
+ * Yang disembunyikan hanya tombol Edit.
+ */
+.dashboard.role-guru .kelas-detail-btn,
+.dashboard.role-kepala_sekolah .kelas-detail-btn {
+    display: inline-flex !important;
+}
+
+/* =========================================================
+   KEPALA SEKOLAH
+   Halaman Pengguna bersifat read-only.
+   ========================================================= */
+
+.dashboard.role-kepala_sekolah #pengguna .mp-button-tambah-siswa,
+.dashboard.role-kepala_sekolah #pengguna .mp-action-edit,
+.dashboard.role-kepala_sekolah #pengguna .mp-action-status,
+.dashboard.role-kepala_sekolah #pengguna .mp-action-delete,
+.dashboard.role-kepala_sekolah #user-form-overlay {
+    display: none !important;
+}
+
+/* Pertahankan lebar kolom agar tabel tidak bergeser saat aksi disembunyikan. */
+.dashboard.role-kepala_sekolah #pengguna .mp-user-table-header > :last-child,
+.dashboard.role-kepala_sekolah #pengguna .mp-user-row > .mp-div-7 {
+    visibility: hidden;
+}
+
+/* =========================================================
+   INPUT NILAI
+   Hak simpan sudah dikontrol Blade + route.
+   CSS hanya menjadi lapisan visual tambahan.
+   ========================================================= */
+
+.dashboard.role-admin #save-grade-button,
+.dashboard.role-kepala_sekolah #save-grade-button {
+    display: none !important;
+}
