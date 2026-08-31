@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use RuntimeException;
 
 class MataPelajaran extends Model
 {
@@ -96,6 +97,14 @@ class MataPelajaran extends Model
 
     public static function hapus(int $id): void
     {
-        self::query()->findOrFail($id)->delete();
+        $mapel = self::query()->withCount('guruMapel')->findOrFail($id);
+
+        if ($mapel->guru_mapel_count > 0) {
+            throw new RuntimeException(
+                'Mata pelajaran tidak dapat dihapus karena masih digunakan oleh data guru mata pelajaran.'
+            );
+        }
+
+        $mapel->delete();
     }
 }
