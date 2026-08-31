@@ -23,14 +23,47 @@ class RaportController extends Controller
         }
     }
 
+    private function kelasWaliGuru(): ?Kelas
+    {
+        $user = Auth::user();
+
+        if ($user?->role !== 'guru') {
+            return null;
+        }
+
+        return Kelas::query()
+            ->where('wali_kelas_id', $user->id)
+            ->first();
+    }
+
     public function index(Request $request): View
     {
         $this->pastikanAksesRaport();
 
-        $tahunAjaranOptions = Kelas::tahunAjaranOptions();
-        $tahunAjaran = Kelas::resolveTahunAjaran($request->query('tahun_ajaran'));
+        $user = Auth::user();
+        $kelasWali = $this->kelasWaliGuru();
+        $isGuruWali = $user?->role === 'guru';
+
+        if ($isGuruWali && !$kelasWali) {
+            throw new HttpException(403, 'Menu raport hanya dapat diakses oleh guru yang menjadi wali kelas.');
+        }
+
+        if ($isGuruWali) {
+            $tahunAjaranOptions = collect([$kelasWali->tahun_ajaran]);
+            $tahunAjaran = $kelasWali->tahun_ajaran;
+            $siswa = Siswa::query()
+                ->with('kelas')
+                ->where('kelas_id', $kelasWali->id)
+                ->orderBy('nama_siswa')
+                ->orderBy('nisn')
+                ->get();
+        } else {
+            $tahunAjaranOptions = Kelas::tahunAjaranOptions();
+            $tahunAjaran = Kelas::resolveTahunAjaran($request->query('tahun_ajaran'));
+            $siswa = Kelas::siswaUntukRaport($tahunAjaran);
+        }
+
         $semester = Nilai::resolveSemester($request->query('semester', 1));
-        $siswa = Kelas::siswaUntukRaport($tahunAjaran);
         $siswaTerpilih = $request->query('siswa');
 
         if ($siswaTerpilih !== null && $siswaTerpilih !== '') {
@@ -63,6 +96,31 @@ class RaportController extends Controller
             'tahun_ajaran.max' => 'Tahun ajaran maksimal 20 karakter.',
         ]);
 
+        $user = Auth::user();
+        $kelasWali = $this->kelasWaliGuru();
+
+        if ($user?->role === 'guru') {
+            if (!$kelasWali || $kelasWali->tahun_ajaran !== trim($validated['tahun_ajaran'])) {
+                return response()->json([
+                    'success' => true,
+                    'data' => [],
+                ]);
+            }
+
+            $siswa = Siswa::query()
+                ->where('kelas_id', $kelasWali->id)
+                ->orderBy('nama_siswa')
+                ->orderBy('nisn')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => Siswa::dataRaport($validated['tahun_ajaran'])
+                    ->whereIn('id', $siswa->pluck('id'))
+                    ->values(),
+            ]);
+        }
+
         return response()->json([
             'success' => true,
             'data' => Siswa::dataRaport($validated['tahun_ajaran']),
@@ -86,14 +144,25 @@ class RaportController extends Controller
 
         $semester = Nilai::resolveSemester($validated['semester'] ?? 1);
         $tahunAjaran = trim($validated['tahun_ajaran']);
+        $user = Auth::user();
+        $kelasWali = $this->kelasWaliGuru();
 
-        $siswa = Siswa::query()
+        $query = Siswa::query()
             ->with(['kelas.waliKelas'])
             ->whereKey($id)
             ->whereHas('kelas', function ($query) use ($tahunAjaran) {
                 $query->where('tahun_ajaran', $tahunAjaran);
-            })
-            ->firstOrFail();
+            });
+
+        if ($user?->role === 'guru') {
+            if (!$kelasWali) {
+                throw new HttpException(403, 'Menu raport hanya dapat diakses oleh guru yang menjadi wali kelas.');
+            }
+
+            $query->where('kelas_id', $kelasWali->id);
+        }
+
+        $siswa = $query->firstOrFail();
 
         $nilai = Nilai::dataRaportSiswa($siswa->id, $semester);
         $kepalaSekolah = User::kepalaSekolahAktif();
