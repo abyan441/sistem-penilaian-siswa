@@ -52,7 +52,6 @@
         <div class="nilai-filter-card">
             <div class="nilai-info-grid" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;">
 
-                {{-- KELAS --}}
                 @if (!empty($isAdmin))
                     <label class="nilai-filter-item">
                         <span class="nilai-filter-label">Kelas</span>
@@ -72,7 +71,6 @@
                     </div>
                 @endif
 
-                {{-- SEMESTER --}}
                 <label class="nilai-filter-item">
                     <span class="nilai-filter-label">Semester</span>
                     <select class="dropdown-items" name="semester" id="semester-select" required>
@@ -81,7 +79,6 @@
                     </select>
                 </label>
 
-                {{-- MATA PELAJARAN --}}
                 <label class="nilai-filter-item">
                     <span class="nilai-filter-label">Mata Pelajaran</span>
                     <select class="dropdown-items" name="mapel_id" id="mapel-select" required>
@@ -92,7 +89,6 @@
                     </select>
                 </label>
 
-                {{-- TAHUN AJARAN --}}
                 @if (!empty($isAdmin))
                     <label class="nilai-filter-item">
                         <span class="nilai-filter-label">Tahun Ajaran</span>
@@ -115,7 +111,7 @@
                 <p class="info-bobot-nilai">
                     <strong>Info:</strong>
                     <span>
-                        {{ !empty($readOnly) ? 'Mode lihat saja. Admin tidak dapat mengubah atau menyimpan nilai.' : 'Bobot Nilai - Tugas (30%), UTS (30%), UAS (40%)' }}
+                        {{ !empty($readOnly) ? 'Mode lihat saja. Akun ini tidak dapat mengubah atau menyimpan nilai.' : 'Bobot Nilai - Tugas (30%), UTS (30%), UAS (40%)' }}
                     </span>
                 </p>
             </aside>
