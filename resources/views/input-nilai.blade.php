@@ -51,24 +51,17 @@
         <div class="nilai-filter-card">
             <div class="nilai-info-grid" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;">
 
-                @if (!empty($isAdmin))
-                    <label class="nilai-filter-item">
-                        <span class="nilai-filter-label">Kelas</span>
-                        <select class="dropdown-items" name="kelas_id" id="kelas-select" required>
-                            <option value="" selected disabled>Pilih Kelas</option>
-                            @foreach ($kelasOptions as $item)
-                                <option value="{{ $item->id }}" data-tahun-ajaran="{{ $item->tahun_ajaran }}">
-                                    Kelas {{ $item->nama_kelas }} ({{ $item->tahun_ajaran }})
-                                </option>
-                            @endforeach
-                        </select>
-                    </label>
-                @else
-                    <div class="nilai-info-item">
-                        <span class="nilai-info-label">Kelas</span>
-                        <div class="nilai-info-value" aria-label="Kelas">Semua Kelas</div>
-                    </div>
-                @endif
+                <label class="nilai-filter-item">
+                    <span class="nilai-filter-label">Kelas</span>
+                    <select class="dropdown-items" name="kelas_id" id="kelas-select" required>
+                        <option value="" selected disabled>Pilih Kelas</option>
+                        @foreach ($kelasOptions as $item)
+                            <option value="{{ $item->id }}" data-tahun-ajaran="{{ $item->tahun_ajaran }}">
+                                Kelas {{ $item->nama_kelas }} ({{ $item->tahun_ajaran }})
+                            </option>
+                        @endforeach
+                    </select>
+                </label>
 
                 <label class="nilai-filter-item">
                     <span class="nilai-filter-label">Semester</span>
@@ -110,7 +103,7 @@
                 <p class="info-bobot-nilai">
                     <strong>Info:</strong>
                     <span>
-                        {{ !empty($readOnly) ? 'Mode lihat saja. Akun ini tidak dapat mengubah atau menyimpan nilai.' : 'Anda hanya dapat menginput nilai untuk mata pelajaran yang diampu. Data siswa mencakup seluruh kelas.' }}
+                        {{ !empty($readOnly) ? 'Mode lihat saja. Akun ini tidak dapat mengubah atau menyimpan nilai.' : 'Anda hanya dapat menginput nilai untuk mata pelajaran yang diampu. Pilih kelas untuk menampilkan siswa pada kelas tersebut.' }}
                     </span>
                 </p>
             </aside>
@@ -131,7 +124,7 @@
         <div class="nilai-table-body" id="nilai-table-body" aria-label="Nilai siswa" role="grid">
             <div class="nilai-empty-state">
                 <span>
-                    {{ !empty($readOnly) ? 'Pilih kelas, tahun ajaran, mata pelajaran, dan semester untuk menampilkan nilai.' : 'Pilih mata pelajaran yang Anda ampu untuk menampilkan seluruh siswa.' }}
+                    {{ !empty($readOnly) ? 'Pilih kelas, tahun ajaran, mata pelajaran, dan semester untuk menampilkan nilai.' : 'Pilih kelas, mata pelajaran, dan semester untuk menampilkan siswa.' }}
                 </span>
             </div>
         </div>
