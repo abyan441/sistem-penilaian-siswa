@@ -35,6 +35,11 @@
         href="{{ asset('css/styleguide.css') }}"
     >
 
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/role-access.css') }}"
+    >
+
 
     {{-- LAYOUT CSS --}}
 
@@ -123,12 +128,7 @@
 
         /* =====================================================
            SIDEBAR GLOBAL - POSISI LOGOUT
-           =====================================================
-
-           Disamakan dengan sidebar pada Preview Raport.
-           Logout selalu terdorong ke bagian paling bawah
-           sidebar pada desktop/tablet.
-        */
+           ===================================================== */
 
         .dashboard .frame-3 .logout-form {
             margin-top: auto;
@@ -246,7 +246,7 @@
 
 <body>
 
-    <main class="dashboard">
+    <main class="dashboard role-{{ auth()->user()->role ?? 'guest' }}">
 
         @include('layouts.sidebar')
 
