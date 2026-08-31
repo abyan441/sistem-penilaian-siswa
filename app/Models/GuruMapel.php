@@ -88,6 +88,14 @@ class GuruMapel extends Model
     }
 
     /**
+     * Memastikan mata pelajaran yang dipilih tersedia.
+     */
+    public static function pastikanMataPelajaranValid(int $mapelId): bool
+    {
+        return MataPelajaran::where('id', $mapelId)->exists();
+    }
+
+    /**
      * Memastikan kombinasi guru dan mata pelajaran tidak duplikat.
      */
     public static function sudahTerdaftar(
@@ -110,16 +118,34 @@ class GuruMapel extends Model
      */
     protected static function validasiBisnis(array $data, ?int $excludeId = null): void
     {
-        $guruId = (int) $data['guru_id'];
-        $mapelId = (int) $data['mapel_id'];
+        $guruId = filter_var($data['guru_id'] ?? null, FILTER_VALIDATE_INT);
+        $mapelId = filter_var($data['mapel_id'] ?? null, FILTER_VALIDATE_INT);
 
-        if (!self::pastikanGuruValid($guruId)) {
+        if ($guruId === false || $guruId === null) {
+            throw ValidationException::withMessages([
+                'guru_id' => 'Guru wajib dipilih dengan benar.',
+            ]);
+        }
+
+        if ($mapelId === false || $mapelId === null) {
+            throw ValidationException::withMessages([
+                'mapel_id' => 'Mata pelajaran wajib dipilih dengan benar.',
+            ]);
+        }
+
+        if (!self::pastikanGuruValid((int) $guruId)) {
             throw ValidationException::withMessages([
                 'guru_id' => 'User yang dipilih bukan merupakan guru.',
             ]);
         }
 
-        if (self::sudahTerdaftar($guruId, $mapelId, $excludeId)) {
+        if (!self::pastikanMataPelajaranValid((int) $mapelId)) {
+            throw ValidationException::withMessages([
+                'mapel_id' => 'Mata pelajaran yang dipilih tidak ditemukan.',
+            ]);
+        }
+
+        if (self::sudahTerdaftar((int) $guruId, (int) $mapelId, $excludeId)) {
             throw ValidationException::withMessages([
                 'mapel_id' => 'Guru tersebut sudah terdaftar pada mata pelajaran yang dipilih.',
             ]);
@@ -153,7 +179,7 @@ class GuruMapel extends Model
             'mapel_id' => $data['mapel_id'],
         ]);
 
-        return $guruMapel;
+        return $guruMapel->fresh();
     }
 
     /**
