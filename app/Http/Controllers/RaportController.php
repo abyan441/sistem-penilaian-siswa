@@ -18,8 +18,25 @@ class RaportController extends Controller
         $tahunAjaran = Kelas::resolveTahunAjaran($request->query('tahun_ajaran'));
         $semester = Nilai::resolveSemester($request->query('semester', 1));
         $siswa = Kelas::siswaUntukRaport($tahunAjaran);
+        $siswaTerpilih = $request->query('siswa');
 
-        return view('raport', compact('siswa', 'tahunAjaranOptions', 'tahunAjaran', 'semester'));
+        if ($siswaTerpilih !== null && $siswaTerpilih !== '') {
+            $siswaTerpilih = (int) $siswaTerpilih;
+
+            if (!$siswa->contains('id', $siswaTerpilih)) {
+                $siswaTerpilih = null;
+            }
+        } else {
+            $siswaTerpilih = null;
+        }
+
+        return view('raport', compact(
+            'siswa',
+            'tahunAjaranOptions',
+            'tahunAjaran',
+            'semester',
+            'siswaTerpilih'
+        ));
     }
 
     public function data(Request $request): JsonResponse
@@ -42,7 +59,7 @@ class RaportController extends Controller
         ]);
 
         $semester = Nilai::resolveSemester($validated['semester'] ?? 1);
-        $tahunAjaran = $validated['tahun_ajaran'];
+        $tahunAjaran = trim($validated['tahun_ajaran']);
 
         $siswa = Siswa::query()
             ->with(['kelas.waliKelas'])
@@ -55,6 +72,9 @@ class RaportController extends Controller
         $nilai = Nilai::dataRaportSiswa($siswa->id, $semester);
         $kepalaSekolah = User::kepalaSekolahAktif();
         $kelas = $siswa->kelas;
+        $rataRata = $nilai->isNotEmpty()
+            ? Nilai::rataRataRaport($nilai)
+            : null;
 
         return view('raport-preview', [
             'siswa' => $siswa,
@@ -62,7 +82,7 @@ class RaportController extends Controller
             'nilai' => $nilai,
             'semester' => $semester,
             'tahunAjaran' => $tahunAjaran,
-            'rataRata' => Nilai::rataRataRaport($nilai),
+            'rataRata' => $rataRata,
             'waliKelas' => $kelas?->waliKelas,
             'kepalaSekolah' => $kepalaSekolah,
         ]);
