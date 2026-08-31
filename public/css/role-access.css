@@ -53,10 +53,146 @@
     display: none !important;
 }
 
-/*
- * Detail kelas tetap terlihat untuk Guru dan Kepala Sekolah.
- * Yang disembunyikan hanya tombol Edit.
- */
+/* =========================================================
+   GUEST
+   Guest juga bersifat read-only pada data master.
+   ========================================================= */
+
+.dashboard.role-guest .guru-add-button,
+.dashboard.role-guest .guru-actions,
+.dashboard.role-guest #guru-modal,
+.dashboard.role-guest #delete-modal,
+.dashboard.role-guest .siswa-add-button,
+.dashboard.role-guest .siswa-actions,
+.dashboard.role-guest #siswa-modal,
+.dashboard.role-guest .k-button-tambah-siswa,
+.dashboard.role-guest .kelas-edit-btn,
+.dashboard.role-guest #kelas-modal,
+.dashboard.role-guest #kelas-delete-modal,
+.dashboard.role-guest .mapel-add-button,
+.dashboard.role-guest .mapel-actions,
+.dashboard.role-guest #mapel-modal,
+.dashboard.role-guest #mapel-edit-modal,
+.dashboard.role-guest #mapel-delete-modal {
+    display: none !important;
+}
+
+/* =========================================================
+   HILANGKAN KOLOM AKSI PADA MODE READ-ONLY
+   Berlaku untuk:
+   - Guest
+   - Guru
+   - Kepala Sekolah
+
+   Kolom Aksi tidak hanya dibuat kosong, tetapi benar-benar
+   dihilangkan dan grid tabel dihitung ulang agar kolom data
+   menggunakan seluruh lebar tabel.
+   ========================================================= */
+
+/* -------------------------
+   DATA GURU
+   ------------------------- */
+
+.dashboard.role-guest .guru-table-header > :last-child,
+.dashboard.role-guru .guru-table-header > :last-child,
+.dashboard.role-kepala_sekolah .guru-table-header > :last-child,
+.dashboard.role-guest .guru-table-row > .guru-actions,
+.dashboard.role-guru .guru-table-row > .guru-actions,
+.dashboard.role-kepala_sekolah .guru-table-row > .guru-actions {
+    display: none !important;
+}
+
+.dashboard.role-guest .guru-table,
+.dashboard.role-guru .guru-table,
+.dashboard.role-kepala_sekolah .guru-table {
+    min-width: 680px;
+}
+
+.dashboard.role-guest .guru-table-header,
+.dashboard.role-guru .guru-table-header,
+.dashboard.role-kepala_sekolah .guru-table-header,
+.dashboard.role-guest .guru-table-row,
+.dashboard.role-guru .guru-table-row,
+.dashboard.role-kepala_sekolah .guru-table-row {
+    grid-template-columns:
+        10%
+        28%
+        37%
+        25%;
+}
+
+/* -------------------------
+   DATA SISWA
+   ------------------------- */
+
+.dashboard.role-guest .siswa-table-header > :last-child,
+.dashboard.role-guru .siswa-table-header > :last-child,
+.dashboard.role-kepala_sekolah .siswa-table-header > :last-child,
+.dashboard.role-guest .siswa-table-row > .siswa-actions,
+.dashboard.role-guru .siswa-table-row > .siswa-actions,
+.dashboard.role-kepala_sekolah .siswa-table-row > .siswa-actions {
+    display: none !important;
+}
+
+.dashboard.role-guest .siswa-table,
+.dashboard.role-guru .siswa-table,
+.dashboard.role-kepala_sekolah .siswa-table {
+    min-width: 780px;
+}
+
+.dashboard.role-guest .siswa-table-header,
+.dashboard.role-guru .siswa-table-header,
+.dashboard.role-kepala_sekolah .siswa-table-header,
+.dashboard.role-guest .siswa-table-row,
+.dashboard.role-guru .siswa-table-row,
+.dashboard.role-kepala_sekolah .siswa-table-row {
+    grid-template-columns:
+        8%
+        20%
+        34%
+        20%
+        18%;
+}
+
+/* -------------------------
+   MATA PELAJARAN
+   ------------------------- */
+
+.dashboard.role-guest .mapel-action-header,
+.dashboard.role-guru .mapel-action-header,
+.dashboard.role-kepala_sekolah .mapel-action-header,
+.dashboard.role-guest .mapel-table-row > .mapel-actions,
+.dashboard.role-guru .mapel-table-row > .mapel-actions,
+.dashboard.role-kepala_sekolah .mapel-table-row > .mapel-actions {
+    display: none !important;
+}
+
+.dashboard.role-guest .mapel-table,
+.dashboard.role-guru .mapel-table,
+.dashboard.role-kepala_sekolah .mapel-table {
+    min-width: 700px;
+}
+
+.dashboard.role-guest .mapel-table-header,
+.dashboard.role-guru .mapel-table-header,
+.dashboard.role-kepala_sekolah .mapel-table-header,
+.dashboard.role-guest .mapel-table-row,
+.dashboard.role-guru .mapel-table-row,
+.dashboard.role-kepala_sekolah .mapel-table-row {
+    grid-template-columns:
+        10%
+        25%
+        40%
+        25%;
+}
+
+/* =========================================================
+   DETAIL KELAS
+   Detail tetap terlihat untuk Guru dan Kepala Sekolah.
+   Yang disembunyikan hanya tombol Edit.
+   ========================================================= */
+
+.dashboard.role-guest .kelas-detail-btn,
 .dashboard.role-guru .kelas-detail-btn,
 .dashboard.role-kepala_sekolah .kelas-detail-btn {
     display: inline-flex !important;
@@ -90,4 +226,48 @@
 .dashboard.role-admin #save-grade-button,
 .dashboard.role-kepala_sekolah #save-grade-button {
     display: none !important;
+}
+
+/* =========================================================
+   RESPONSIVE READ-ONLY TABLE
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .dashboard.role-guest .guru-table,
+    .dashboard.role-guru .guru-table,
+    .dashboard.role-kepala_sekolah .guru-table {
+        min-width: 620px;
+    }
+
+    .dashboard.role-guest .siswa-table,
+    .dashboard.role-guru .siswa-table,
+    .dashboard.role-kepala_sekolah .siswa-table {
+        min-width: 720px;
+    }
+
+    .dashboard.role-guest .mapel-table,
+    .dashboard.role-guru .mapel-table,
+    .dashboard.role-kepala_sekolah .mapel-table {
+        min-width: 640px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard.role-guest .guru-table,
+    .dashboard.role-guru .guru-table,
+    .dashboard.role-kepala_sekolah .guru-table {
+        min-width: 600px;
+    }
+
+    .dashboard.role-guest .siswa-table,
+    .dashboard.role-guru .siswa-table,
+    .dashboard.role-kepala_sekolah .siswa-table {
+        min-width: 680px;
+    }
+
+    .dashboard.role-guest .mapel-table,
+    .dashboard.role-guru .mapel-table,
+    .dashboard.role-kepala_sekolah .mapel-table {
+        min-width: 600px;
+    }
 }
