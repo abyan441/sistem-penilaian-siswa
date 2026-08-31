@@ -131,8 +131,10 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
     public static function dataHalaman(int $guruId): array
     {
         $kelas = static::pastikanKelasWaliGuru($guruId);
-        $mataPelajaran = GuruMapel::query()->with('mataPelajaran')->where('guru_id', $guruId)->get()
-            ->pluck('mataPelajaran')->filter()->sortBy(fn ($item) => mb_strtolower($item->nama_pelajaran))->values();
+
+        // Wali kelas dapat menginput nilai untuk seluruh mata pelajaran.
+        // Penugasan guru_mapel tidak lagi menjadi filter mata pelajaran pada halaman ini.
+        $mataPelajaran = static::semuaMataPelajaran();
 
         return [
             'kelas' => $kelas,
@@ -156,14 +158,28 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         return GuruMapel::query()->where('guru_id', $guruId)->where('mapel_id', $mapelId)->first();
     }
 
+    /**
+     * Mendapatkan relasi guru_mapel untuk kebutuhan penyimpanan nilai wali kelas.
+     *
+     * Wali kelas tidak wajib mempunyai penugasan guru_mapel secara manual.
+     * Jika belum ada relasi untuk mata pelajaran yang dipilih, relasi tersebut
+     * dibuat otomatis atas nama wali kelas agar struktur tabel nilai tetap valid.
+     */
     public static function guruMapelUntukInput($guruId, $mapelId)
     {
-        $guru = User::query()->where('id', $guruId)->where('role', 'guru')->first();
-        if (!$guru) throw new InvalidArgumentException('Akun guru tidak valid.');
-        if (!MataPelajaran::query()->find($mapelId)) throw new InvalidArgumentException('Mata pelajaran tidak ditemukan.');
-        $guruMapel = static::guruMapelGuruMapel($guruId, $mapelId);
-        if (!$guruMapel) throw new InvalidArgumentException('Anda tidak memiliki penugasan untuk mata pelajaran tersebut.');
-        return $guruMapel;
+        $guru = User::query()->where('id', $guruId)->where('role', 'guru')->where('status', 'aktif')->first();
+        if (!$guru) throw new InvalidArgumentException('Akun guru tidak valid atau tidak aktif.');
+
+        $mataPelajaran = MataPelajaran::query()->find($mapelId);
+        if (!$mataPelajaran) throw new InvalidArgumentException('Mata pelajaran tidak ditemukan.');
+
+        return GuruMapel::query()->firstOrCreate(
+            [
+                'guru_id' => $guruId,
+                'mapel_id' => $mapelId,
+            ],
+            []
+        );
     }
 
     public static function pastikanSemester($semester): void
@@ -221,8 +237,12 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         $kelas = static::pastikanKelasWaliGuru($guruId);
         static::pastikanSemester($semester);
         if (empty($dataNilai)) throw new InvalidArgumentException('Data nilai tidak boleh kosong.');
+
+        // Wali kelas boleh menginput semua mata pelajaran. Jika belum ada
+        // guru_mapel untuk kombinasi wali + mapel, dibuat otomatis di sini.
         $guruMapel = static::guruMapelUntukInput($guruId, $mapelId);
         static::pastikanSiswaDalamKelas($kelas->id, collect($dataNilai)->pluck('siswa_id'));
+
         DB::transaction(function () use ($dataNilai,$guruMapel,$semester) {
             foreach ($dataNilai as $data) {
                 $tugas=static::validasiNilai($data['nilai_tugas'],'Nilai tugas');
