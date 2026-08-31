@@ -10,15 +10,15 @@ class PenggunaRequest extends FormRequest
 {
     /**
      * Menentukan apakah request diperbolehkan.
+     *
+     * Pengelolaan akun pengguna adalah hak ADMIN.
+     * Kepala Sekolah hanya memiliki akses baca melalui route
+     * GET /pengguna dan GET /pengguna/{user}.
      */
     public function authorize(): bool
     {
         return auth()->check()
-            && in_array(
-                auth()->user()->role,
-                ['admin', 'kepala_sekolah'],
-                true
-            );
+            && auth()->user()->role === 'admin';
     }
 
     /**
@@ -43,7 +43,8 @@ class PenggunaRequest extends FormRequest
          *
          * UPDATE:
          * - role pengguna yang sudah ada boleh dipertahankan
-         * - admin tidak boleh diberikan kepada pengguna lain
+         * - admin hanya dapat dipertahankan pada akun admin yang
+         *   memang sudah ada
          */
         $allowedRoles = [
             'kepala_sekolah',
@@ -103,7 +104,6 @@ class PenggunaRequest extends FormRequest
 
         /*
          * Password:
-         *
          * CREATE = wajib
          * UPDATE = opsional
          */
@@ -145,11 +145,9 @@ class PenggunaRequest extends FormRequest
              * ADMIN
              * =====================================================
              *
-             * Admin hanya boleh dibuat melalui Tinker.
-             *
-             * Pada UPDATE:
-             * role admin hanya boleh dipertahankan oleh
-             * akun yang memang sudah menjadi admin.
+             * Admin hanya dapat dibuat melalui Tinker.
+             * Pada UPDATE, role admin hanya boleh dipertahankan
+             * pada akun yang memang sudah menjadi admin.
              */
             if (
                 $this->isMethod('post') &&
@@ -168,7 +166,7 @@ class PenggunaRequest extends FormRequest
             ) {
                 $validator->errors()->add(
                     'role',
-                    'Role Administrator hanya dapat dipertahankan oleh akun Administrator.'
+                    'Role Administrator hanya dapat dipertahankan pada akun Administrator.'
                 );
             }
 
@@ -243,15 +241,8 @@ class PenggunaRequest extends FormRequest
     {
         $this->merge([
             'username' => trim((string) $this->username),
-
-            'nama_lengkap' => trim(
-                (string) $this->nama_lengkap
-            ),
-
-            'email' => trim(
-                (string) $this->email
-            ),
-
+            'nama_lengkap' => trim((string) $this->nama_lengkap),
+            'email' => trim((string) $this->email),
             'nip' => $this->filled('nip')
                 ? trim((string) $this->nip)
                 : null,
