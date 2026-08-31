@@ -19,7 +19,7 @@ class AkunController extends Controller
             'new_email' => [
                 'required',
                 'email',
-                'max:255',
+                'max:30',
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
             'confirm_email' => [
@@ -33,7 +33,7 @@ class AkunController extends Controller
         ], [
             'new_email.required' => 'Email baru wajib diisi.',
             'new_email.email' => 'Format email baru tidak valid.',
-            'new_email.max' => 'Email baru terlalu panjang.',
+            'new_email.max' => 'Email baru maksimal 30 karakter.',
             'new_email.unique' => 'Email tersebut sudah digunakan oleh pengguna lain.',
             'confirm_email.required' => 'Konfirmasi email wajib diisi.',
             'confirm_email.same' => 'Konfirmasi email tidak sama dengan email baru.',
