@@ -79,13 +79,9 @@ class GuruMapel extends Model
         return MataPelajaran::where('id', $mapelId)->exists();
     }
 
-    public static function sudahTerdaftar(
-        int $guruId,
-        int $mapelId,
-        ?int $excludeId = null
-    ): bool {
-        $query = self::where('guru_id', $guruId)
-            ->where('mapel_id', $mapelId);
+    public static function sudahTerdaftar(int $guruId, int $mapelId, ?int $excludeId = null): bool
+    {
+        $query = self::where('guru_id', $guruId)->where('mapel_id', $mapelId);
 
         if ($excludeId !== null) {
             $query->where('id', '!=', $excludeId);
@@ -100,33 +96,23 @@ class GuruMapel extends Model
         $mapelId = filter_var($data['mapel_id'] ?? null, FILTER_VALIDATE_INT);
 
         if ($guruId === false || $guruId === null) {
-            throw ValidationException::withMessages([
-                'guru_id' => 'Guru wajib dipilih dengan benar.',
-            ]);
+            throw ValidationException::withMessages(['guru_id' => 'Guru wajib dipilih dengan benar.']);
         }
 
         if ($mapelId === false || $mapelId === null) {
-            throw ValidationException::withMessages([
-                'mapel_id' => 'Mata pelajaran wajib dipilih dengan benar.',
-            ]);
+            throw ValidationException::withMessages(['mapel_id' => 'Mata pelajaran wajib dipilih dengan benar.']);
         }
 
         if (!self::pastikanGuruValid((int) $guruId)) {
-            throw ValidationException::withMessages([
-                'guru_id' => 'Guru yang dipilih tidak ditemukan atau sudah tidak aktif.',
-            ]);
+            throw ValidationException::withMessages(['guru_id' => 'Guru yang dipilih tidak ditemukan atau sudah tidak aktif.']);
         }
 
         if (!self::pastikanMataPelajaranValid((int) $mapelId)) {
-            throw ValidationException::withMessages([
-                'mapel_id' => 'Mata pelajaran yang dipilih tidak ditemukan.',
-            ]);
+            throw ValidationException::withMessages(['mapel_id' => 'Mata pelajaran yang dipilih tidak ditemukan.']);
         }
 
         if (self::sudahTerdaftar((int) $guruId, (int) $mapelId, $excludeId)) {
-            throw ValidationException::withMessages([
-                'mapel_id' => 'Guru tersebut sudah terdaftar pada mata pelajaran yang dipilih.',
-            ]);
+            throw ValidationException::withMessages(['mapel_id' => 'Guru tersebut sudah terdaftar pada mata pelajaran yang dipilih.']);
         }
     }
 
@@ -143,7 +129,6 @@ class GuruMapel extends Model
     public static function ubah(int $id, array $data): self
     {
         $guruMapel = self::findOrFail($id);
-
         self::validasiBisnis($data, $id);
 
         $guruMapel->update([
@@ -156,11 +141,14 @@ class GuruMapel extends Model
 
     public static function hapus(int $id): bool
     {
-        // Penugasan guru-mata pelajaran hanya merupakan data penugasan.
-        // Data nilai sekarang menyimpan mapel_id secara mandiri, sehingga
-        // penghapusan penugasan tidak lagi diblokir oleh data nilai.
-        return (bool) self::query()
-            ->findOrFail($id)
-            ->delete();
+        $guruMapel = self::query()->findOrFail($id);
+
+        if ($guruMapel->nilai()->exists()) {
+            throw ValidationException::withMessages([
+                'guru_mapel' => 'Penugasan guru mata pelajaran tidak dapat dihapus karena sudah memiliki data nilai.',
+            ]);
+        }
+
+        return (bool) $guruMapel->delete();
     }
 }
