@@ -8,12 +8,25 @@ use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RaportController extends Controller
 {
+    private function pastikanAksesRaport(): void
+    {
+        $user = Auth::user();
+
+        if ($user?->role === 'guru' && !Kelas::query()->where('wali_kelas_id', $user->id)->exists()) {
+            throw new HttpException(403, 'Menu raport hanya dapat diakses oleh guru yang menjadi wali kelas.');
+        }
+    }
+
     public function index(Request $request): View
     {
+        $this->pastikanAksesRaport();
+
         $tahunAjaranOptions = Kelas::tahunAjaranOptions();
         $tahunAjaran = Kelas::resolveTahunAjaran($request->query('tahun_ajaran'));
         $semester = Nilai::resolveSemester($request->query('semester', 1));
@@ -22,7 +35,6 @@ class RaportController extends Controller
 
         if ($siswaTerpilih !== null && $siswaTerpilih !== '') {
             $siswaTerpilih = (int) $siswaTerpilih;
-
             if (!$siswa->contains('id', $siswaTerpilih)) {
                 $siswaTerpilih = null;
             }
@@ -41,6 +53,8 @@ class RaportController extends Controller
 
     public function data(Request $request): JsonResponse
     {
+        $this->pastikanAksesRaport();
+
         $validated = $request->validate([
             'tahun_ajaran' => ['required', 'string', 'max:20'],
         ], [
@@ -57,6 +71,8 @@ class RaportController extends Controller
 
     public function preview(Request $request, int $id): View
     {
+        $this->pastikanAksesRaport();
+
         $validated = $request->validate([
             'tahun_ajaran' => ['required', 'string', 'max:20'],
             'semester' => ['nullable', 'integer', 'in:1,2'],
@@ -82,9 +98,7 @@ class RaportController extends Controller
         $nilai = Nilai::dataRaportSiswa($siswa->id, $semester);
         $kepalaSekolah = User::kepalaSekolahAktif();
         $kelas = $siswa->kelas;
-        $rataRata = $nilai->isNotEmpty()
-            ? Nilai::rataRataRaport($nilai)
-            : null;
+        $rataRata = $nilai->isNotEmpty() ? Nilai::rataRataRaport($nilai) : null;
 
         return view('raport-preview', [
             'siswa' => $siswa,
