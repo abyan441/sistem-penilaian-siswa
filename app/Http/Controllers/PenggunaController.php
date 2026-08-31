@@ -10,47 +10,28 @@ use Illuminate\Validation\Rule;
 
 class PenggunaController extends Controller
 {
-    /**
-     * Menampilkan halaman Manajemen Pengguna.
-     */
     public function index()
     {
         return view('pengguna', [
             'pengguna' => User::semuaPengguna(),
-
-            'statistik' =>
-                User::statistikPengguna(),
+            'statistik' => User::statistikPengguna(),
         ]);
     }
 
-    /**
-     * Menyimpan pengguna baru.
-     */
-    public function store(
-        PenggunaRequest $request
-    ): JsonResponse {
-        $pengguna = User::buatPengguna(
-            $request->validated()
-        );
+    public function store(PenggunaRequest $request): JsonResponse
+    {
+        $pengguna = User::buatPengguna($request->validated());
 
         return response()->json([
             'success' => true,
-            'message' =>
-                'Pengguna berhasil ditambahkan.',
+            'message' => 'Pengguna berhasil ditambahkan.',
             'data' => $pengguna,
         ], 201);
     }
 
-    /**
-     * Menampilkan detail pengguna.
-     *
-     * Password tidak ikut dikirim karena
-     * sudah berada di $hidden pada model User.
-     */
     public function show(int $user): JsonResponse
     {
-        $pengguna =
-            User::penggunaById($user);
+        $pengguna = User::penggunaById($user);
 
         return response()->json([
             'success' => true,
@@ -58,75 +39,74 @@ class PenggunaController extends Controller
         ]);
     }
 
-    /**
-     * Memperbarui pengguna.
-     */
-    public function update(
-        PenggunaRequest $request,
-        int $user
-    ): JsonResponse {
-        $pengguna =
-            User::perbaruiPengguna(
+    public function update(PenggunaRequest $request, int $user): JsonResponse
+    {
+        try {
+            $pengguna = User::perbaruiPengguna(
                 $user,
                 $request->validated()
             );
 
-        return response()->json([
-            'success' => true,
-            'message' =>
-                'Pengguna berhasil diperbarui.',
-            'data' => $pengguna,
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengguna berhasil diperbarui.',
+                'data' => $pengguna,
+            ]);
+        } catch (\RuntimeException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ], 422);
+        }
     }
 
-    /**
-     * Mengubah status aktif / tidak aktif.
-     */
-    public function updateStatus(
-        Request $request,
-        int $user
-    ): JsonResponse {
+    public function updateStatus(Request $request, int $user): JsonResponse
+    {
         $validated = $request->validate([
             'status' => [
                 'required',
-                Rule::in(
-                    User::daftarStatus()
-                ),
+                Rule::in(User::daftarStatus()),
             ],
         ], [
-            'status.required' =>
-                'Status wajib dipilih.',
-
-            'status.in' =>
-                'Status pengguna tidak valid.',
+            'status.required' => 'Status wajib dipilih.',
+            'status.in' => 'Status pengguna tidak valid.',
         ]);
 
-        $pengguna = User::ubahStatus(
-            $user,
-            $validated['status']
-        );
+        try {
+            $pengguna = User::ubahStatus(
+                $user,
+                $validated['status']
+            );
 
-        return response()->json([
-            'success' => true,
-            'message' =>
-                $pengguna->status === 'aktif'
+            return response()->json([
+                'success' => true,
+                'message' => $pengguna->status === 'aktif'
                     ? 'Akun berhasil diaktifkan.'
                     : 'Akun berhasil dinonaktifkan.',
-            'data' => $pengguna,
-        ]);
+                'data' => $pengguna,
+            ]);
+        } catch (\RuntimeException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ], 422);
+        }
     }
 
-    /**
-     * Menghapus pengguna.
-     */
     public function destroy(int $user): JsonResponse
     {
-        User::hapusPengguna($user);
+        try {
+            User::hapusPengguna($user);
 
-        return response()->json([
-            'success' => true,
-            'message' =>
-                'Pengguna berhasil dihapus.',
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengguna berhasil dihapus.',
+            ]);
+        } catch (\RuntimeException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ], 422);
+        }
     }
 }
