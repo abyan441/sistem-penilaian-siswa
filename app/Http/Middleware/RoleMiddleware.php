@@ -4,12 +4,13 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
     /**
-     * Memeriksa role user yang sedang login.
+     * Memeriksa role dan status akun user yang sedang login.
      *
      * Contoh:
      *
@@ -26,15 +27,34 @@ class RoleMiddleware
         /*
          * Pastikan user sudah login.
          */
-        if (!$request->user()) {
+        $user = $request->user();
+
+        if (!$user) {
             return redirect()->route('login');
+        }
+
+        /*
+         * Akun yang dinonaktifkan tidak boleh melanjutkan
+         * sesi yang sudah terlanjur login.
+         */
+        if (($user->status ?? null) !== 'aktif') {
+            Auth::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()
+                ->route('login')
+                ->withErrors([
+                    'email' => 'Akun Anda sudah tidak aktif. Silakan hubungi administrator.',
+                ]);
         }
 
         /*
          * Ambil role user yang sedang login.
          */
         $userRole = strtolower(
-            trim($request->user()->role ?? '')
+            trim($user->role ?? '')
         );
 
         /*
@@ -53,7 +73,6 @@ class RoleMiddleware
          * tolak akses.
          */
         if (!in_array($userRole, $allowedRoles, true)) {
-
             /*
              * Untuk request AJAX / JSON,
              * kirim response JSON.
@@ -76,7 +95,7 @@ class RoleMiddleware
         }
 
         /*
-         * Role sesuai.
+         * Role dan status akun sesuai.
          * Lanjutkan request.
          */
         return $next($request);
