@@ -1,22 +1,14 @@
 /* =========================================================
-   DATA GURU
-   ========================================================= */
+DATA GURU
+========================================================= */
 
 /* =========================================================
-   CONTENT UTAMA
-   ========================================================= */
+CONTENT UTAMA
+========================================================= */
 
 .guru-content {
     width: 100%;
-
     margin: 0;
-
-    /*
-     * Jarak atas dibuat 4px agar posisi halaman Guru
-     * lebih dekat dengan posisi konten Dashboard.
-     *
-     * Padding kiri dan kanan diatur oleh layouts.app.
-     */
     padding: 4px 0 36px;
 
     color: var(--primarypr-50);
@@ -27,18 +19,15 @@
 }
 
 /* =========================================================
-   HEADER DATA GURU
-   ========================================================= */
+HEADER DATA GURU
+========================================================= */
 
 .guru-heading {
     display: flex;
-
     align-items: flex-start;
-
     justify-content: space-between;
 
     width: 100%;
-
     min-height: 72px;
 
     gap: 24px;
@@ -48,9 +37,7 @@
 
 .guru-heading-text {
     display: flex;
-
     flex-direction: column;
-
     align-items: flex-start;
 
     min-width: 0;
@@ -64,11 +51,8 @@
     color: var(--primarypr-40);
 
     font-family: var(--heading-h5-medium-font-family);
-
     font-size: var(--heading-h5-medium-font-size);
-
     font-weight: var(--heading-h5-medium-font-weight);
-
     line-height: var(--heading-h5-medium-line-height);
 }
 
@@ -78,47 +62,36 @@
     color: var(--primarypr-50);
 
     font-family: var(--paragraph-p16-regular-font-family);
-
     font-size: var(--paragraph-p16-regular-font-size);
-
     line-height: var(--paragraph-p16-regular-line-height);
 }
 
 /* =========================================================
-   TOMBOL TAMBAH GURU
-   ========================================================= */
+TOMBOL TAMBAH GURU
+========================================================= */
 
 .guru-add-button {
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
 
     width: 165px;
-
     min-width: 165px;
-
     height: 40px;
 
     margin-top: 13px;
-
     padding: 0 14px;
 
     gap: 7px;
 
     border: 0;
-
     border-radius: 9px;
 
     background: var(--primarypr-30);
-
     color: var(--primarypr-00);
 
     font-family: var(--label-l16-regular-font-family);
-
     font-size: var(--label-l16-regular-font-size);
-
     font-weight: var(--label-l16-regular-font-weight);
 
     white-space: nowrap;
@@ -138,27 +111,23 @@
 
 .guru-add-button svg {
     width: 16px;
-
     height: 16px;
 
     flex: 0 0 16px;
 }
 
 /* =========================================================
-   SEARCH
-   ========================================================= */
+SEARCH
+========================================================= */
 
 .guru-search-card {
     width: 100%;
-
     height: 82px;
 
     margin-top: 16px;
-
     padding: 20px;
 
     border: 1px solid var(--secondarysc-50);
-
     border-radius: 15px;
 
     background: var(--primarypr-10);
@@ -170,17 +139,14 @@
 
 .guru-search-form {
     display: flex;
-
     align-items: center;
 
     width: 100%;
-
     height: 41px;
 
     overflow: hidden;
 
     border: 1px solid var(--secondarysc-50);
-
     border-radius: 12px;
 
     background: var(--primarypr-00);
@@ -188,23 +154,18 @@
 
 .guru-search-form input {
     width: 100%;
-
     min-width: 0;
-
     height: 100%;
 
     padding: 0 14px;
 
     border: 0;
-
     outline: 0;
 
     background: transparent;
-
     color: var(--primarypr-50);
 
     font-family: var(--paragraph-p16-regular-font-family);
-
     font-size: var(--paragraph-p16-regular-font-size);
 
     box-sizing: border-box;
@@ -212,11 +173,9 @@
 
 .guru-search-form button {
     display: grid;
-
     place-items: center;
 
     width: 54px;
-
     height: 100%;
 
     flex: 0 0 54px;
@@ -224,7 +183,6 @@
     border: 0;
 
     background: transparent;
-
     color: var(--primarypr-50);
 
     cursor: pointer;
@@ -232,13 +190,12 @@
 
 .guru-search-form button svg {
     width: 22px;
-
     height: 22px;
 }
 
 /* =========================================================
-   TABLE DATA GURU
-   ========================================================= */
+TABLE DATA GURU
+========================================================= */
 
 .guru-table-card {
     width: 100%;
@@ -246,11 +203,9 @@
     margin-top: 32px;
 
     overflow-x: auto;
-
     overflow-y: hidden;
 
     border: 1px solid var(--secondarysc-50);
-
     border-radius: 15px;
 
     background: var(--primarypr-00);
@@ -258,17 +213,17 @@
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
 
     box-sizing: border-box;
+
+    -webkit-overflow-scrolling: touch;
 }
 
 .guru-table-scroll {
     width: max-content;
-
     min-width: 100%;
 }
 
 .guru-table {
     width: 100%;
-
     min-width: 760px;
 }
 
@@ -284,6 +239,8 @@
         15%;
 
     align-items: center;
+
+    box-sizing: border-box;
 }
 
 .guru-table-header {
@@ -292,13 +249,10 @@
     border-bottom: 1px solid var(--secondarysc-50);
 
     background: var(--primarypr-10);
-
     color: var(--primarypr-50);
 
     font-family: var(--paragraph-p16-medium-font-family);
-
     font-size: var(--paragraph-p16-medium-font-size);
-
     font-weight: var(--paragraph-p16-medium-font-weight);
 
     box-sizing: border-box;
@@ -323,43 +277,34 @@
     border-bottom: 1px solid var(--secondarysc-00);
 
     background: var(--primarypr-00);
-
     color: var(--primarypr-50);
 
     font-family: var(--paragraph-p16-regular-font-family);
-
     font-size: var(--paragraph-p16-regular-font-size);
-
     font-weight: var(--paragraph-p16-regular-font-weight);
 
     box-sizing: border-box;
 }
 
 /* =========================================================
-   TABEL KOSONG
-   ========================================================= */
+TABEL KOSONG
+========================================================= */
 
 .guru-table-row.guru-table-empty {
-    grid-column: 1 / -1;
-
-    display: grid;
-
-    grid-template-columns: 1fr;
-
+    display: flex;
     align-items: center;
-
-    justify-items: center;
+    justify-content: center;
 
     width: 100%;
+    min-width: 100%;
 
-    min-height: 120px;
+    min-height: 78px;
 
     padding: 0;
 
     border-bottom: 0;
 
     background: var(--primarypr-00);
-
     color: var(--primarypr-50);
 
     text-align: center;
@@ -371,23 +316,18 @@
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     width: 100%;
+    min-height: 78px;
 
-    min-height: 120px;
-
-    padding: 24px 16px;
+    padding: 16px 24px;
 
     color: var(--primarypr-50);
 
     font-family: var(--paragraph-p16-regular-font-family);
-
     font-size: var(--paragraph-p16-regular-font-size);
-
     font-weight: var(--paragraph-p16-regular-font-weight);
-
     line-height: var(--paragraph-p16-regular-line-height);
 
     text-align: center;
@@ -395,11 +335,13 @@
     box-sizing: border-box;
 }
 
+/* =========================================================
+AKSI
+========================================================= */
+
 .guru-actions {
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     width: 100%;
@@ -409,11 +351,9 @@
 
 .guru-actions button {
     display: grid;
-
     place-items: center;
 
     width: 32px;
-
     height: 32px;
 
     padding: 0;
@@ -433,7 +373,6 @@
 
 .guru-actions svg {
     width: 20px;
-
     height: 20px;
 }
 
@@ -446,8 +385,8 @@
 }
 
 /* =========================================================
-   MODAL
-   ========================================================= */
+MODAL
+========================================================= */
 
 body.guru-modal-open {
     overflow: hidden;
@@ -459,7 +398,6 @@ body.guru-modal-open {
 
 .guru-modal {
     position: fixed;
-
     inset: 0;
 
     z-index: 2000;
@@ -467,11 +405,9 @@ body.guru-modal-open {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     width: 100vw;
-
     height: 100vh;
 
     padding: 16px;
@@ -481,11 +417,9 @@ body.guru-modal-open {
 
 .guru-modal-backdrop {
     position: absolute;
-
     inset: 0;
 
     width: 100%;
-
     height: 100%;
 
     background: rgba(0, 0, 0, 0.45);
@@ -499,7 +433,6 @@ body.guru-modal-open {
     z-index: 2001;
 
     width: 100%;
-
     max-width: 520px;
 
     max-height: calc(100vh - 32px);
@@ -522,30 +455,25 @@ body.guru-modal-open {
 @keyframes modalIn {
     from {
         opacity: 0;
-
         transform: scale(0.95) translateY(-10px);
     }
 
     to {
         opacity: 1;
-
         transform: scale(1) translateY(0);
     }
 }
 
 /* =========================================================
-   MODAL HEADER
-   ========================================================= */
+MODAL HEADER
+========================================================= */
 
 .guru-modal-header {
     display: flex;
-
     align-items: flex-start;
-
     justify-content: space-between;
 
     margin-bottom: 20px;
-
     padding-bottom: 12px;
 
     border-bottom: 1px solid var(--secondarysc-00);
@@ -557,11 +485,8 @@ body.guru-modal-open {
     color: var(--primarypr-40);
 
     font-family: var(--heading-h5-bold-font-family);
-
     font-size: var(--heading-h5-bold-font-size);
-
     font-weight: var(--heading-h5-bold-font-weight);
-
     line-height: var(--heading-h5-bold-line-height);
 }
 
@@ -571,25 +496,20 @@ body.guru-modal-open {
     color: var(--primarypr-50);
 
     font-family: var(--paragraph-p12-regular-font-family);
-
     font-size: var(--paragraph-p12-regular-font-size);
 }
 
 .guru-modal-close {
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     padding: 4px;
 
     border: 0;
-
     border-radius: 6px;
 
     background: transparent;
-
     color: var(--primarypr-50);
 
     cursor: pointer;
@@ -601,17 +521,15 @@ body.guru-modal-open {
 
 .guru-modal-close svg {
     width: 20px;
-
     height: 20px;
 }
 
 /* =========================================================
-   FORM
-   ========================================================= */
+FORM
+========================================================= */
 
 .guru-form {
     display: flex;
-
     flex-direction: column;
 
     gap: 16px;
@@ -619,7 +537,6 @@ body.guru-modal-open {
 
 .guru-form-group {
     display: flex;
-
     flex-direction: column;
 
     gap: 6px;
@@ -629,16 +546,13 @@ body.guru-modal-open {
     color: var(--primarypr-50);
 
     font-family: var(--label-l16-medium-font-family);
-
     font-size: var(--label-l16-medium-font-size);
-
     font-weight: var(--label-l16-medium-font-weight);
 }
 
 .guru-form-group input,
 .guru-select-wrap select {
     width: 100%;
-
     height: 42px;
 
     padding: 0 14px;
@@ -646,15 +560,12 @@ body.guru-modal-open {
     outline: none;
 
     border: 1px solid var(--secondarysc-50);
-
     border-radius: 8px;
 
     background: var(--primarypr-00);
-
     color: var(--primarypr-50);
 
     font-family: var(--paragraph-p16-regular-font-family);
-
     font-size: var(--paragraph-p16-regular-font-size);
 
     box-sizing: border-box;
@@ -674,20 +585,18 @@ body.guru-modal-open {
 }
 
 /* =========================================================
-   FORM BUTTONS
-   ========================================================= */
+FORM BUTTONS
+========================================================= */
 
 .guru-form-actions {
     display: flex;
 
     align-items: center;
-
     justify-content: flex-end;
 
     gap: 10px;
 
     margin-top: 8px;
-
     padding-top: 16px;
 
     border-top: 1px solid var(--secondarysc-00);
@@ -703,7 +612,6 @@ body.guru-modal-open {
     border-radius: 8px;
 
     font-family: var(--label-l16-medium-font-family);
-
     font-size: 14px;
 
     cursor: pointer;
@@ -715,7 +623,6 @@ body.guru-modal-open {
     border: 1px solid var(--secondarysc-50);
 
     background: var(--primarypr-00);
-
     color: var(--primarypr-50);
 }
 
@@ -723,7 +630,6 @@ body.guru-modal-open {
     border: 1px solid var(--primarypr-30);
 
     background: var(--primarypr-30);
-
     color: var(--primarypr-00);
 }
 
@@ -731,29 +637,26 @@ body.guru-modal-open {
     border: 1px solid var(--colors-accents-red);
 
     background: var(--colors-accents-red);
-
     color: var(--primarypr-00);
 }
 
 /* =========================================================
-   DELETE MODAL
-   ========================================================= */
+DELETE MODAL
+========================================================= */
 
 .delete-modal-dialog {
-    text-align: center;
-
     max-width: 440px;
+
+    text-align: center;
 }
 
 .delete-modal-icon {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     width: 52px;
-
     height: 52px;
 
     margin: 0 auto 14px;
@@ -767,7 +670,6 @@ body.guru-modal-open {
 
 .delete-modal-icon svg {
     width: 25px;
-
     height: 25px;
 }
 
@@ -777,7 +679,6 @@ body.guru-modal-open {
     color: var(--primarypr-50);
 
     font-family: var(--heading-h5-bold-font-family);
-
     font-size: var(--heading-h5-bold-font-size);
 }
 
@@ -787,7 +688,6 @@ body.guru-modal-open {
     color: var(--primarypr-50);
 
     font-size: 14px;
-
     line-height: 22px;
 }
 
@@ -800,18 +700,16 @@ body.guru-modal-open {
 }
 
 /* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
+ACCESSIBILITY
+========================================================= */
 
 .sr-only {
     position: absolute;
 
     width: 1px;
-
     height: 1px;
 
     padding: 0;
-
     margin: -1px;
 
     overflow: hidden;
@@ -824,20 +722,18 @@ body.guru-modal-open {
 }
 
 /* =========================================================
-   TABLET
-   769px - 1100px
-   ========================================================= */
+TABLET
+769px - 1100px
+========================================================= */
 
 @media (min-width: 769px) and (max-width: 1100px) {
     .guru-content {
         padding-top: 4px;
-
         padding-bottom: 32px;
     }
 
     .guru-heading {
         min-height: 68px;
-
         gap: 18px;
     }
 
@@ -847,7 +743,6 @@ body.guru-modal-open {
 
     .guru-add-button {
         width: 165px;
-
         min-width: 165px;
 
         margin-top: 13px;
@@ -888,14 +783,9 @@ body.guru-modal-open {
         padding: 0 14px;
     }
 
-    .guru-table-row.guru-table-empty {
-        min-height: 110px;
-    }
-
+    .guru-table-row.guru-table-empty,
     .guru-table-row.guru-table-empty > div {
-        min-height: 110px;
-
-        padding: 22px 14px;
+        min-height: 78px;
     }
 
     .guru-modal {
@@ -910,9 +800,9 @@ body.guru-modal-open {
 }
 
 /* =========================================================
-   MOBILE
-   <= 768px
-   ========================================================= */
+MOBILE
+<= 768px
+========================================================= */
 
 @media (max-width: 768px) {
     .guru-content {
@@ -924,6 +814,7 @@ body.guru-modal-open {
 
         flex-direction: column;
         align-items: stretch;
+
         gap: 14px;
     }
 
@@ -931,19 +822,16 @@ body.guru-modal-open {
         margin-top: 4px;
 
         font-size: 20px;
-
         line-height: 28px;
     }
 
     .guru-heading p {
         font-size: 14px;
-
         line-height: 21px;
     }
 
     .guru-add-button {
         width: 100%;
-
         min-width: 0;
 
         height: 40px;
@@ -983,7 +871,6 @@ body.guru-modal-open {
 
     .guru-search-form button svg {
         width: 20px;
-
         height: 20px;
     }
 
@@ -993,7 +880,6 @@ body.guru-modal-open {
         border-radius: 12px;
 
         width: 100%;
-
         max-width: 100%;
     }
 
@@ -1005,7 +891,6 @@ body.guru-modal-open {
 
     .guru-table {
         width: 720px;
-
         min-width: 720px;
     }
 
@@ -1036,16 +921,18 @@ body.guru-modal-open {
         padding: 0 12px;
     }
 
+    /* =====================================================
+    EMPTY STATE MOBILE
+    ===================================================== */
+
     .guru-table-row.guru-table-empty {
-        min-height: 100px;
+        min-height: 70px;
     }
 
     .guru-table-row.guru-table-empty > div {
-        min-height: 100px;
+        min-height: 70px;
 
-        padding: 20px 12px;
-
-        font-size: 14px;
+        padding: 16px 20px;
     }
 
     .guru-actions {
@@ -1054,13 +941,11 @@ body.guru-modal-open {
 
     .guru-actions button {
         width: 30px;
-
         height: 30px;
     }
 
     .guru-actions svg {
         width: 19px;
-
         height: 19px;
     }
 
@@ -1080,9 +965,9 @@ body.guru-modal-open {
 }
 
 /* =========================================================
-   SMALL MOBILE
-   <= 480px
-   ========================================================= */
+SMALL MOBILE
+<= 480px
+========================================================= */
 
 @media (max-width: 480px) {
     .guru-content {
@@ -1101,19 +986,16 @@ body.guru-modal-open {
         margin-top: 2px;
 
         font-size: 20px;
-
         line-height: 27px;
     }
 
     .guru-heading p {
         font-size: 13px;
-
         line-height: 20px;
     }
 
     .guru-add-button {
         width: 100%;
-
         min-width: 0;
 
         height: 40px;
@@ -1151,7 +1033,6 @@ body.guru-modal-open {
 
     .guru-search-form button svg {
         width: 19px;
-
         height: 19px;
     }
 
@@ -1163,7 +1044,6 @@ body.guru-modal-open {
 
     .guru-table {
         width: 720px;
-
         min-width: 720px;
     }
 
@@ -1184,16 +1064,18 @@ body.guru-modal-open {
         padding: 0 10px;
     }
 
+    /* =====================================================
+    EMPTY STATE SMALL MOBILE
+    ===================================================== */
+
     .guru-table-row.guru-table-empty {
-        min-height: 90px;
+        min-height: 66px;
     }
 
     .guru-table-row.guru-table-empty > div {
-        min-height: 90px;
+        min-height: 66px;
 
-        padding: 18px 10px;
-
-        font-size: 13px;
+        padding: 14px 16px;
     }
 
     .guru-actions {
@@ -1202,13 +1084,11 @@ body.guru-modal-open {
 
     .guru-actions button {
         width: 28px;
-
         height: 28px;
     }
 
     .guru-actions svg {
         width: 18px;
-
         height: 18px;
     }
 
@@ -1232,7 +1112,6 @@ body.guru-modal-open {
 
     .guru-modal-header h2 {
         font-size: 18px;
-
         line-height: 24px;
     }
 
