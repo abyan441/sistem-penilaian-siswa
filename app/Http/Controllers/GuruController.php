@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GuruMapel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class GuruController extends Controller
 {
@@ -17,14 +18,31 @@ class GuruController extends Controller
     }
 
     /**
+     * Aturan validasi request guru mata pelajaran.
+     */
+    private function validateRequest(Request $request): array
+    {
+        return $request->validate([
+            'guru_id' => ['required', 'integer', 'exists:users,id'],
+            'mapel_id' => ['required', 'integer', 'exists:mata_pelajaran,id'],
+        ], [
+            'guru_id.required' => 'Guru wajib dipilih.',
+            'guru_id.integer' => 'Data guru tidak valid.',
+            'guru_id.exists' => 'Guru yang dipilih tidak ditemukan.',
+            'mapel_id.required' => 'Mata pelajaran wajib dipilih.',
+            'mapel_id.integer' => 'Data mata pelajaran tidak valid.',
+            'mapel_id.exists' => 'Mata pelajaran yang dipilih tidak ditemukan.',
+        ]);
+    }
+
+    /**
      * Menyimpan guru mata pelajaran baru.
      */
     public function store(Request $request): JsonResponse
     {
-        $guruMapel = GuruMapel::tambah([
-            'guru_id' => $request->input('guru_id'),
-            'mapel_id' => $request->input('mapel_id'),
-        ]);
+        $data = $this->validateRequest($request);
+
+        $guruMapel = GuruMapel::tambah($data);
 
         return response()->json([
             'success' => true,
@@ -38,10 +56,9 @@ class GuruController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $guruMapel = GuruMapel::ubah($id, [
-            'guru_id' => $request->input('guru_id'),
-            'mapel_id' => $request->input('mapel_id'),
-        ]);
+        $data = $this->validateRequest($request);
+
+        $guruMapel = GuruMapel::ubah($id, $data);
 
         return response()->json([
             'success' => true,
