@@ -29,11 +29,13 @@ Route::middleware(['auth'])->group(function () {
 
     /* =====================================================
        DASHBOARD
-       Semua role dapat melihat dashboard.
+       Semua role aktif dapat melihat dashboard.
        ===================================================== */
 
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.home');
+    Route::middleware(['role:admin,guru,kepala_sekolah'])->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.home');
+    });
 
     /* =====================================================
        DATA MASTER — AKSES LIHAT
@@ -41,31 +43,19 @@ Route::middleware(['auth'])->group(function () {
        ===================================================== */
 
     Route::middleware(['role:admin,guru,kepala_sekolah'])->group(function () {
-
-        /* Data Guru */
         Route::get('/guru', [GuruController::class, 'index'])->name('guru');
-
-        /* Data Siswa */
         Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa');
-
-        /* Data Kelas */
         Route::get('/kelas', [KelasController::class, 'index'])->name('kelas');
         Route::get('/kelas/{id}/detail', [KelasController::class, 'detail'])->name('kelas.detail');
-
-        /* Mata Pelajaran */
         Route::get('/mata-pelajaran', [MataPelajaranController::class, 'index'])->name('mapel');
     });
 
     /* =====================================================
        DATA MASTER — CRUD
        Hanya ADMIN yang boleh mengubah data master.
-
-       Guru dan kepala sekolah tetap dapat melihat data,
-       tetapi tidak dapat menambah, mengubah, atau menghapus.
        ===================================================== */
 
     Route::middleware(['role:admin'])->group(function () {
-
         /* Guru */
         Route::post('/guru', [GuruController::class, 'store'])->name('guru.store');
         Route::put('/guru/{id}', [GuruController::class, 'update'])->name('guru.update');
@@ -89,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
 
     /* =====================================================
        INPUT NILAI — AKSES LIHAT
-       Semua role dapat membuka dan melihat data nilai.
+       Semua role aktif dapat membuka dan melihat data nilai.
        ===================================================== */
 
     Route::middleware(['role:admin,guru,kepala_sekolah'])->group(function () {
@@ -101,8 +91,6 @@ Route::middleware(['auth'])->group(function () {
     /* =====================================================
        INPUT NILAI — SIMPAN
        Hanya GURU yang dapat memasukkan/mengubah nilai.
-       Controller juga memvalidasi guru_mapel agar guru hanya
-       dapat mengelola mata pelajaran yang memang diampunya.
        ===================================================== */
 
     Route::middleware(['role:guru'])->group(function () {
@@ -111,8 +99,7 @@ Route::middleware(['auth'])->group(function () {
 
     /* =====================================================
        RAPORT
-       Semua role dapat melihat dan mencetak raport.
-       Tidak ada operasi perubahan data raport di sini.
+       Semua role aktif dapat melihat dan mencetak raport.
        ===================================================== */
 
     Route::middleware(['role:admin,guru,kepala_sekolah'])->group(function () {
@@ -123,7 +110,7 @@ Route::middleware(['auth'])->group(function () {
 
     /* =====================================================
        PENGELOLAAN PENGGUNA — AKSES LIHAT
-       Admin dan kepala sekolah dapat melihat daftar pengguna.
+       Admin dan kepala sekolah dapat melihat pengguna.
        ===================================================== */
 
     Route::middleware(['role:admin,kepala_sekolah'])->group(function () {
@@ -133,8 +120,7 @@ Route::middleware(['auth'])->group(function () {
 
     /* =====================================================
        PENGELOLAAN PENGGUNA — CRUD
-       Hanya ADMIN yang dapat membuat, mengubah, menonaktifkan,
-       atau menghapus akun pengguna.
+       Hanya ADMIN yang dapat mengubah akun pengguna.
        ===================================================== */
 
     Route::middleware(['role:admin'])->group(function () {
@@ -145,19 +131,13 @@ Route::middleware(['auth'])->group(function () {
     });
 
     /* =====================================================
-       AKUN SENDIRI
-       Semua pengguna boleh mengubah email dan password akun
-       miliknya sendiri. Controller harus tetap memastikan
-       perubahan hanya berlaku pada akun yang sedang login.
+       AKUN SENDIRI + LOGOUT
+       RoleMiddleware sekaligus memastikan akun masih aktif.
        ===================================================== */
 
-    Route::put('/akun/email', [AkunController::class, 'updateEmail'])->name('akun.email.update');
-    Route::put('/akun/password', [AkunController::class, 'updatePassword'])->name('akun.password.update');
-
-    /* =====================================================
-       LOGOUT
-       Semua pengguna yang login dapat logout.
-       ===================================================== */
-
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::middleware(['role:admin,guru,kepala_sekolah'])->group(function () {
+        Route::put('/akun/email', [AkunController::class, 'updateEmail'])->name('akun.email.update');
+        Route::put('/akun/password', [AkunController::class, 'updatePassword'])->name('akun.password.update');
+        Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    });
 });
