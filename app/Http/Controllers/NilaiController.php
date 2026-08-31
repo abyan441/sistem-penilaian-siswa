@@ -144,8 +144,17 @@ class NilaiController extends Controller
         ], $this->validationMessages());
 
         try {
+            /*
+             * Penting: User::getAuthIdentifierName() pada project ini
+             * menggunakan kolom username. Karena itu Auth::id() mengembalikan
+             * username, bukan users.id. Sedangkan wali_kelas_id dan guru_id
+             * menggunakan users.id sebagai foreign key.
+             *
+             * Gunakan $user->id agar ID database guru yang sebenarnya diteruskan
+             * ke proses penyimpanan nilai.
+             */
             Nilai::simpanNilai(
-                Auth::id(),
+                $user->id,
                 $validated['semester'],
                 $validated['mapel_id'],
                 $validated['nilai']
