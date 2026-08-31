@@ -7,7 +7,6 @@
 @endpush
 
 @section('content')
-
 <form class="nilai-page" id="grade-form">
     @csrf
 
@@ -15,7 +14,7 @@
         <div class="nilai-page-title">
             <h1>Input Nilai</h1>
             <p>
-                {{ !empty($readOnly) ? 'Melihat nilai siswa per kelas dan mata pelajaran' : 'Input nilai siswa per mata pelajaran' }}
+                {{ !empty($readOnly) ? 'Melihat nilai siswa per kelas dan mata pelajaran' : 'Input nilai siswa berdasarkan mata pelajaran yang diampu' }}
             </p>
         </div>
 
@@ -67,7 +66,7 @@
                 @else
                     <div class="nilai-info-item">
                         <span class="nilai-info-label">Kelas</span>
-                        <div class="nilai-info-value" aria-label="Kelas">Kelas {{ $kelas->nama_kelas }}</div>
+                        <div class="nilai-info-value" aria-label="Kelas">Semua Kelas</div>
                     </div>
                 @endif
 
@@ -102,7 +101,7 @@
                 @else
                     <div class="nilai-info-item">
                         <span class="nilai-info-label">Tahun Ajaran</span>
-                        <div class="nilai-info-value" aria-label="Tahun Ajaran">{{ $kelas->tahun_ajaran }}</div>
+                        <div class="nilai-info-value" aria-label="Tahun Ajaran">Semua Tahun Ajaran</div>
                     </div>
                 @endif
             </div>
@@ -111,7 +110,7 @@
                 <p class="info-bobot-nilai">
                     <strong>Info:</strong>
                     <span>
-                        {{ !empty($readOnly) ? 'Mode lihat saja. Akun ini tidak dapat mengubah atau menyimpan nilai.' : 'Bobot Nilai - Tugas (30%), UTS (30%), UAS (40%)' }}
+                        {{ !empty($readOnly) ? 'Mode lihat saja. Akun ini tidak dapat mengubah atau menyimpan nilai.' : 'Anda hanya dapat menginput nilai untuk mata pelajaran yang diampu. Data siswa mencakup seluruh kelas.' }}
                     </span>
                 </p>
             </aside>
@@ -132,13 +131,12 @@
         <div class="nilai-table-body" id="nilai-table-body" aria-label="Nilai siswa" role="grid">
             <div class="nilai-empty-state">
                 <span>
-                    {{ !empty($readOnly) ? 'Pilih kelas, tahun ajaran, mata pelajaran, dan semester untuk menampilkan nilai.' : 'Pilih mata pelajaran untuk menampilkan data siswa.' }}
+                    {{ !empty($readOnly) ? 'Pilih kelas, tahun ajaran, mata pelajaran, dan semester untuk menampilkan nilai.' : 'Pilih mata pelajaran yang Anda ampu untuk menampilkan seluruh siswa.' }}
                 </span>
             </div>
         </div>
     </section>
 </form>
-
 @endsection
 
 @push('scripts')
