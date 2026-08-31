@@ -57,11 +57,13 @@ class GuruMapel extends Model
     }
 
     /**
-     * Daftar user yang memiliki role guru.
+     * Daftar user yang memiliki role guru dan masih aktif.
+     * Guru tidak aktif tidak boleh dipilih untuk penugasan baru.
      */
     public static function daftarGuru()
     {
         return User::where('role', 'guru')
+            ->where('status', 'aktif')
             ->orderBy('nama_lengkap')
             ->orderBy('id')
             ->get();
@@ -78,12 +80,13 @@ class GuruMapel extends Model
     }
 
     /**
-     * Memastikan user yang dipilih adalah guru.
+     * Memastikan user yang dipilih adalah guru aktif.
      */
     public static function pastikanGuruValid(int $guruId): bool
     {
         return User::where('id', $guruId)
             ->where('role', 'guru')
+            ->where('status', 'aktif')
             ->exists();
     }
 
@@ -135,7 +138,7 @@ class GuruMapel extends Model
 
         if (!self::pastikanGuruValid((int) $guruId)) {
             throw ValidationException::withMessages([
-                'guru_id' => 'User yang dipilih bukan merupakan guru.',
+                'guru_id' => 'Guru yang dipilih tidak ditemukan atau sudah tidak aktif.',
             ]);
         }
 
