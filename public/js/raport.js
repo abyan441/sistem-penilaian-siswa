@@ -15,38 +15,56 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    function showMessage(message, type) {
+    function showMessage(message, type = "error") {
         if (typeof showAppToast === "function") {
-            showAppToast(message, type || "error");
+            showAppToast(message, type);
             return;
         }
 
         window.alert(message);
     }
 
-    /* =====================================================
-       FILTER TAHUN AJARAN
-       ===================================================== */
+    function reloadWithFilter() {
+        const data = getFilterData();
 
-    if (academicYearSelect && semesterSelect) {
-        academicYearSelect.addEventListener("change", function () {
-            const tahunAjaran = academicYearSelect.value;
-            const semester = semesterSelect.value || "1";
+        if (!data.tahunAjaran) {
+            return;
+        }
 
-            if (!tahunAjaran) {
-                return;
-            }
+        const url = new URL(window.location.href);
 
-            const url = new URL(window.location.href);
-            url.searchParams.set("tahun_ajaran", tahunAjaran);
-            url.searchParams.set("semester", semester);
-            window.location.href = url.toString();
-        });
+        url.searchParams.set("tahun_ajaran", data.tahunAjaran);
+        url.searchParams.set("semester", data.semester);
+        url.searchParams.delete("siswa");
+
+        window.location.href = url.toString();
     }
 
-    /* =====================================================
-       PREVIEW RAPORT DARI FILTER
-       ===================================================== */
+    function createPreviewUrl(studentId, printMode = false) {
+        const data = getFilterData();
+
+        const url = new URL(
+            "/raport/" + encodeURIComponent(studentId) + "/preview",
+            window.location.origin,
+        );
+
+        url.searchParams.set("semester", data.semester);
+        url.searchParams.set("tahun_ajaran", data.tahunAjaran);
+
+        if (printMode) {
+            url.searchParams.set("print", "1");
+        }
+
+        return url.toString();
+    }
+
+    if (academicYearSelect) {
+        academicYearSelect.addEventListener("change", reloadWithFilter);
+    }
+
+    if (semesterSelect) {
+        semesterSelect.addEventListener("change", reloadWithFilter);
+    }
 
     if (filterForm) {
         filterForm.addEventListener("submit", function (event) {
@@ -56,27 +74,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (!data.siswa) {
                 showMessage("Silakan pilih siswa terlebih dahulu.");
-                if (studentSelect) {
-                    studentSelect.focus();
-                }
+                studentSelect?.focus();
                 return;
             }
 
-            const url = new URL(
-                "/raport/" + encodeURIComponent(data.siswa) + "/preview",
-                window.location.origin,
-            );
+            if (!data.tahunAjaran) {
+                showMessage("Silakan pilih tahun ajaran terlebih dahulu.");
+                academicYearSelect?.focus();
+                return;
+            }
 
-            url.searchParams.set("semester", data.semester);
-            url.searchParams.set("tahun_ajaran", data.tahunAjaran);
-
-            window.location.href = url.toString();
+            window.location.href = createPreviewUrl(data.siswa);
         });
     }
-
-    /* =====================================================
-       PENCARIAN SISWA
-       ===================================================== */
 
     if (searchInput && tableBody) {
         searchInput.addEventListener("input", function () {
@@ -85,7 +95,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             rows.forEach(function (row) {
                 const searchableText = (
-                    row.dataset.student || row.textContent || ""
+                    row.dataset.student ||
+                    row.textContent ||
+                    ""
                 ).toLowerCase();
 
                 row.style.display =
@@ -96,37 +108,35 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* =====================================================
-       PREVIEW PER BARIS
-       ===================================================== */
-
     document
         .querySelectorAll(".raport-action-preview")
         .forEach(function (button) {
             button.addEventListener("click", function () {
                 const studentId = button.dataset.studentId;
-                const data = getFilterData();
 
                 if (!studentId) {
                     showMessage("Data siswa tidak ditemukan.");
                     return;
                 }
 
-                const url = new URL(
-                    "/raport/" + encodeURIComponent(studentId) + "/preview",
-                    window.location.origin,
-                );
-
-                url.searchParams.set("semester", data.semester);
-                url.searchParams.set("tahun_ajaran", data.tahunAjaran);
-
-                window.location.href = url.toString();
+                window.location.href = createPreviewUrl(studentId);
             });
         });
 
-    /* =====================================================
-       CETAK PDF
-       ===================================================== */
+    document
+        .querySelectorAll(".raport-action-download")
+        .forEach(function (button) {
+            button.addEventListener("click", function () {
+                const studentId = button.dataset.studentId;
+
+                if (!studentId) {
+                    showMessage("Data siswa tidak ditemukan.");
+                    return;
+                }
+
+                window.open(createPreviewUrl(studentId, true), "_blank");
+            });
+        });
 
     if (pdfButton) {
         pdfButton.addEventListener("click", function () {
@@ -134,22 +144,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (!data.siswa) {
                 showMessage("Silakan pilih siswa terlebih dahulu.");
-                if (studentSelect) {
-                    studentSelect.focus();
-                }
+                studentSelect?.focus();
                 return;
             }
 
-            const url = new URL(
-                "/raport/" + encodeURIComponent(data.siswa) + "/preview",
-                window.location.origin,
-            );
+            if (!data.tahunAjaran) {
+                showMessage("Silakan pilih tahun ajaran terlebih dahulu.");
+                academicYearSelect?.focus();
+                return;
+            }
 
-            url.searchParams.set("semester", data.semester);
-            url.searchParams.set("tahun_ajaran", data.tahunAjaran);
-            url.searchParams.set("print", "1");
-
-            window.open(url.toString(), "_blank");
+            window.open(createPreviewUrl(data.siswa, true), "_blank");
         });
     }
 });
