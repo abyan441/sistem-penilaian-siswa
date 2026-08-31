@@ -8,17 +8,11 @@ use Illuminate\Http\Request;
 
 class GuruController extends Controller
 {
-    /**
-     * Menampilkan halaman data guru.
-     */
     public function index()
     {
         return view('guru', GuruMapel::dataHalaman());
     }
 
-    /**
-     * Aturan validasi request guru mata pelajaran.
-     */
     private function validateRequest(Request $request): array
     {
         return $request->validate([
@@ -34,13 +28,9 @@ class GuruController extends Controller
         ]);
     }
 
-    /**
-     * Menyimpan guru mata pelajaran baru.
-     */
     public function store(Request $request): JsonResponse
     {
         $data = $this->validateRequest($request);
-
         $guruMapel = GuruMapel::tambah($data);
 
         return response()->json([
@@ -50,13 +40,9 @@ class GuruController extends Controller
         ]);
     }
 
-    /**
-     * Memperbarui guru mata pelajaran.
-     */
     public function update(Request $request, int $id): JsonResponse
     {
         $data = $this->validateRequest($request);
-
         $guruMapel = GuruMapel::ubah($id, $data);
 
         return response()->json([
@@ -66,28 +52,26 @@ class GuruController extends Controller
         ]);
     }
 
-    /**
-     * Menghapus guru mata pelajaran.
-     */
     public function destroy(int $id): JsonResponse
     {
-        GuruMapel::hapus($id);
+        try {
+            GuruMapel::hapus($id);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Data guru berhasil dihapus.',
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data guru berhasil dihapus.',
+            ]);
+        } catch (\RuntimeException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ], 422);
+        }
     }
 
-    /**
-     * Menyiapkan data guru mata pelajaran untuk response JSON.
-     */
     private function formatGuruMapel(GuruMapel $guruMapel): array
     {
-        $guruMapel->loadMissing([
-            'guru',
-            'mataPelajaran',
-        ]);
+        $guruMapel->loadMissing(['guru', 'mataPelajaran']);
 
         return [
             'id' => $guruMapel->id,
