@@ -144,10 +144,26 @@ class User extends Authenticatable
     public static function perbaruiPengguna(int $id, array $data): self
     {
         $pengguna = self::penggunaById($id);
+        $roleBaru = $data['role'];
+
+        if ($pengguna->role !== $roleBaru) {
+            if ($pengguna->guruMapel()->exists()) {
+                throw new \RuntimeException(
+                    'Role pengguna tidak dapat diubah karena masih memiliki penugasan mata pelajaran.'
+                );
+            }
+
+            if ($pengguna->waliKelas()->exists()) {
+                throw new \RuntimeException(
+                    'Role pengguna tidak dapat diubah karena masih menjadi wali kelas.'
+                );
+            }
+        }
+
         $pengguna->username = $data['username'];
         $pengguna->nama_lengkap = $data['nama_lengkap'];
         $pengguna->email = $data['email'];
-        $pengguna->role = $data['role'];
+        $pengguna->role = $roleBaru;
         $pengguna->status = $data['status'] ?? 'aktif';
         $pengguna->nip = $data['nip'] ?? null;
 
@@ -170,7 +186,6 @@ class User extends Authenticatable
 
     public static function ubahPassword(self $user, string $password): self
     {
-        // Password otomatis di-hash oleh cast 'hashed' pada model.
         $user->password = $password;
         $user->save();
 
@@ -201,6 +216,18 @@ class User extends Authenticatable
 
         if (auth()->check() && (int) auth()->id() === (int) $pengguna->id) {
             throw new \RuntimeException('Pengguna yang sedang login tidak dapat dihapus.');
+        }
+
+        if ($pengguna->guruMapel()->exists()) {
+            throw new \RuntimeException(
+                'Pengguna tidak dapat dihapus karena masih memiliki penugasan mata pelajaran. Hapus penugasannya terlebih dahulu.'
+            );
+        }
+
+        if ($pengguna->waliKelas()->exists()) {
+            throw new \RuntimeException(
+                'Pengguna tidak dapat dihapus karena masih menjadi wali kelas. Ubah wali kelas terlebih dahulu.'
+            );
         }
 
         return (bool) $pengguna->delete();
