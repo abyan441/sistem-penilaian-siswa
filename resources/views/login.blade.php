@@ -24,7 +24,7 @@
     <section
         class="background"
         aria-label="Ilustrasi guru"
-        style="background-image: url('{{ asset('gambar/login_page_background.jpg') }}');"
+        style="background-image: url('{{ asset('gambar/green_background.jpg') }}');"
     >
 
         <div class="rectangle" aria-hidden="true"></div>
@@ -105,7 +105,7 @@
 
                         <img
                             class="vector"
-                            src="{{ asset('gambar/vector-mail.png') }}"
+                            src="{{ asset('gambar/gmail_icon.png') }}"
                             alt=""
                             aria-hidden="true"
                         >
@@ -140,7 +140,7 @@
                         >
                             <img
                                 class="img"
-                                src="{{ asset('gambar/Vector-password.png') }}"
+                                src="{{ asset('gambar/password_vektor.png') }}"
                                 alt=""
                             >
                         </span>
