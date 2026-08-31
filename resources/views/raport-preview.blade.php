@@ -115,7 +115,9 @@
 
                             <tr class="average-row">
                                 <td colspan="2">Rata-rata Nilai</td>
-                                <td>{{ number_format($rataRata, 2, ',', '.') }}</td>
+                                <td>
+                                    {{ $rataRata !== null ? number_format($rataRata, 2, ',', '.') : '-' }}
+                                </td>
                                 <td></td>
                                 <td></td>
                             </tr>
