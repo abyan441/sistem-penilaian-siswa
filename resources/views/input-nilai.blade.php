@@ -53,11 +53,11 @@
 
                 <label class="nilai-filter-item">
                     <span class="nilai-filter-label">Kelas</span>
-                    <select class="dropdown-items" name="kelas_id" id="kelas-select" required>
-                        <option value="" selected disabled>Pilih Kelas</option>
+                    <select class="dropdown-items" name="kelas_id" id="kelas-select">
+                        <option value="">Semua Kelas</option>
                         @foreach ($kelasOptions as $item)
-                            <option value="{{ $item->id }}" data-tahun-ajaran="{{ $item->tahun_ajaran }}">
-                                Kelas {{ $item->nama_kelas }} ({{ $item->tahun_ajaran }})
+                            <option value="{{ $item->id }}">
+                                Kelas {{ $item->nama_kelas }}
                             </option>
                         @endforeach
                     </select>
@@ -81,29 +81,22 @@
                     </select>
                 </label>
 
-                @if (!empty($isAdmin))
-                    <label class="nilai-filter-item">
-                        <span class="nilai-filter-label">Tahun Ajaran</span>
-                        <select class="dropdown-items" name="tahun_ajaran" id="tahun-ajaran-select" required>
-                            <option value="" selected disabled>Pilih Tahun Ajaran</option>
-                            @foreach ($tahunAjaranOptions as $tahun)
-                                <option value="{{ $tahun }}">{{ $tahun }}</option>
-                            @endforeach
-                        </select>
-                    </label>
-                @else
-                    <div class="nilai-info-item">
-                        <span class="nilai-info-label">Tahun Ajaran</span>
-                        <div class="nilai-info-value" aria-label="Tahun Ajaran">Semua Tahun Ajaran</div>
-                    </div>
-                @endif
+                <label class="nilai-filter-item">
+                    <span class="nilai-filter-label">Tahun Ajaran</span>
+                    <select class="dropdown-items" name="tahun_ajaran" id="tahun-ajaran-select">
+                        <option value="">Semua Tahun Ajaran</option>
+                        @foreach ($kelasOptions->pluck('tahun_ajaran')->unique()->values() as $tahun)
+                            <option value="{{ $tahun }}">{{ $tahun }}</option>
+                        @endforeach
+                    </select>
+                </label>
             </div>
 
             <aside class="info-bobot-nilai-wrapper" aria-label="Informasi bobot nilai">
                 <p class="info-bobot-nilai">
                     <strong>Info:</strong>
                     <span>
-                        {{ !empty($readOnly) ? 'Mode lihat saja. Akun ini tidak dapat mengubah atau menyimpan nilai.' : 'Anda hanya dapat menginput nilai untuk mata pelajaran yang diampu. Pilih kelas untuk menampilkan siswa pada kelas tersebut.' }}
+                        {{ !empty($readOnly) ? 'Mode lihat saja. Akun ini tidak dapat mengubah atau menyimpan nilai.' : 'Anda hanya dapat menginput nilai untuk mata pelajaran yang diampu. Kelas dan tahun ajaran dapat difilter secara terpisah.' }}
                     </span>
                 </p>
             </aside>
@@ -124,7 +117,7 @@
         <div class="nilai-table-body" id="nilai-table-body" aria-label="Nilai siswa" role="grid">
             <div class="nilai-empty-state">
                 <span>
-                    {{ !empty($readOnly) ? 'Pilih kelas, tahun ajaran, mata pelajaran, dan semester untuk menampilkan nilai.' : 'Pilih kelas, mata pelajaran, dan semester untuk menampilkan siswa.' }}
+                    {{ !empty($readOnly) ? 'Pilih kelas, tahun ajaran, mata pelajaran, dan semester untuk menampilkan nilai.' : 'Pilih kelas atau tahun ajaran, mata pelajaran, dan semester untuk menampilkan siswa.' }}
                 </span>
             </div>
         </div>
