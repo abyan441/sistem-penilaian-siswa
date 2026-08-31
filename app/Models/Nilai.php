@@ -16,7 +16,6 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
 
     protected $fillable = [
         'siswa_id',
-        'mapel_id',
         'guru_mapel_id',
         'semester',
         'nilai_tugas',
@@ -29,7 +28,6 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
     {
         return [
             'siswa_id' => 'integer',
-            'mapel_id' => 'integer',
             'guru_mapel_id' => 'integer',
             'semester' => 'integer',
             'nilai_tugas' => 'decimal:2',
@@ -44,16 +42,14 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         return $this->belongsTo(Siswa::class, 'siswa_id');
     }
 
-    public function mataPelajaran()
-    {
-        return $this->belongsTo(MataPelajaran::class, 'mapel_id');
-    }
-
-    // Relasi lama dipertahankan untuk kompatibilitas data yang sudah ada.
-    // Nilai baru tidak lagi bergantung pada relasi ini.
     public function guruMapel()
     {
         return $this->belongsTo(GuruMapel::class, 'guru_mapel_id');
+    }
+
+    public function getMataPelajaranAttribute()
+    {
+        return $this->guruMapel?->mataPelajaran;
     }
 
     public static function resolveSemester($semester): int
@@ -67,17 +63,11 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         self::pastikanSemester($semester);
 
         return self::query()
-            ->with(['mataPelajaran', 'guruMapel.mataPelajaran'])
+            ->with(['guruMapel.mataPelajaran'])
             ->where('siswa_id', $siswaId)
             ->where('semester', $semester)
             ->get()
-            ->sortBy(function ($item) {
-                $namaMapel = $item->mataPelajaran?->nama_pelajaran
-                    ?? $item->guruMapel?->mataPelajaran?->nama_pelajaran
-                    ?? '';
-
-                return mb_strtolower($namaMapel);
-            })
+            ->sortBy(fn ($item) => mb_strtolower($item->guruMapel?->mataPelajaran?->nama_pelajaran ?? ''))
             ->values();
     }
 
@@ -91,11 +81,9 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
     public static function predikat($nilaiAkhir): string
     {
         $nilaiAkhir = (float) $nilaiAkhir;
-
         if ($nilaiAkhir >= 90) return 'A';
         if ($nilaiAkhir >= 80) return 'B';
         if ($nilaiAkhir >= 70) return 'C';
-
         return 'D';
     }
 
@@ -114,7 +102,6 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         return self::untukRaport($siswaId, $semester)->map(function ($item) {
             $item->predikat = self::predikat($item->nilai_akhir);
             $item->deskripsi_predikat = self::deskripsiPredikat($item->nilai_akhir);
-
             return $item;
         });
     }
@@ -136,109 +123,72 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
     public static function pastikanKelasWaliGuru($guruId)
     {
         $kelas = static::kelasAktifGuru($guruId);
-
         if (!$kelas) {
-            throw new InvalidArgumentException(
-                'Anda belum memiliki kelas yang diampu sebagai wali kelas.'
-            );
+            throw new InvalidArgumentException('Anda belum memiliki kelas yang diampu sebagai wali kelas.');
         }
-
         return $kelas;
     }
 
     public static function kelasAdmin($kelasId)
     {
-        if (!$kelasId) {
-            throw new InvalidArgumentException('Silakan pilih kelas terlebih dahulu.');
-        }
-
+        if (!$kelasId) throw new InvalidArgumentException('Silakan pilih kelas terlebih dahulu.');
         $kelas = Kelas::query()->find($kelasId);
-
-        if (!$kelas) {
-            throw new InvalidArgumentException('Kelas tidak ditemukan.');
-        }
-
+        if (!$kelas) throw new InvalidArgumentException('Kelas tidak ditemukan.');
         return $kelas;
     }
 
-    public static function kelasWali($guruId, $kelasId)
+    public static function semuaKelas()
     {
-        return Kelas::query()
-            ->where('id', $kelasId)
-            ->where('wali_kelas_id', $guruId)
-            ->first();
-    }
-
-    public static function pastikanKelasWali($guruId, $kelasId)
-    {
-        $kelas = static::kelasWali($guruId, $kelasId);
-
-        if (!$kelas) {
-            throw new InvalidArgumentException('Anda tidak memiliki akses ke kelas tersebut.');
-        }
-
-        return $kelas;
+        return Kelas::query()->orderByDesc('tahun_ajaran')->orderBy('nama_kelas')->get();
     }
 
     public static function daftarSiswa($kelasId): Collection
     {
-        return Siswa::query()
-            ->where('kelas_id', $kelasId)
-            ->orderBy('nama_siswa')
-            ->orderBy('nisn')
-            ->get();
+        return Siswa::query()->where('kelas_id', $kelasId)->orderBy('nama_siswa')->orderBy('nisn')->get();
     }
 
-    public static function pastikanSiswaDalamKelas($kelasId, Collection $siswaIds): void
+    public static function semuaSiswa(): Collection
     {
-        if ($siswaIds->isEmpty()) {
-            throw new InvalidArgumentException('Data siswa tidak boleh kosong.');
-        }
+        return Siswa::query()->with('kelas')->orderBy('kelas_id')->orderBy('nama_siswa')->orderBy('nisn')->get();
+    }
 
-        if ($siswaIds->count() !== $siswaIds->unique()->count()) {
-            throw new InvalidArgumentException('Terdapat data siswa yang duplikat.');
-        }
-
-        $jumlahValid = Siswa::query()
-            ->where('kelas_id', $kelasId)
-            ->whereIn('id', $siswaIds)
-            ->count();
-
-        if ($jumlahValid !== $siswaIds->count()) {
-            throw new InvalidArgumentException(
-                'Terdapat siswa yang tidak sesuai dengan kelas wali Anda.'
-            );
+    public static function pastikanSiswaValid(Collection $siswaIds): void
+    {
+        if ($siswaIds->isEmpty()) throw new InvalidArgumentException('Data siswa tidak boleh kosong.');
+        if ($siswaIds->count() !== $siswaIds->unique()->count()) throw new InvalidArgumentException('Terdapat data siswa yang duplikat.');
+        if (Siswa::query()->whereIn('id', $siswaIds)->count() !== $siswaIds->count()) {
+            throw new InvalidArgumentException('Terdapat siswa yang tidak ditemukan.');
         }
     }
 
     public static function semuaMataPelajaran()
     {
-        return MataPelajaran::query()
-            ->orderBy('nama_pelajaran')
+        return MataPelajaran::query()->orderBy('nama_pelajaran')->orderBy('id')->get();
+    }
+
+    public static function mataPelajaranGuru(int $guruId)
+    {
+        return GuruMapel::query()
+            ->with('mataPelajaran')
+            ->where('guru_id', $guruId)
+            ->whereHas('mataPelajaran')
             ->orderBy('id')
             ->get();
     }
 
     public static function dataHalaman(int $guruId): array
     {
-        $kelas = static::pastikanKelasWaliGuru($guruId);
-
-        // Hak input nilai ditentukan oleh status wali kelas.
-        // Semua mata pelajaran yang tersedia di database dapat dipilih.
-        // Guru tidak harus mengampu mata pelajaran tersebut melalui guru_mapel.
+        $penugasan = static::mataPelajaranGuru($guruId);
         return [
-            'kelas' => $kelas,
-            'mataPelajaran' => static::semuaMataPelajaran(),
+            'kelas' => null,
+            'kelasOptions' => static::semuaKelas(),
+            'mataPelajaran' => $penugasan->pluck('mataPelajaran')->filter()->unique('id')->values(),
         ];
     }
 
     public static function dataHalamanAdmin(): array
     {
-        $kelasOptions = Kelas::query()
-            ->orderByDesc('tahun_ajaran')
-            ->orderBy('nama_kelas')
-            ->get();
-
+        $kelasOptions = static::semuaKelas();
         return [
             'kelas' => $kelasOptions->first(),
             'kelasOptions' => $kelasOptions,
@@ -249,27 +199,24 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
 
     public static function guruMapelGuruMapel($guruId, $mapelId)
     {
-        return GuruMapel::query()
-            ->where('guru_id', $guruId)
-            ->where('mapel_id', $mapelId)
-            ->first();
+        return GuruMapel::query()->where('guru_id', $guruId)->where('mapel_id', $mapelId)->first();
+    }
+
+    public static function pastikanGuruMapel(int $guruId, int $mapelId): GuruMapel
+    {
+        $guruMapel = static::guruMapelGuruMapel($guruId, $mapelId);
+        if (!$guruMapel) throw new InvalidArgumentException('Anda tidak memiliki penugasan untuk mata pelajaran tersebut.');
+        return $guruMapel;
     }
 
     public static function pastikanSemester($semester): void
     {
-        if (!in_array((string) $semester, ['1', '2'], true)) {
-            throw new InvalidArgumentException('Semester hanya boleh 1 atau 2.');
-        }
+        if (!in_array((string) $semester, ['1', '2'], true)) throw new InvalidArgumentException('Semester hanya boleh 1 atau 2.');
     }
 
     public static function validasiNilai($nilai, $namaNilai): float
     {
-        if (!is_numeric($nilai) || $nilai < 0 || $nilai > 100) {
-            throw new InvalidArgumentException(
-                "{$namaNilai} harus berada di antara 0 sampai 100."
-            );
-        }
-
+        if (!is_numeric($nilai) || $nilai < 0 || $nilai > 100) throw new InvalidArgumentException("{$namaNilai} harus berada di antara 0 sampai 100.");
         return round((float) $nilai, 2);
     }
 
@@ -287,19 +234,18 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
     {
         return $siswa->values()->map(function ($siswa, $index) use ($nilai) {
             $nilaiSiswa = $nilai->get($siswa->id);
-
             $tugas = $nilaiSiswa ? (float) $nilaiSiswa->nilai_tugas : 0;
             $uts = $nilaiSiswa ? (float) $nilaiSiswa->nilai_uts : 0;
             $uas = $nilaiSiswa ? (float) $nilaiSiswa->nilai_uas : 0;
-
-            $akhir = $nilaiSiswa && $nilaiSiswa->nilai_akhir !== null
-                ? (float) $nilaiSiswa->nilai_akhir
-                : static::hitungNilaiAkhir($tugas, $uts, $uas);
+            $akhir = $nilaiSiswa && $nilaiSiswa->nilai_akhir !== null ? (float) $nilaiSiswa->nilai_akhir : static::hitungNilaiAkhir($tugas, $uts, $uas);
 
             return [
                 'id' => $siswa->id,
                 'nisn' => $siswa->nisn,
                 'nama_siswa' => $siswa->nama_siswa,
+                'kelas_id' => $siswa->kelas_id,
+                'kelas' => $siswa->kelas?->nama_kelas,
+                'tahun_ajaran' => $siswa->kelas?->tahun_ajaran,
                 'nomor' => $index + 1,
                 'nilai_id' => $nilaiSiswa?->id,
                 'nilai_tugas' => $tugas,
@@ -311,31 +257,30 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         });
     }
 
-    public static function dataNilai($guruId, $semester, $mapelId): array
+    public static function dataNilai($guruId, $semester, $mapelId, $kelasId = null, $tahunAjaran = null): array
     {
-        $kelas = static::pastikanKelasWaliGuru($guruId);
         static::pastikanSemester($semester);
+        $guruMapel = static::pastikanGuruMapel((int) $guruId, (int) $mapelId);
 
-        if (!MataPelajaran::query()->find($mapelId)) {
-            throw new InvalidArgumentException('Mata pelajaran tidak ditemukan.');
-        }
+        $query = Siswa::query()->with('kelas');
+        if ($kelasId) $query->where('kelas_id', $kelasId);
+        if ($tahunAjaran) $query->whereHas('kelas', fn ($q) => $q->where('tahun_ajaran', $tahunAjaran));
 
-        $siswa = static::daftarSiswa($kelas->id);
-
+        $siswa = $query->orderBy('kelas_id')->orderBy('nama_siswa')->orderBy('nisn')->get();
         $nilai = static::query()
-            ->where('mapel_id', $mapelId)
+            ->where('guru_mapel_id', $guruMapel->id)
             ->where('semester', $semester)
             ->whereIn('siswa_id', $siswa->pluck('id'))
             ->get()
             ->keyBy('siswa_id');
 
         return [
-            'kelas_id' => $kelas->id,
-            'kelas' => $kelas->nama_kelas,
-            'tahun_ajaran' => $kelas->tahun_ajaran,
+            'kelas_id' => $kelasId ? (int) $kelasId : null,
+            'kelas' => $kelasId ? Kelas::find($kelasId)?->nama_kelas : 'Semua Kelas',
+            'tahun_ajaran' => $tahunAjaran ?: 'Semua Tahun Ajaran',
             'semester' => (int) $semester,
             'mapel_id' => (int) $mapelId,
-            'guru_mapel_id' => null,
+            'guru_mapel_id' => (int) $guruMapel->id,
             'siswa' => static::formatSiswaDenganNilai($siswa, $nilai)->all(),
         ];
     }
@@ -343,33 +288,26 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
     public static function dataNilaiAdmin($kelasId, $tahunAjaran, $semester, $mapelId): array
     {
         static::pastikanSemester($semester);
+        if (!$mapelId || !MataPelajaran::query()->find($mapelId)) throw new InvalidArgumentException('Mata pelajaran tidak ditemukan.');
 
-        $kelas = static::kelasAdmin($kelasId);
+        $query = Siswa::query()->with('kelas');
+        if ($kelasId) $query->where('kelas_id', $kelasId);
+        if ($tahunAjaran) $query->whereHas('kelas', fn ($q) => $q->where('tahun_ajaran', $tahunAjaran));
+        $siswa = $query->orderBy('kelas_id')->orderBy('nama_siswa')->orderBy('nisn')->get();
 
-        if ($tahunAjaran && $kelas->tahun_ajaran !== $tahunAjaran) {
-            throw new InvalidArgumentException(
-                'Kelas dan tahun ajaran yang dipilih tidak ditemukan.'
-            );
-        }
-
-        if (!MataPelajaran::query()->find($mapelId)) {
-            throw new InvalidArgumentException('Mata pelajaran tidak ditemukan.');
-        }
-
-        $siswa = static::daftarSiswa($kelas->id);
-
+        $guruMapelIds = GuruMapel::query()->where('mapel_id', $mapelId)->pluck('id');
         $nilai = static::query()
             ->where('semester', $semester)
-            ->where('mapel_id', $mapelId)
+            ->whereIn('guru_mapel_id', $guruMapelIds)
             ->whereIn('siswa_id', $siswa->pluck('id'))
             ->orderBy('id')
             ->get()
             ->keyBy('siswa_id');
 
         return [
-            'kelas_id' => $kelas->id,
-            'kelas' => $kelas->nama_kelas,
-            'tahun_ajaran' => $kelas->tahun_ajaran,
+            'kelas_id' => $kelasId ? (int) $kelasId : null,
+            'kelas' => $kelasId ? Kelas::find($kelasId)?->nama_kelas : 'Semua Kelas',
+            'tahun_ajaran' => $tahunAjaran ?: 'Semua Tahun Ajaran',
             'semester' => (int) $semester,
             'mapel_id' => (int) $mapelId,
             'guru_mapel_id' => null,
@@ -379,25 +317,12 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
 
     public static function simpanNilai($guruId, $semester, $mapelId, array $dataNilai): void
     {
-        $kelas = static::pastikanKelasWaliGuru($guruId);
         static::pastikanSemester($semester);
+        $guruMapel = static::pastikanGuruMapel((int) $guruId, (int) $mapelId);
+        if (empty($dataNilai)) throw new InvalidArgumentException('Data nilai tidak boleh kosong.');
+        static::pastikanSiswaValid(collect($dataNilai)->pluck('siswa_id'));
 
-        if (empty($dataNilai)) {
-            throw new InvalidArgumentException('Data nilai tidak boleh kosong.');
-        }
-
-        $mataPelajaran = MataPelajaran::query()->find($mapelId);
-
-        if (!$mataPelajaran) {
-            throw new InvalidArgumentException('Mata pelajaran tidak ditemukan.');
-        }
-
-        static::pastikanSiswaDalamKelas(
-            $kelas->id,
-            collect($dataNilai)->pluck('siswa_id')
-        );
-
-        DB::transaction(function () use ($dataNilai, $mapelId, $semester) {
+        DB::transaction(function () use ($dataNilai, $guruMapel, $semester) {
             foreach ($dataNilai as $data) {
                 $tugas = static::validasiNilai($data['nilai_tugas'], 'Nilai tugas');
                 $uts = static::validasiNilai($data['nilai_uts'], 'Nilai UTS');
@@ -406,12 +331,10 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
                 static::updateOrCreate(
                     [
                         'siswa_id' => $data['siswa_id'],
-                        'mapel_id' => $mapelId,
+                        'guru_mapel_id' => $guruMapel->id,
                         'semester' => $semester,
                     ],
                     [
-                        // Nilai tidak lagi dikaitkan dengan penugasan guru_mapel.
-                        'guru_mapel_id' => null,
                         'nilai_tugas' => $tugas,
                         'nilai_uts' => $uts,
                         'nilai_uas' => $uas,
@@ -435,22 +358,14 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
 
         return [
             'labels' => $data->pluck('tahun_ajaran')->values()->all(),
-            'values' => $data
-                ->map(fn ($item) => round((float) $item->rata_rata, 2))
-                ->values()
-                ->all(),
+            'values' => $data->map(fn ($item) => round((float) $item->rata_rata, 2))->values()->all(),
         ];
     }
 
     public static function aktivitasTerbaru(int $limit = 6): Collection
     {
         return static::query()
-            ->with([
-                'siswa.kelas',
-                'mataPelajaran',
-                'guruMapel.guru',
-                'guruMapel.mataPelajaran',
-            ])
+            ->with(['siswa.kelas', 'guruMapel.guru', 'guruMapel.mataPelajaran'])
             ->orderByDesc('id')
             ->limit($limit)
             ->get();
