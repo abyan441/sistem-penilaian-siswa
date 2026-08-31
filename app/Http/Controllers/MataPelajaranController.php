@@ -6,6 +6,7 @@ use App\Models\MataPelajaran;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use RuntimeException;
 
 class MataPelajaranController extends Controller
 {
@@ -26,6 +27,17 @@ class MataPelajaranController extends Controller
             'kode_mapel' => ['required', 'string', 'max:5', 'unique:mata_pelajaran,kode_mapel'],
             'nama_pelajaran' => ['required', 'string', 'max:45'],
             'kkm' => ['required', 'integer', 'between:0,100'],
+        ], [
+            'kode_mapel.required' => 'Kode mata pelajaran wajib diisi.',
+            'kode_mapel.string' => 'Kode mata pelajaran harus berupa teks.',
+            'kode_mapel.max' => 'Kode mata pelajaran maksimal 5 karakter.',
+            'kode_mapel.unique' => 'Kode mata pelajaran sudah digunakan.',
+            'nama_pelajaran.required' => 'Nama mata pelajaran wajib diisi.',
+            'nama_pelajaran.string' => 'Nama mata pelajaran harus berupa teks.',
+            'nama_pelajaran.max' => 'Nama mata pelajaran maksimal 45 karakter.',
+            'kkm.required' => 'KKM wajib diisi.',
+            'kkm.integer' => 'KKM harus berupa angka.',
+            'kkm.between' => 'KKM harus berada di antara 0 sampai 100.',
         ]);
 
         $mapel = MataPelajaran::tambah($validated);
@@ -60,6 +72,17 @@ class MataPelajaranController extends Controller
             ],
             'nama_pelajaran' => ['required', 'string', 'max:45'],
             'kkm' => ['required', 'integer', 'between:0,100'],
+        ], [
+            'kode_mapel.required' => 'Kode mata pelajaran wajib diisi.',
+            'kode_mapel.string' => 'Kode mata pelajaran harus berupa teks.',
+            'kode_mapel.max' => 'Kode mata pelajaran maksimal 5 karakter.',
+            'kode_mapel.unique' => 'Kode mata pelajaran sudah digunakan.',
+            'nama_pelajaran.required' => 'Nama mata pelajaran wajib diisi.',
+            'nama_pelajaran.string' => 'Nama mata pelajaran harus berupa teks.',
+            'nama_pelajaran.max' => 'Nama mata pelajaran maksimal 45 karakter.',
+            'kkm.required' => 'KKM wajib diisi.',
+            'kkm.integer' => 'KKM harus berupa angka.',
+            'kkm.between' => 'KKM harus berada di antara 0 sampai 100.',
         ]);
 
         $mapel = MataPelajaran::ubah($id, $validated);
@@ -83,7 +106,14 @@ class MataPelajaranController extends Controller
             ], 404);
         }
 
-        MataPelajaran::hapus($id);
+        try {
+            MataPelajaran::hapus($id);
+        } catch (RuntimeException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ], 422);
+        }
 
         return response()->json([
             'success' => true,
