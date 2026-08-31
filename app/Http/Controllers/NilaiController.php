@@ -43,7 +43,7 @@ class NilaiController extends Controller
             'mapel_id' => ['required', 'integer', 'exists:mata_pelajaran,id'],
             'kelas_id' => ['nullable', 'integer', 'exists:kelas,id'],
             'tahun_ajaran' => ['nullable', 'string', 'max:20'],
-        ]);
+        ], $this->validationMessages());
 
         try {
             $user = Auth::user();
@@ -93,7 +93,7 @@ class NilaiController extends Controller
             $kelas = $readOnly
                 ? Nilai::kelasAdmin($request->validate([
                     'kelas_id' => ['required', 'integer', 'exists:kelas,id'],
-                ])['kelas_id'])
+                ], $this->validationMessages())['kelas_id'])
                 : Nilai::pastikanKelasWaliGuru($user->id);
 
             return response()->json([
@@ -141,7 +141,7 @@ class NilaiController extends Controller
             'nilai.*.nilai_tugas' => ['required', 'numeric', 'between:0,100'],
             'nilai.*.nilai_uts' => ['required', 'numeric', 'between:0,100'],
             'nilai.*.nilai_uas' => ['required', 'numeric', 'between:0,100'],
-        ]);
+        ], $this->validationMessages());
 
         try {
             Nilai::simpanNilai(
@@ -168,5 +168,44 @@ class NilaiController extends Controller
                 'message' => 'Terjadi kesalahan saat menyimpan nilai.',
             ], 500);
         }
+    }
+
+    private function validationMessages(): array
+    {
+        return [
+            'semester.required' => 'Semester wajib dipilih.',
+            'semester.in' => 'Semester tidak valid. Pilih semester 1 atau 2.',
+
+            'mapel_id.required' => 'Mata pelajaran wajib dipilih.',
+            'mapel_id.integer' => 'Data mata pelajaran tidak valid.',
+            'mapel_id.exists' => 'Mata pelajaran yang dipilih tidak ditemukan.',
+
+            'kelas_id.required' => 'Kelas wajib dipilih.',
+            'kelas_id.integer' => 'Data kelas tidak valid.',
+            'kelas_id.exists' => 'Kelas yang dipilih tidak ditemukan.',
+
+            'tahun_ajaran.string' => 'Tahun ajaran harus berupa teks.',
+            'tahun_ajaran.max' => 'Tahun ajaran maksimal 20 karakter.',
+
+            'nilai.required' => 'Data nilai wajib diisi.',
+            'nilai.array' => 'Format data nilai tidak valid.',
+            'nilai.min' => 'Minimal satu data nilai harus diisi.',
+
+            'nilai.*.siswa_id.required' => 'Data siswa wajib dipilih.',
+            'nilai.*.siswa_id.integer' => 'ID siswa tidak valid.',
+            'nilai.*.siswa_id.exists' => 'Siswa yang dipilih tidak ditemukan.',
+
+            'nilai.*.nilai_tugas.required' => 'Nilai tugas wajib diisi.',
+            'nilai.*.nilai_tugas.numeric' => 'Nilai tugas harus berupa angka.',
+            'nilai.*.nilai_tugas.between' => 'Nilai tugas harus berada pada rentang 0 sampai 100.',
+
+            'nilai.*.nilai_uts.required' => 'Nilai UTS wajib diisi.',
+            'nilai.*.nilai_uts.numeric' => 'Nilai UTS harus berupa angka.',
+            'nilai.*.nilai_uts.between' => 'Nilai UTS harus berada pada rentang 0 sampai 100.',
+
+            'nilai.*.nilai_uas.required' => 'Nilai UAS wajib diisi.',
+            'nilai.*.nilai_uas.numeric' => 'Nilai UAS harus berupa angka.',
+            'nilai.*.nilai_uas.between' => 'Nilai UAS harus berada pada rentang 0 sampai 100.',
+        ];
     }
 }
