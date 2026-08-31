@@ -43,6 +43,10 @@ class RaportController extends Controller
     {
         $validated = $request->validate([
             'tahun_ajaran' => ['required', 'string', 'max:20'],
+        ], [
+            'tahun_ajaran.required' => 'Tahun ajaran wajib dipilih.',
+            'tahun_ajaran.string' => 'Tahun ajaran harus berupa teks.',
+            'tahun_ajaran.max' => 'Tahun ajaran maksimal 20 karakter.',
         ]);
 
         return response()->json([
@@ -56,6 +60,12 @@ class RaportController extends Controller
         $validated = $request->validate([
             'tahun_ajaran' => ['required', 'string', 'max:20'],
             'semester' => ['nullable', 'integer', 'in:1,2'],
+        ], [
+            'tahun_ajaran.required' => 'Tahun ajaran wajib dipilih.',
+            'tahun_ajaran.string' => 'Tahun ajaran harus berupa teks.',
+            'tahun_ajaran.max' => 'Tahun ajaran maksimal 20 karakter.',
+            'semester.integer' => 'Semester tidak valid.',
+            'semester.in' => 'Semester tidak valid. Pilih semester 1 atau 2.',
         ]);
 
         $semester = Nilai::resolveSemester($validated['semester'] ?? 1);
