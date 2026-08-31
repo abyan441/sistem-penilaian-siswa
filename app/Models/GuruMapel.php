@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
+use RuntimeException;
 
 class GuruMapel extends Model
 {
@@ -34,9 +35,6 @@ class GuruMapel extends Model
         return $this->hasMany(Nilai::class, 'guru_mapel_id');
     }
 
-    /**
-     * Data yang dibutuhkan halaman data guru.
-     */
     public static function dataHalaman(): array
     {
         return [
@@ -46,9 +44,6 @@ class GuruMapel extends Model
         ];
     }
 
-    /**
-     * Semua penugasan guru mata pelajaran.
-     */
     public static function semua()
     {
         return self::with(['guru', 'mataPelajaran'])
@@ -56,10 +51,6 @@ class GuruMapel extends Model
             ->get();
     }
 
-    /**
-     * Daftar user yang memiliki role guru dan masih aktif.
-     * Guru tidak aktif tidak boleh dipilih untuk penugasan baru.
-     */
     public static function daftarGuru()
     {
         return User::where('role', 'guru')
@@ -69,9 +60,6 @@ class GuruMapel extends Model
             ->get();
     }
 
-    /**
-     * Daftar mata pelajaran untuk pilihan form.
-     */
     public static function daftarMataPelajaran()
     {
         return MataPelajaran::orderBy('nama_pelajaran')
@@ -79,9 +67,6 @@ class GuruMapel extends Model
             ->get();
     }
 
-    /**
-     * Memastikan user yang dipilih adalah guru aktif.
-     */
     public static function pastikanGuruValid(int $guruId): bool
     {
         return User::where('id', $guruId)
@@ -90,17 +75,11 @@ class GuruMapel extends Model
             ->exists();
     }
 
-    /**
-     * Memastikan mata pelajaran yang dipilih tersedia.
-     */
     public static function pastikanMataPelajaranValid(int $mapelId): bool
     {
         return MataPelajaran::where('id', $mapelId)->exists();
     }
 
-    /**
-     * Memastikan kombinasi guru dan mata pelajaran tidak duplikat.
-     */
     public static function sudahTerdaftar(
         int $guruId,
         int $mapelId,
@@ -116,9 +95,6 @@ class GuruMapel extends Model
         return $query->exists();
     }
 
-    /**
-     * Validasi aturan bisnis sebelum tambah atau ubah data.
-     */
     protected static function validasiBisnis(array $data, ?int $excludeId = null): void
     {
         $guruId = filter_var($data['guru_id'] ?? null, FILTER_VALIDATE_INT);
@@ -155,9 +131,6 @@ class GuruMapel extends Model
         }
     }
 
-    /**
-     * Menambahkan penugasan guru mata pelajaran.
-     */
     public static function tambah(array $data): self
     {
         self::validasiBisnis($data);
@@ -168,9 +141,6 @@ class GuruMapel extends Model
         ]);
     }
 
-    /**
-     * Mengubah penugasan guru mata pelajaran.
-     */
     public static function ubah(int $id, array $data): self
     {
         $guruMapel = self::findOrFail($id);
@@ -185,11 +155,18 @@ class GuruMapel extends Model
         return $guruMapel->fresh();
     }
 
-    /**
-     * Menghapus penugasan guru mata pelajaran.
-     */
     public static function hapus(int $id): bool
     {
-        return self::findOrFail($id)->delete();
+        $guruMapel = self::query()
+            ->withCount('nilai')
+            ->findOrFail($id);
+
+        if ($guruMapel->nilai_count > 0) {
+            throw new RuntimeException(
+                'Penugasan guru mata pelajaran tidak dapat dihapus karena sudah memiliki data nilai.'
+            );
+        }
+
+        return (bool) $guruMapel->delete();
     }
 }
