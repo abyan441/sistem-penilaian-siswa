@@ -31,16 +31,22 @@ return new class extends Migration
             SQL);
         }
 
-        // Relasi guru_mapel pada nilai dibuat opsional agar penghapusan
-        // penugasan guru tidak ikut menghapus atau menghalangi data nilai.
+        // Lepaskan semua foreign key yang mengikat nilai ke guru_mapel.
+        // Nama constraint dapat berbeda karena database dibuat melalui
+        // MySQL Workbench, sehingga tidak cukup hanya memakai nama standar Laravel.
         if (Schema::hasColumn('nilai', 'guru_mapel_id')) {
-            try {
-                Schema::table('nilai', function (Blueprint $table) {
-                    $table->dropForeign(['guru_mapel_id']);
-                });
-            } catch (\Throwable $e) {
-                // Foreign key mungkin sudah tidak menggunakan nama standar.
-                // Perubahan kolom tetap dicoba di bawah.
+            $foreignKeys = DB::select(<<<'SQL'
+                SELECT DISTINCT CONSTRAINT_NAME
+                FROM information_schema.KEY_COLUMN_USAGE
+                WHERE TABLE_SCHEMA = DATABASE()
+                  AND TABLE_NAME = 'nilai'
+                  AND COLUMN_NAME = 'guru_mapel_id'
+                  AND REFERENCED_TABLE_NAME = 'guru_mapel'
+            SQL);
+
+            foreach ($foreignKeys as $foreignKey) {
+                $constraint = str_replace('`', '``', $foreignKey->CONSTRAINT_NAME);
+                DB::statement("ALTER TABLE `nilai` DROP FOREIGN KEY `{$constraint}`");
             }
 
             Schema::table('nilai', function (Blueprint $table) {
@@ -48,12 +54,24 @@ return new class extends Migration
             });
         }
 
-        Schema::table('nilai', function (Blueprint $table) {
-            $table->foreign('mapel_id')
-                ->references('id')
-                ->on('mata_pelajaran')
-                ->nullOnDelete();
-        });
+        // Nilai sekarang mempunyai relasi langsung ke mata pelajaran.
+        $mapelForeignKeyExists = DB::selectOne(<<<'SQL'
+            SELECT COUNT(*) AS jumlah
+            FROM information_schema.KEY_COLUMN_USAGE
+            WHERE TABLE_SCHEMA = DATABASE()
+              AND TABLE_NAME = 'nilai'
+              AND COLUMN_NAME = 'mapel_id'
+              AND REFERENCED_TABLE_NAME = 'mata_pelajaran'
+        SQL);
+
+        if ((int) ($mapelForeignKeyExists->jumlah ?? 0) === 0) {
+            Schema::table('nilai', function (Blueprint $table) {
+                $table->foreign('mapel_id')
+                    ->references('id')
+                    ->on('mata_pelajaran')
+                    ->nullOnDelete();
+            });
+        }
     }
 
     public function down(): void
@@ -62,22 +80,22 @@ return new class extends Migration
             return;
         }
 
-        try {
-            Schema::table('nilai', function (Blueprint $table) {
-                $table->dropForeign(['mapel_id']);
-            });
-        } catch (\Throwable $e) {
-            // Abaikan jika foreign key sudah tidak ada.
+        $mapelForeignKeys = DB::select(<<<'SQL'
+            SELECT DISTINCT CONSTRAINT_NAME
+            FROM information_schema.KEY_COLUMN_USAGE
+            WHERE TABLE_SCHEMA = DATABASE()
+              AND TABLE_NAME = 'nilai'
+              AND COLUMN_NAME = 'mapel_id'
+              AND REFERENCED_TABLE_NAME = 'mata_pelajaran'
+        SQL);
+
+        foreach ($mapelForeignKeys as $foreignKey) {
+            $constraint = str_replace('`', '``', $foreignKey->CONSTRAINT_NAME);
+            DB::statement("ALTER TABLE `nilai` DROP FOREIGN KEY `{$constraint}`");
         }
 
         Schema::table('nilai', function (Blueprint $table) {
             $table->dropColumn('mapel_id');
         });
-
-        if (Schema::hasColumn('nilai', 'guru_mapel_id')) {
-            Schema::table('nilai', function (Blueprint $table) {
-                $table->unsignedInteger('guru_mapel_id')->nullable(false)->change();
-            });
-        }
     }
 };
