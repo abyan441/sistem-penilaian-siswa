@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
-use RuntimeException;
 
 class GuruMapel extends Model
 {
@@ -157,16 +156,11 @@ class GuruMapel extends Model
 
     public static function hapus(int $id): bool
     {
-        $guruMapel = self::query()
-            ->withCount('nilai')
-            ->findOrFail($id);
-
-        if ($guruMapel->nilai_count > 0) {
-            throw new RuntimeException(
-                'Penugasan guru mata pelajaran tidak dapat dihapus karena sudah memiliki data nilai.'
-            );
-        }
-
-        return (bool) $guruMapel->delete();
+        // Penugasan guru-mata pelajaran hanya merupakan data penugasan.
+        // Data nilai sekarang menyimpan mapel_id secara mandiri, sehingga
+        // penghapusan penugasan tidak lagi diblokir oleh data nilai.
+        return (bool) self::query()
+            ->findOrFail($id)
+            ->delete();
     }
 }
