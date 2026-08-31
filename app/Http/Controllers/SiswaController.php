@@ -44,7 +44,7 @@ class SiswaController extends Controller
                 'integer',
                 'exists:kelas,id',
             ],
-        ]);
+        ], $this->validationMessages());
 
         $siswa = Siswa::tambah($data);
 
@@ -84,7 +84,7 @@ class SiswaController extends Controller
                 'integer',
                 'exists:kelas,id',
             ],
-        ]);
+        ], $this->validationMessages());
 
         $siswa = Siswa::ubah($id, $data);
 
@@ -106,6 +106,30 @@ class SiswaController extends Controller
             'success' => true,
             'message' => 'Data siswa berhasil dihapus.',
         ]);
+    }
+
+    /**
+     * Pesan validasi Bahasa Indonesia.
+     */
+    private function validationMessages(): array
+    {
+        return [
+            'nisn.required' => 'NISN wajib diisi.',
+            'nisn.string' => 'NISN harus berupa teks.',
+            'nisn.max' => 'NISN maksimal 15 karakter.',
+            'nisn.unique' => 'NISN sudah digunakan oleh siswa lain.',
+
+            'nama_siswa.required' => 'Nama siswa wajib diisi.',
+            'nama_siswa.string' => 'Nama siswa harus berupa teks.',
+            'nama_siswa.max' => 'Nama siswa maksimal 40 karakter.',
+
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
+            'jenis_kelamin.in' => 'Jenis kelamin tidak valid. Pilih L atau P.',
+
+            'kelas_id.required' => 'Kelas wajib dipilih.',
+            'kelas_id.integer' => 'Data kelas tidak valid.',
+            'kelas_id.exists' => 'Kelas yang dipilih tidak ditemukan.',
+        ];
     }
 
     /**
