@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const storeUrl = config.storeUrl || "/input-nilai";
     const csrfToken = config.csrfToken || "";
     const readOnly = Boolean(config.readOnly);
-    const isAdmin = Boolean(config.isAdmin);
     let toastTimeout;
 
     function showMessage(message, type = "error") {
@@ -94,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function renderStudents(students) {
         if (!tableBody) return;
         if (!Array.isArray(students) || students.length === 0) {
-            emptyState("Belum ada siswa pada kelas yang dipilih.");
+            emptyState("Belum ada siswa pada filter yang dipilih.");
             return;
         }
 
@@ -153,25 +152,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function hasCompleteFilter() {
         return Boolean(
-            kelasSelect?.value &&
             semesterSelect?.value &&
             mapelSelect?.value &&
-            (!isAdmin || tahunSelect?.value)
+            (kelasSelect?.value || tahunSelect?.value)
         );
     }
 
     function filterMessage() {
-        return isAdmin
-            ? "Pilih kelas, tahun ajaran, mata pelajaran, dan semester untuk menampilkan nilai."
-            : "Pilih kelas, mata pelajaran, dan semester untuk menampilkan siswa.";
+        return "Pilih kelas atau tahun ajaran, mata pelajaran, dan semester untuk menampilkan siswa.";
     }
 
     function buildParams() {
         const params = new URLSearchParams();
-        params.set("kelas_id", kelasSelect.value);
+        if (kelasSelect?.value) params.set("kelas_id", kelasSelect.value);
+        if (tahunSelect?.value) params.set("tahun_ajaran", tahunSelect.value);
         params.set("semester", semesterSelect.value);
         params.set("mapel_id", mapelSelect.value);
-        if (isAdmin && tahunSelect?.value) params.set("tahun_ajaran", tahunSelect.value);
         return params;
     }
 
@@ -198,32 +194,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    if (kelasSelect) {
-        kelasSelect.addEventListener("change", function () {
-            const selected = kelasSelect.options[kelasSelect.selectedIndex];
-            if (isAdmin && tahunSelect && selected?.dataset.tahunAjaran) {
-                tahunSelect.value = selected.dataset.tahunAjaran;
-            }
-            loadData();
-        });
-    }
-
-    if (tahunSelect) {
-        tahunSelect.addEventListener("change", function () {
-            if (isAdmin && kelasSelect) {
-                const selectedYear = tahunSelect.value;
-                Array.from(kelasSelect.options).forEach((option) => {
-                    if (!option.value) return;
-                    option.hidden = Boolean(selectedYear && option.dataset.tahunAjaran !== selectedYear);
-                });
-                if (kelasSelect.value && kelasSelect.options[kelasSelect.selectedIndex]?.hidden) {
-                    kelasSelect.value = "";
-                }
-            }
-            loadData();
-        });
-    }
-
+    kelasSelect?.addEventListener("change", loadData);
+    tahunSelect?.addEventListener("change", loadData);
     semesterSelect?.addEventListener("change", loadData);
     mapelSelect?.addEventListener("change", loadData);
 
@@ -294,12 +266,4 @@ document.addEventListener("DOMContentLoaded", function () {
             if (buttonText) buttonText.textContent = originalText;
         }
     });
-
-    if (isAdmin && kelasSelect && tahunSelect) {
-        Array.from(kelasSelect.options).forEach((option) => {
-            if (option.value && option.dataset.tahunAjaran === tahunSelect.value) {
-                option.hidden = false;
-            }
-        });
-    }
 });
