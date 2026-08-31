@@ -27,6 +27,7 @@
                                 value="{{ $item->id }}"
                                 data-nisn="{{ $item->nisn }}"
                                 data-kelas="{{ $item->kelas?->nama_kelas }}"
+                                @selected((string) $siswaTerpilih === (string) $item->id)
                             >
                                 {{ $item->nama_siswa }}
                             </option>
