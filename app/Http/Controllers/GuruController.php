@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\GuruMapel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class GuruController extends Controller
 {
