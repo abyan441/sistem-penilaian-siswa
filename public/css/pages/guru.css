@@ -335,6 +335,66 @@
     box-sizing: border-box;
 }
 
+/* =========================================================
+   TABEL KOSONG
+   ========================================================= */
+
+.guru-table-row.guru-table-empty {
+    grid-column: 1 / -1;
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    align-items: center;
+
+    justify-items: center;
+
+    width: 100%;
+
+    min-height: 120px;
+
+    padding: 0;
+
+    border-bottom: 0;
+
+    background: var(--primarypr-00);
+
+    color: var(--primarypr-50);
+
+    text-align: center;
+
+    box-sizing: border-box;
+}
+
+.guru-table-row.guru-table-empty > div {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+
+    min-height: 120px;
+
+    padding: 24px 16px;
+
+    color: var(--primarypr-50);
+
+    font-family: var(--paragraph-p16-regular-font-family);
+
+    font-size: var(--paragraph-p16-regular-font-size);
+
+    font-weight: var(--paragraph-p16-regular-font-weight);
+
+    line-height: var(--paragraph-p16-regular-line-height);
+
+    text-align: center;
+
+    box-sizing: border-box;
+}
+
 .guru-actions {
     display: flex;
 
@@ -828,6 +888,16 @@ body.guru-modal-open {
         padding: 0 14px;
     }
 
+    .guru-table-row.guru-table-empty {
+        min-height: 110px;
+    }
+
+    .guru-table-row.guru-table-empty > div {
+        min-height: 110px;
+
+        padding: 22px 14px;
+    }
+
     .guru-modal {
         padding: 16px;
     }
@@ -966,6 +1036,18 @@ body.guru-modal-open {
         padding: 0 12px;
     }
 
+    .guru-table-row.guru-table-empty {
+        min-height: 100px;
+    }
+
+    .guru-table-row.guru-table-empty > div {
+        min-height: 100px;
+
+        padding: 20px 12px;
+
+        font-size: 14px;
+    }
+
     .guru-actions {
         gap: 12px;
     }
@@ -1100,6 +1182,18 @@ body.guru-modal-open {
     .guru-table-header > div,
     .guru-table-row > div {
         padding: 0 10px;
+    }
+
+    .guru-table-row.guru-table-empty {
+        min-height: 90px;
+    }
+
+    .guru-table-row.guru-table-empty > div {
+        min-height: 90px;
+
+        padding: 18px 10px;
+
+        font-size: 13px;
     }
 
     .guru-actions {
