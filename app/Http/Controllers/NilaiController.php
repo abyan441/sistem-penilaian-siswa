@@ -18,18 +18,13 @@ class NilaiController extends Controller
         if ($readOnly) {
             return view('input-nilai', array_merge(
                 Nilai::dataHalamanAdmin(),
-                [
-                    'readOnly' => true,
-                    'isAdmin' => true,
-                ]
+                ['readOnly' => true, 'isAdmin' => true]
             ));
         }
 
         return view('input-nilai', array_merge(
             Nilai::dataHalaman($user->id),
             [
-                'kelasOptions' => collect(),
-                'tahunAjaranOptions' => collect(),
                 'readOnly' => false,
                 'isAdmin' => false,
             ]
@@ -59,7 +54,9 @@ class NilaiController extends Controller
                 : Nilai::dataNilai(
                     $user->id,
                     $validated['semester'],
-                    $validated['mapel_id']
+                    $validated['mapel_id'],
+                    $validated['kelas_id'] ?? null,
+                    $validated['tahun_ajaran'] ?? null
                 );
 
             return response()->json([
@@ -75,7 +72,6 @@ class NilaiController extends Controller
             ], 422);
         } catch (\Throwable $e) {
             report($e);
-
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat mengambil data nilai.',
@@ -90,19 +86,27 @@ class NilaiController extends Controller
             $user = Auth::user();
             $readOnly = in_array($user->role, ['admin', 'kepala_sekolah'], true);
 
-            $kelas = $readOnly
-                ? Nilai::kelasAdmin($request->validate([
+            if ($readOnly) {
+                $validated = $request->validate([
                     'kelas_id' => ['required', 'integer', 'exists:kelas,id'],
-                ], $this->validationMessages())['kelas_id'])
-                : Nilai::pastikanKelasWaliGuru($user->id);
+                ], $this->validationMessages());
+
+                $kelas = Nilai::kelasAdmin($validated['kelas_id']);
+                $siswa = Nilai::daftarSiswa($kelas->id);
+            } else {
+                $kelas = $request->filled('kelas_id')
+                    ? Nilai::kelasAdmin((int) $request->kelas_id)
+                    : null;
+                $siswa = $kelas ? Nilai::daftarSiswa($kelas->id) : Nilai::semuaSiswa();
+            }
 
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'kelas_id' => $kelas->id,
-                    'kelas' => $kelas->nama_kelas,
-                    'tahun_ajaran' => $kelas->tahun_ajaran,
-                    'siswa' => Nilai::daftarSiswa($kelas->id),
+                    'kelas_id' => $kelas?->id,
+                    'kelas' => $kelas?->nama_kelas ?? 'Semua Kelas',
+                    'tahun_ajaran' => $kelas?->tahun_ajaran ?? 'Semua Tahun Ajaran',
+                    'siswa' => $siswa,
                 ],
             ]);
         } catch (InvalidArgumentException $e) {
@@ -113,7 +117,6 @@ class NilaiController extends Controller
             ], 422);
         } catch (\Throwable $e) {
             report($e);
-
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat mengambil siswa.',
@@ -144,15 +147,6 @@ class NilaiController extends Controller
         ], $this->validationMessages());
 
         try {
-            /*
-             * Penting: User::getAuthIdentifierName() pada project ini
-             * menggunakan kolom username. Karena itu Auth::id() mengembalikan
-             * username, bukan users.id. Sedangkan wali_kelas_id dan guru_id
-             * menggunakan users.id sebagai foreign key.
-             *
-             * Gunakan $user->id agar ID database guru yang sebenarnya diteruskan
-             * ke proses penyimpanan nilai.
-             */
             Nilai::simpanNilai(
                 $user->id,
                 $validated['semester'],
@@ -171,7 +165,6 @@ class NilaiController extends Controller
             ], 422);
         } catch (\Throwable $e) {
             report($e);
-
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat menyimpan nilai.',
@@ -184,34 +177,26 @@ class NilaiController extends Controller
         return [
             'semester.required' => 'Semester wajib dipilih.',
             'semester.in' => 'Semester tidak valid. Pilih semester 1 atau 2.',
-
             'mapel_id.required' => 'Mata pelajaran wajib dipilih.',
             'mapel_id.integer' => 'Data mata pelajaran tidak valid.',
             'mapel_id.exists' => 'Mata pelajaran yang dipilih tidak ditemukan.',
-
             'kelas_id.required' => 'Kelas wajib dipilih.',
             'kelas_id.integer' => 'Data kelas tidak valid.',
             'kelas_id.exists' => 'Kelas yang dipilih tidak ditemukan.',
-
             'tahun_ajaran.string' => 'Tahun ajaran harus berupa teks.',
             'tahun_ajaran.max' => 'Tahun ajaran maksimal 20 karakter.',
-
             'nilai.required' => 'Data nilai wajib diisi.',
             'nilai.array' => 'Format data nilai tidak valid.',
             'nilai.min' => 'Minimal satu data nilai harus diisi.',
-
             'nilai.*.siswa_id.required' => 'Data siswa wajib dipilih.',
             'nilai.*.siswa_id.integer' => 'ID siswa tidak valid.',
             'nilai.*.siswa_id.exists' => 'Siswa yang dipilih tidak ditemukan.',
-
             'nilai.*.nilai_tugas.required' => 'Nilai tugas wajib diisi.',
             'nilai.*.nilai_tugas.numeric' => 'Nilai tugas harus berupa angka.',
             'nilai.*.nilai_tugas.between' => 'Nilai tugas harus berada pada rentang 0 sampai 100.',
-
             'nilai.*.nilai_uts.required' => 'Nilai UTS wajib diisi.',
             'nilai.*.nilai_uts.numeric' => 'Nilai UTS harus berupa angka.',
             'nilai.*.nilai_uts.between' => 'Nilai UTS harus berada pada rentang 0 sampai 100.',
-
             'nilai.*.nilai_uas.required' => 'Nilai UAS wajib diisi.',
             'nilai.*.nilai_uas.numeric' => 'Nilai UAS harus berupa angka.',
             'nilai.*.nilai_uas.between' => 'Nilai UAS harus berada pada rentang 0 sampai 100.',
