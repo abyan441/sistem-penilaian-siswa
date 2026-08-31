@@ -13,11 +13,15 @@ class NilaiController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $readOnly = in_array($user->role, ['admin', 'kepala_sekolah'], true);
 
-        if ($user->role === 'admin') {
+        if ($readOnly) {
             return view('input-nilai', array_merge(
                 Nilai::dataHalamanAdmin(),
-                ['readOnly' => true, 'isAdmin' => true]
+                [
+                    'readOnly' => true,
+                    'isAdmin' => true,
+                ]
             ));
         }
 
@@ -43,8 +47,9 @@ class NilaiController extends Controller
 
         try {
             $user = Auth::user();
+            $readOnly = in_array($user->role, ['admin', 'kepala_sekolah'], true);
 
-            $data = $user->role === 'admin'
+            $data = $readOnly
                 ? Nilai::dataNilaiAdmin(
                     $validated['kelas_id'] ?? null,
                     $validated['tahun_ajaran'] ?? null,
@@ -59,7 +64,7 @@ class NilaiController extends Controller
 
             return response()->json([
                 'success' => true,
-                'readOnly' => $user->role === 'admin',
+                'readOnly' => $readOnly,
                 'data' => $data,
             ]);
         } catch (InvalidArgumentException $e) {
@@ -70,6 +75,7 @@ class NilaiController extends Controller
             ], 422);
         } catch (\Throwable $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat mengambil data nilai.',
@@ -82,7 +88,9 @@ class NilaiController extends Controller
     {
         try {
             $user = Auth::user();
-            $kelas = $user->role === 'admin'
+            $readOnly = in_array($user->role, ['admin', 'kepala_sekolah'], true);
+
+            $kelas = $readOnly
                 ? Nilai::kelasAdmin($request->validate([
                     'kelas_id' => ['required', 'integer', 'exists:kelas,id'],
                 ])['kelas_id'])
@@ -105,6 +113,7 @@ class NilaiController extends Controller
             ], 422);
         } catch (\Throwable $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat mengambil siswa.',
@@ -115,10 +124,12 @@ class NilaiController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        if (Auth::user()?->role === 'admin') {
+        $user = Auth::user();
+
+        if (in_array($user?->role, ['admin', 'kepala_sekolah'], true)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Admin hanya dapat melihat nilai dan tidak dapat mengubah atau menyimpan nilai.',
+                'message' => 'Akun ini hanya dapat melihat nilai dan tidak dapat mengubah atau menyimpan nilai.',
             ], 403);
         }
 
@@ -151,6 +162,7 @@ class NilaiController extends Controller
             ], 422);
         } catch (\Throwable $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat menyimpan nilai.',
