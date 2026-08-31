@@ -247,10 +247,15 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
             throw new InvalidArgumentException('Mata pelajaran tidak ditemukan.');
         }
 
-        return GuruMapel::firstOrCreate([
-            'guru_id' => $guruId,
-            'mapel_id' => $mapelId,
-        ]);
+        $guruMapel = static::guruMapelGuruMapel($guruId, $mapelId);
+
+        if (!$guruMapel) {
+            throw new InvalidArgumentException(
+                'Anda tidak memiliki penugasan untuk mata pelajaran tersebut.'
+            );
+        }
+
+        return $guruMapel;
     }
 
     public static function pastikanSemester($semester): void
