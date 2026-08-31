@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     "use strict";
 
     const form = document.getElementById("grade-form");
+    const kelasSelect = document.getElementById("kelas-select");
+    const tahunSelect = document.getElementById("tahun-ajaran-select");
     const semesterSelect = document.getElementById("semester-select");
     const mapelSelect = document.getElementById("mapel-select");
     const tableBody = document.getElementById("nilai-table-body");
@@ -15,6 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const dataUrl = config.dataUrl || "/input-nilai/data";
     const storeUrl = config.storeUrl || "/input-nilai";
     const csrfToken = config.csrfToken || "";
+    const readOnly = Boolean(config.readOnly);
+    const isAdmin = Boolean(config.isAdmin);
 
     function hideToast() {
         if (!toast) return;
@@ -152,6 +156,12 @@ document.addEventListener("DOMContentLoaded", function () {
         input.setAttribute("type", "number");
         input.value = value ?? 0;
 
+        if (readOnly) {
+            input.disabled = true;
+            input.readOnly = true;
+            input.setAttribute("aria-readonly", "true");
+        }
+
         wrapper.appendChild(input);
         return wrapper;
     }
@@ -165,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (students.length === 0) {
-            showEmptyState("Belum ada siswa pada kelas wali Anda.");
+            showEmptyState("Belum ada siswa pada kelas yang dipilih.");
             return;
         }
 
@@ -233,6 +243,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function hasCompleteFilter() {
+        if (isAdmin) {
+            return Boolean(
+                kelasSelect &&
+                    kelasSelect.value &&
+                    tahunSelect &&
+                    tahunSelect.value &&
+                    semesterSelect &&
+                    semesterSelect.value &&
+                    mapelSelect &&
+                    mapelSelect.value,
+            );
+        }
+
         return Boolean(
             semesterSelect &&
                 semesterSelect.value &&
@@ -241,19 +264,47 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
+    function getFilterMessage() {
+        if (isAdmin) {
+            return "Pilih kelas, tahun ajaran, mata pelajaran, dan semester untuk menampilkan nilai.";
+        }
+
+        return "Pilih mata pelajaran untuk menampilkan data siswa.";
+    }
+
+    function buildDataParams() {
+        const params = new URLSearchParams();
+
+        if (semesterSelect && semesterSelect.value) {
+            params.append("semester", semesterSelect.value);
+        }
+
+        if (mapelSelect && mapelSelect.value) {
+            params.append("mapel_id", mapelSelect.value);
+        }
+
+        if (isAdmin) {
+            if (kelasSelect && kelasSelect.value) {
+                params.append("kelas_id", kelasSelect.value);
+            }
+
+            if (tahunSelect && tahunSelect.value) {
+                params.append("tahun_ajaran", tahunSelect.value);
+            }
+        }
+
+        return params;
+    }
+
     async function loadData() {
         if (!hasCompleteFilter()) {
-            showEmptyState(
-                "Pilih mata pelajaran untuk menampilkan data siswa.",
-            );
+            showEmptyState(getFilterMessage());
             return;
         }
 
         showLoadingState();
 
-        const params = new URLSearchParams();
-        params.append("semester", semesterSelect.value);
-        params.append("mapel_id", mapelSelect.value);
+        const params = buildDataParams();
 
         try {
             const response = await fetch(dataUrl + "?" + params.toString(), {
@@ -273,12 +324,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (!response.ok) {
                 throw new Error(
-                    result.message || "Gagal mengambil data siswa.",
+                    result.message || "Gagal mengambil data nilai siswa.",
                 );
             }
 
             if (!result.success) {
-                throw new Error(result.message || "Data siswa tidak tersedia.");
+                throw new Error(result.message || "Data nilai siswa tidak tersedia.");
             }
 
             const siswa =
@@ -289,10 +340,80 @@ document.addEventListener("DOMContentLoaded", function () {
             renderStudents(siswa);
         } catch (error) {
             showEmptyState(
-                error.message || "Terjadi kesalahan saat mengambil data siswa.",
+                error.message || "Terjadi kesalahan saat mengambil data nilai siswa.",
             );
             console.error("Input Nilai - Load Data:", error);
         }
+    }
+
+    function prepareAdminClassFilter() {
+        if (!isAdmin || !kelasSelect || !tahunSelect) return;
+
+        const allClassOptions = Array.from(kelasSelect.options)
+            .filter(function (option) {
+                return option.value !== "";
+            })
+            .map(function (option) {
+                return {
+                    value: option.value,
+                    text: option.textContent.trim(),
+                    year: option.dataset.tahunAjaran || "",
+                };
+            });
+
+        function filterClassesByYear() {
+            const selectedYear = tahunSelect.value;
+            const currentClass = kelasSelect.value;
+
+            while (kelasSelect.options.length > 1) {
+                kelasSelect.remove(1);
+            }
+
+            allClassOptions.forEach(function (item) {
+                if (!selectedYear || item.year === selectedYear) {
+                    const option = document.createElement("option");
+                    option.value = item.value;
+                    option.textContent = item.text;
+                    option.dataset.tahunAjaran = item.year;
+                    kelasSelect.appendChild(option);
+                }
+            });
+
+            const currentStillExists = Array.from(kelasSelect.options).some(
+                function (option) {
+                    return option.value === currentClass;
+                },
+            );
+
+            kelasSelect.value = currentStillExists ? currentClass : "";
+        }
+
+        function syncYearFromClass() {
+            const selected = kelasSelect.options[kelasSelect.selectedIndex];
+
+            if (selected && selected.dataset.tahunAjaran) {
+                const year = selected.dataset.tahunAjaran;
+                const yearExists = Array.from(tahunSelect.options).some(
+                    function (option) {
+                        return option.value === year;
+                    },
+                );
+
+                if (yearExists) {
+                    tahunSelect.value = year;
+                }
+            }
+        }
+
+        kelasSelect.addEventListener("change", function () {
+            syncYearFromClass();
+            loadData();
+        });
+
+        tahunSelect.addEventListener("change", function () {
+            filterClassesByYear();
+            loadData();
+        });
     }
 
     if (semesterSelect) {
@@ -306,13 +427,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (tableBody) {
         tableBody.addEventListener("input", function (event) {
             const input = event.target;
-            if (!input.classList.contains("nilai-input")) return;
+            if (!input.classList.contains("nilai-input") || readOnly) return;
             updateRow(input.closest(".nilai-row"));
         });
 
         tableBody.addEventListener("change", function (event) {
             const input = event.target;
-            if (!input.classList.contains("nilai-input")) return;
+            if (!input.classList.contains("nilai-input") || readOnly) return;
             updateRow(input.closest(".nilai-row"));
         });
     }
@@ -320,6 +441,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (form) {
         form.addEventListener("submit", async function (event) {
             event.preventDefault();
+
+            if (readOnly) {
+                alert("Akun ini hanya dapat melihat nilai dan tidak dapat mengubah atau menyimpan nilai.");
+                return;
+            }
 
             if (!semesterSelect || !semesterSelect.value) {
                 alert("Silakan pilih semester terlebih dahulu.");
@@ -426,5 +552,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    showEmptyState("Pilih mata pelajaran untuk menampilkan data siswa.");
+    prepareAdminClassFilter();
+    showEmptyState(getFilterMessage());
 });
