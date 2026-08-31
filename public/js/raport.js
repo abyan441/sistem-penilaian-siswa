@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function getFilterData() {
         return {
-            siswa: studentSelect ? studentSelect.value : "",
-            semester: semesterSelect ? semesterSelect.value : "1",
-            tahunAjaran: academicYearSelect ? academicYearSelect.value : "",
+            siswa: studentSelect?.value || "",
+            semester: semesterSelect?.value || "1",
+            tahunAjaran: academicYearSelect?.value || "",
         };
     }
 
@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = getFilterData();
 
         if (!data.tahunAjaran) {
+            showMessage("Tahun ajaran belum tersedia. Silakan tambahkan data kelas terlebih dahulu.");
             return;
         }
 
@@ -35,7 +36,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         url.searchParams.set("tahun_ajaran", data.tahunAjaran);
         url.searchParams.set("semester", data.semester);
-        url.searchParams.delete("siswa");
+
+        if (data.siswa) {
+            url.searchParams.set("siswa", data.siswa);
+        } else {
+            url.searchParams.delete("siswa");
+        }
 
         window.location.href = url.toString();
     }
@@ -91,13 +97,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (searchInput && tableBody) {
         searchInput.addEventListener("input", function () {
             const keyword = searchInput.value.trim().toLowerCase();
-            const rows = tableBody.querySelectorAll(".raport-table-row");
+            const rows = tableBody.querySelectorAll(
+                ".raport-table-row:not(.raport-empty-row)",
+            );
 
             rows.forEach(function (row) {
                 const searchableText = (
-                    row.dataset.student ||
-                    row.textContent ||
-                    ""
+                    row.dataset.student || row.textContent || ""
                 ).toLowerCase();
 
                 row.style.display =
