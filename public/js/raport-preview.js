@@ -3,6 +3,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const downloadButton = document.getElementById("download-pdf-button");
     const reportPaper = document.getElementById("report-paper");
 
+    function showMessage(message, type = "error") {
+        if (typeof showAppToast === "function") {
+            showAppToast(message, type);
+            return;
+        }
+
+        window.alert(message);
+    }
+
+    function printReport() {
+        if (!reportPaper) {
+            showMessage("Tidak dapat menemukan data raport untuk dicetak.");
+            return;
+        }
+
+        window.print();
+    }
+
     if (backButton) {
         backButton.addEventListener("click", function () {
             if (window.history.length > 1) {
@@ -14,13 +32,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (downloadButton) {
-        downloadButton.addEventListener("click", function () {
-            if (!reportPaper) {
-                alert("Tidak dapat menemukan data raport untuk dicetak.");
-                return;
-            }
+        downloadButton.addEventListener("click", printReport);
+    }
 
-            window.print();
-        });
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get("print") === "1") {
+        setTimeout(printReport, 500);
     }
 });
