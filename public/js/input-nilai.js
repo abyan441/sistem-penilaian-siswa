@@ -31,7 +31,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function hideToast() {
         if (!toast) return;
         toast.classList.remove("is-visible");
-        window.setTimeout(() => { toast.hidden = true; }, 180);
+        window.setTimeout(() => {
+            toast.hidden = true;
+        }, 180);
     }
 
     function showToast() {
@@ -52,7 +54,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function finalScore(tugas, uts, uas) {
-        return Math.round((Number(tugas || 0) * 0.3 + Number(uts || 0) * 0.3 + Number(uas || 0) * 0.4) * 100) / 100;
+        return (
+            Math.round(
+                (Number(tugas || 0) * 0.3 +
+                    Number(uts || 0) * 0.3 +
+                    Number(uas || 0) * 0.4) *
+                    100,
+            ) / 100
+        );
     }
 
     function normalizeInput(input) {
@@ -78,7 +87,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (output) output.textContent = score.toFixed(2);
         if (badgeText) badgeText.textContent = predikat;
         if (badge) {
-            badge.classList.remove("predikat-a", "predikat-b", "predikat-c", "predikat-d");
+            badge.classList.remove(
+                "predikat-a",
+                "predikat-b",
+                "predikat-c",
+                "predikat-d",
+            );
             badge.classList.add("predikat-" + predikat.toLowerCase());
         }
     }
@@ -128,7 +142,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 input.step = "0.01";
                 input.inputMode = "decimal";
                 input.value = Number(student[`nilai_${type}`] ?? 0);
-                input.setAttribute("aria-label", `Nilai ${type.toUpperCase()} ${student.nama_siswa || ""}`);
+                input.setAttribute(
+                    "aria-label",
+                    `Nilai ${type.toUpperCase()} ${student.nama_siswa || ""}`,
+                );
                 if (readOnly) {
                     input.disabled = true;
                     input.readOnly = true;
@@ -152,7 +169,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 deleteButton.type = "button";
                 deleteButton.className = "nilai-delete-button";
                 deleteButton.dataset.nilaiId = student.nilai_id;
-                deleteButton.setAttribute("aria-label", `Hapus nilai ${student.nama_siswa || "siswa"}`);
+                deleteButton.setAttribute(
+                    "aria-label",
+                    `Hapus nilai ${student.nama_siswa || "siswa"}`,
+                );
                 deleteButton.textContent = "Hapus";
                 row.appendChild(deleteButton);
             } else if (isAdmin) {
@@ -168,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return Boolean(
             semesterSelect?.value &&
             mapelSelect?.value &&
-            (kelasSelect?.value || tahunSelect?.value)
+            (kelasSelect?.value || tahunSelect?.value),
         );
     }
 
@@ -194,16 +214,24 @@ document.addEventListener("DOMContentLoaded", function () {
         emptyState("Memuat data siswa...");
 
         try {
-            const response = await fetch(`${dataUrl}?${buildParams().toString()}`, {
-                headers: { Accept: "application/json" },
-            });
+            const response = await fetch(
+                `${dataUrl}?${buildParams().toString()}`,
+                {
+                    headers: { Accept: "application/json" },
+                },
+            );
             const result = await response.json();
             if (!response.ok || !result.success) {
-                throw new Error(result.message || "Gagal mengambil data nilai siswa.");
+                throw new Error(
+                    result.message || "Gagal mengambil data nilai siswa.",
+                );
             }
             renderStudents(result.data?.siswa || []);
         } catch (error) {
-            emptyState(error.message || "Terjadi kesalahan saat mengambil data nilai siswa.");
+            emptyState(
+                error.message ||
+                    "Terjadi kesalahan saat mengambil data nilai siswa.",
+            );
             console.error("Input Nilai - Load Data:", error);
         }
     }
@@ -225,7 +253,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const nilaiId = deleteButton.dataset.nilaiId;
         if (!nilaiId) return;
-        if (!window.confirm("Hapus nilai siswa ini? Data yang dihapus tidak dapat dikembalikan.")) return;
+        if (
+            !window.confirm(
+                "Hapus nilai siswa ini? Data yang dihapus tidak dapat dikembalikan.",
+            )
+        )
+            return;
 
         deleteButton.disabled = true;
         try {
@@ -241,10 +274,15 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!response.ok || !result.success) {
                 throw new Error(result.message || "Nilai gagal dihapus.");
             }
-            showMessage(result.message || "Nilai siswa berhasil dihapus.", "success");
+            showMessage(
+                result.message || "Nilai siswa berhasil dihapus.",
+                "success",
+            );
             await loadData();
         } catch (error) {
-            showMessage(error.message || "Terjadi kesalahan saat menghapus nilai.");
+            showMessage(
+                error.message || "Terjadi kesalahan saat menghapus nilai.",
+            );
         } finally {
             deleteButton.disabled = false;
         }
@@ -254,7 +292,9 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
 
         if (readOnly) {
-            showMessage("Akun ini hanya dapat melihat nilai dan tidak dapat menyimpan nilai.");
+            showMessage(
+                "Akun ini hanya dapat melihat nilai dan tidak dapat menyimpan nilai.",
+            );
             return;
         }
         if (!hasCompleteFilter()) {
@@ -271,9 +311,12 @@ document.addEventListener("DOMContentLoaded", function () {
         updateAllRows();
         const nilai = Array.from(rows).map((row) => ({
             siswa_id: Number(row.dataset.studentId),
-            nilai_tugas: Number(row.querySelector(".nilai-input-tugas")?.value) || 0,
-            nilai_uts: Number(row.querySelector(".nilai-input-uts")?.value) || 0,
-            nilai_uas: Number(row.querySelector(".nilai-input-uas")?.value) || 0,
+            nilai_tugas:
+                Number(row.querySelector(".nilai-input-tugas")?.value) || 0,
+            nilai_uts:
+                Number(row.querySelector(".nilai-input-uts")?.value) || 0,
+            nilai_uas:
+                Number(row.querySelector(".nilai-input-uas")?.value) || 0,
         }));
 
         if (saveButton) saveButton.disabled = true;
@@ -304,7 +347,9 @@ document.addEventListener("DOMContentLoaded", function () {
             showToast();
             await loadData();
         } catch (error) {
-            showMessage(error.message || "Terjadi kesalahan saat menyimpan nilai.");
+            showMessage(
+                error.message || "Terjadi kesalahan saat menyimpan nilai.",
+            );
             console.error("Input Nilai - Save Data:", error);
         } finally {
             if (saveButton) saveButton.disabled = false;
