@@ -194,6 +194,22 @@
 
     @stack('styles')
 
+    {{-- =====================================================
+       ROLE ACCESS OVERRIDE
+       Diletakkan setelah seluruh CSS halaman agar aturan role
+       tetap menang walaupun CSS halaman menentukan display:flex.
+       ===================================================== --}}
+    <style>
+        .dashboard.role-guru .k-button-tambah-siswa,
+        .dashboard.role-kepala_sekolah .k-button-tambah-siswa,
+        .dashboard.role-guest .k-button-tambah-siswa,
+        .dashboard.role-guru .kelas-edit-btn,
+        .dashboard.role-kepala_sekolah .kelas-edit-btn,
+        .dashboard.role-guest .kelas-edit-btn {
+            display: none !important;
+        }
+    </style>
+
 </head>
 
 <body>
