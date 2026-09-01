@@ -141,7 +141,14 @@ class Siswa extends Model
             ]);
         }
 
-        $duplicate = self::query()->where('nisn', $nisn);
+        $kelasId = (int) $kelasId;
+
+        // NISN boleh digunakan kembali pada tahun ajaran berikutnya,
+        // karena record siswa dibuat ulang untuk kelas/tahun ajaran baru.
+        // Yang tidak boleh adalah NISN yang sama pada kelas yang sama.
+        $duplicate = self::query()
+            ->where('nisn', $nisn)
+            ->where('kelas_id', $kelasId);
 
         if ($excludeId !== null) {
             $duplicate->where('id', '!=', $excludeId);
@@ -149,7 +156,7 @@ class Siswa extends Model
 
         if ($duplicate->exists()) {
             throw ValidationException::withMessages([
-                'nisn' => 'NISN sudah digunakan oleh siswa lain.',
+                'nisn' => 'NISN sudah digunakan pada kelas tersebut.',
             ]);
         }
 
@@ -157,7 +164,7 @@ class Siswa extends Model
             'nisn' => $nisn,
             'nama_siswa' => $namaSiswa,
             'jenis_kelamin' => $jenisKelamin,
-            'kelas_id' => (int) $kelasId,
+            'kelas_id' => $kelasId,
         ];
     }
 
