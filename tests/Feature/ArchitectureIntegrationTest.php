@@ -82,6 +82,7 @@ class ArchitectureIntegrationTest extends TestCase
             $table->id();
             $table->unsignedBigInteger('siswa_id')->nullable();
             $table->unsignedBigInteger('guru_mapel_id')->nullable();
+            $table->string('tahun_ajaran', 9)->nullable();
             $table->integer('semester')->nullable();
             $table->decimal('nilai_tugas', 5, 2)->nullable();
             $table->decimal('nilai_uts', 5, 2)->nullable();
@@ -500,5 +501,89 @@ class ArchitectureIntegrationTest extends TestCase
 
         $this->assertTrue(GuruMapel::hapus($guruMapel->id));
         $this->assertDatabaseMissing('guru_mapel', ['id' => $guruMapel->id]);
+    }
+
+    public function test_nama_kelas_yang_sama_boleh_dibuat_pada_tahun_ajaran_berbeda(): void
+    {
+        $guruPertama = User::query()->create([
+            'name' => 'Wali Pertama',
+            'username' => 'wali_pertama',
+            'password' => Hash::make('password123'),
+            'nama_lengkap' => 'Wali Pertama',
+            'email' => 'wali_pertama@test.com',
+            'role' => 'guru',
+            'status' => 'aktif',
+        ]);
+        $guruKedua = User::query()->create([
+            'name' => 'Wali Kedua',
+            'username' => 'wali_kedua',
+            'password' => Hash::make('password123'),
+            'nama_lengkap' => 'Wali Kedua',
+            'email' => 'wali_kedua@test.com',
+            'role' => 'guru',
+            'status' => 'aktif',
+        ]);
+
+        Kelas::tambahKelas([
+            'nama_kelas' => '7A',
+            'tahun_ajaran' => '2026/2027',
+            'wali_kelas_id' => $guruPertama->id,
+        ]);
+        $kelasBerikutnya = Kelas::tambahKelas([
+            'nama_kelas' => '7A',
+            'tahun_ajaran' => '2027/2028',
+            'wali_kelas_id' => $guruKedua->id,
+        ]);
+
+        $this->assertSame('7A', $kelasBerikutnya->nama_kelas);
+        $this->assertDatabaseCount('kelas', 2);
+    }
+
+    public function test_grafik_dashboard_memakai_snapshot_tahun_nilai(): void
+    {
+        $guru = User::query()->create([
+            'name' => 'Guru Grafik',
+            'username' => 'guru_grafik',
+            'password' => Hash::make('password123'),
+            'nama_lengkap' => 'Guru Grafik',
+            'email' => 'guru_grafik@test.com',
+            'role' => 'guru',
+            'status' => 'aktif',
+        ]);
+        $mapel = MataPelajaran::query()->create([
+            'kode_mapel' => 'MAT',
+            'nama_pelajaran' => 'Matematika',
+            'kkm' => 75,
+        ]);
+        $kelas = Kelas::query()->create([
+            'nama_kelas' => '7A',
+            'tahun_ajaran' => '2027/2028',
+            'wali_kelas_id' => $guru->id,
+        ]);
+        $siswa = Siswa::query()->create([
+            'nisn' => '111111111111111',
+            'nama_siswa' => 'Siswa Grafik',
+            'jenis_kelamin' => 'L',
+            'kelas_id' => $kelas->id,
+        ]);
+        $guruMapel = GuruMapel::query()->create([
+            'guru_id' => $guru->id,
+            'mapel_id' => $mapel->id,
+        ]);
+        Nilai::query()->create([
+            'siswa_id' => $siswa->id,
+            'guru_mapel_id' => $guruMapel->id,
+            'tahun_ajaran' => '2026/2027',
+            'semester' => 1,
+            'nilai_tugas' => 80,
+            'nilai_uts' => 80,
+            'nilai_uas' => 80,
+            'nilai_akhir' => 80,
+        ]);
+
+        $grafik = Nilai::perkembanganDashboard();
+
+        $this->assertSame(['2026/2027'], $grafik['labels']);
+        $this->assertSame([80.0], $grafik['values']);
     }
 }

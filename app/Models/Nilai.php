@@ -17,6 +17,7 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
     protected $fillable = [
         'siswa_id',
         'guru_mapel_id',
+        'tahun_ajaran',
         'semester',
         'nilai_tugas',
         'nilai_uts',
@@ -29,6 +30,7 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         return [
             'siswa_id' => 'integer',
             'guru_mapel_id' => 'integer',
+            'tahun_ajaran' => 'string',
             'semester' => 'integer',
             'nilai_tugas' => 'decimal:2',
             'nilai_uts' => 'decimal:2',
@@ -75,7 +77,7 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         }
     }
 
-    public static function untukRaport(int $siswaId, int $semester): Collection
+    public static function untukRaport(int $siswaId, int $semester, ?string $tahunAjaran = null): Collection
     {
         self::pastikanSemester($semester);
 
@@ -83,6 +85,7 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
             ->with(['guruMapel.mataPelajaran'])
             ->where('siswa_id', $siswaId)
             ->where('semester', $semester)
+            ->when($tahunAjaran, fn ($query) => $query->where('tahun_ajaran', $tahunAjaran))
             ->get()
             ->sortBy(fn ($item) => mb_strtolower($item->guruMapel?->mataPelajaran?->nama_pelajaran ?? ''))
             ->values();
@@ -114,9 +117,9 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         };
     }
 
-    public static function dataRaportSiswa(int $siswaId, int $semester): Collection
+    public static function dataRaportSiswa(int $siswaId, int $semester, ?string $tahunAjaran = null): Collection
     {
-        return self::untukRaport($siswaId, $semester)->map(function ($item) {
+        return self::untukRaport($siswaId, $semester, $tahunAjaran)->map(function ($item) {
             $item->predikat = self::predikat($item->nilai_akhir);
             $item->deskripsi_predikat = self::deskripsiPredikat($item->nilai_akhir);
             return $item;
@@ -283,6 +286,7 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         $nilai = static::query()
             ->where('guru_mapel_id', $guruMapel->id)
             ->where('semester', $semester)
+            ->when($tahunAjaran, fn ($query) => $query->where('tahun_ajaran', $tahunAjaran))
             ->whereIn('siswa_id', $siswa->pluck('id'))
             ->get()
             ->keyBy('siswa_id');
@@ -321,6 +325,7 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         $guruMapelIds = GuruMapel::query()->where('mapel_id', $mapelId)->pluck('id');
         $nilai = static::query()
             ->where('semester', $semester)
+            ->when($tahunAjaran, fn ($query) => $query->where('tahun_ajaran', $tahunAjaran))
             ->whereIn('guru_mapel_id', $guruMapelIds)
             ->whereIn('siswa_id', $siswa->pluck('id'))
             ->orderBy('id')
@@ -357,6 +362,15 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
 
         DB::transaction(function () use ($dataNilai, $guruMapel, $semester) {
             foreach ($dataNilai as $data) {
+                $tahunAjaran = Siswa::query()
+                    ->with('kelas:id,tahun_ajaran')
+                    ->findOrFail($data['siswa_id'])
+                    ->kelas?->tahun_ajaran;
+
+                if (!$tahunAjaran) {
+                    throw new InvalidArgumentException('Tahun ajaran siswa tidak ditemukan.');
+                }
+
                 $tugas = static::validasiNilai($data['nilai_tugas'], 'Nilai tugas');
                 $uts = static::validasiNilai($data['nilai_uts'], 'Nilai UTS');
                 $uas = static::validasiNilai($data['nilai_uas'], 'Nilai UAS');
@@ -365,6 +379,7 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
                     [
                         'siswa_id' => $data['siswa_id'],
                         'guru_mapel_id' => $guruMapel->id,
+                        'tahun_ajaran' => $tahunAjaran,
                         'semester' => $semester,
                     ],
                     [
@@ -391,9 +406,9 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
             ->join('siswa', 'siswa.id', '=', 'nilai.siswa_id')
             ->join('kelas', 'kelas.id', '=', 'siswa.kelas_id')
             ->whereNotNull('nilai.nilai_akhir')
-            ->select('kelas.tahun_ajaran', DB::raw('AVG(nilai.nilai_akhir) as rata_rata'))
-            ->groupBy('kelas.tahun_ajaran')
-            ->orderBy('kelas.tahun_ajaran')
+            ->select('nilai.tahun_ajaran', DB::raw('AVG(nilai.nilai_akhir) as rata_rata'))
+            ->groupBy('nilai.tahun_ajaran')
+            ->orderBy('nilai.tahun_ajaran')
             ->get();
 
         return [

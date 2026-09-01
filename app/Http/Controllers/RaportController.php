@@ -156,7 +156,7 @@ class RaportController extends ApiController
 
         $siswa = $query->firstOrFail();
 
-        $nilai = Nilai::dataRaportSiswa($siswa->id, $semester);
+        $nilai = Nilai::dataRaportSiswa($siswa->id, $semester, $tahunAjaran);
         $kepalaSekolah = User::kepalaSekolahAktif();
         $kelas = $siswa->kelas ?? throw new HttpException(500, 'Data kelas siswa tidak ditemukan.');
 

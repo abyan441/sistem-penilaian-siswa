@@ -168,25 +168,27 @@ class Kelas extends Model
         }
 
         $queryNama = static::query()
-            ->whereRaw('UPPER(nama_kelas) = ?', [$namaKelas]);
+            ->whereRaw('UPPER(nama_kelas) = ?', [$namaKelas])
+            ->where('tahun_ajaran', $tahunAjaran);
 
         if ($id !== null) {
             $queryNama->where('id', '!=', $id);
         }
 
         if ($queryNama->exists()) {
-            throw new InvalidArgumentException('Nama kelas sudah digunakan.');
+            throw new InvalidArgumentException('Nama kelas sudah digunakan pada tahun ajaran tersebut.');
         }
 
         $queryWali = static::query()
-            ->where('wali_kelas_id', $waliKelasId);
+            ->where('wali_kelas_id', $waliKelasId)
+            ->where('tahun_ajaran', $tahunAjaran);
 
         if ($id !== null) {
             $queryWali->where('id', '!=', $id);
         }
 
         if ($queryWali->exists()) {
-            throw new InvalidArgumentException('Guru tersebut sudah menjadi wali kelas lain.');
+            throw new InvalidArgumentException('Guru tersebut sudah menjadi wali kelas lain pada tahun ajaran tersebut.');
         }
 
         return [
