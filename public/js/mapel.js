@@ -679,9 +679,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     "success",
                 );
             } catch (error) {
-                showAppToast(
-                    error.message || "Gagal menghapus mata pelajaran.",
-                );
+                /*
+                 * Tutup modal konfirmasi terlebih dahulu agar notifikasi
+                 * tidak tertutup/terkena efek blur dari backdrop modal.
+                 */
+                closeDeleteModal();
+
+                setTimeout(function () {
+                    showAppToast(
+                        error.message || "Gagal menghapus mata pelajaran.",
+                    );
+                }, 50);
             }
         });
     }
