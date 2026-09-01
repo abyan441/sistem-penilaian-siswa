@@ -1894,3 +1894,120 @@ body.kelas-modal-open {
     filter: none !important;
     opacity: 1 !important;
 }
+
+
+/* =========================================================
+   FILTER TAHUN AJARAN
+========================================================= */
+#data-kelas > .k-div .kelas-header-actions {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-left: auto;
+}
+
+.kelas-filter-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 210px;
+}
+
+.kelas-filter-label {
+    font-family: var(--paragraph-p12-regular-font-family);
+    font-size: var(--paragraph-p12-regular-font-size);
+    font-weight: var(--paragraph-p12-regular-font-weight);
+    color: var(--primarypr-50);
+    line-height: 1;
+}
+
+.kelas-filter-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border: 1px solid var(--secondarysc-50);
+    border-radius: 9px;
+    background: var(--primarypr-00);
+    box-sizing: border-box;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.kelas-filter-control:focus-within {
+    border-color: var(--secondarysec-80);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, .12);
+}
+
+.kelas-filter-icon {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    margin-left: 12px;
+    color: var(--secondarysec-80);
+}
+
+.kelas-filter-control select {
+    width: 100%;
+    height: 100%;
+    padding: 0 34px 0 9px;
+    border: 0;
+    outline: 0;
+    appearance: none;
+    background: transparent;
+    color: var(--primarypr-50);
+    font-family: var(--paragraph-p16-regular-font-family);
+    font-size: var(--paragraph-p16-regular-font-size);
+    cursor: pointer;
+}
+
+.kelas-filter-control::after {
+    content: "";
+    position: absolute;
+    right: 13px;
+    width: 7px;
+    height: 7px;
+    border-right: 1.8px solid var(--primarypr-50);
+    border-bottom: 1.8px solid var(--primarypr-50);
+    transform: rotate(45deg) translateY(-2px);
+    pointer-events: none;
+}
+
+.kelas-filter-empty {
+    width: 100%;
+    margin-top: 22px;
+    padding: 34px 20px;
+    border: 1px dashed var(--secondarysc-50);
+    border-radius: 12px;
+    text-align: center;
+    color: var(--primarypr-50);
+    background: var(--primarypr-00);
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    #data-kelas > .k-div .kelas-header-actions {
+        width: 100%;
+        margin-left: 0;
+        align-items: stretch;
+    }
+
+    .kelas-filter-wrap {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .kelas-header-actions .k-button-tambah-siswa {
+        flex: 1 1 auto !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #data-kelas > .k-div .kelas-header-actions {
+        flex-direction: column;
+    }
+
+    .kelas-header-actions .k-button-tambah-siswa {
+        width: 100% !important;
+    }
+}
