@@ -2,26 +2,31 @@ document.addEventListener("DOMContentLoaded", () => {
     "use strict";
 
     const dataKelas = document.getElementById("data-kelas");
-    const header = dataKelas?.querySelector(":scope > .k-div");
-    const titleBlock = header?.querySelector(":scope > .k-div-2");
+    if (!dataKelas) return;
 
-    if (!dataKelas || !header || !titleBlock) return;
+    const header = dataKelas.querySelector(".k-div");
+    if (!header) return;
+
+    if (document.getElementById("kelas-tahun-filter")) return;
 
     const filter = document.createElement("div");
     filter.className = "kelas-filter";
     filter.innerHTML = `
-        <label class="kelas-filter-label" for="kelas-tahun-filter">
-            Tahun Ajaran
-        </label>
+        <label class="kelas-filter-label" for="kelas-tahun-filter">Tahun Ajaran</label>
         <select class="kelas-filter-select" id="kelas-tahun-filter" aria-label="Filter tahun ajaran">
             <option value="">Semua Tahun Ajaran</option>
         </select>
     `;
 
-    const addButton = header.querySelector(":scope > #kelas-add-button");
-    header.insertBefore(filter, addButton || null);
+    const addButton = header.querySelector("#kelas-add-button");
+    if (addButton) {
+        header.insertBefore(filter, addButton);
+    } else {
+        header.appendChild(filter);
+    }
 
-    const select = filter.querySelector("#kelas-tahun-filter");
+    const select = document.getElementById("kelas-tahun-filter");
+    if (!select) return;
 
     const emptyState = document.createElement("div");
     emptyState.className = "kelas-filter-empty";
@@ -42,12 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function refreshOptions() {
-        if (!select) return;
-
-        const selected = select.value;
+        const current = select.value;
         const years = getYears();
 
-        select.innerHTML = '<option value="">Semua Tahun Ajaran</option>';
+        select.innerHTML = "<option value=\"\">Semua Tahun Ajaran</option>";
 
         years.forEach(year => {
             const option = document.createElement("option");
@@ -56,10 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
             select.appendChild(option);
         });
 
-        if (selected && years.includes(selected)) {
-            select.value = selected;
-        } else if (!selected && years.length > 0) {
-            // Tampilkan tahun ajaran terbaru secara default agar halaman tidak menumpuk.
+        if (current && years.includes(current)) {
+            select.value = current;
+        } else if (years.length > 0) {
             select.value = years[0];
         } else {
             select.value = "";
@@ -67,26 +69,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateSummary(visibleCards) {
-        const summaryValues = dataKelas.querySelectorAll(
-            ".k-div-3 .k-div-4 .k-text-wrapper-4"
-        );
-
+        const values = dataKelas.querySelectorAll(".k-div-3 .k-div-4 .k-text-wrapper-4");
         const totalKelas = visibleCards.length;
         const totalSiswa = visibleCards.reduce(
             (total, card) => total + Number(card.dataset.siswa || 0),
             0
         );
-        const rataRata = totalKelas > 0
-            ? Math.round(totalSiswa / totalKelas)
-            : 0;
+        const rataRata = totalKelas > 0 ? Math.round(totalSiswa / totalKelas) : 0;
 
-        if (summaryValues[0]) summaryValues[0].textContent = totalKelas;
-        if (summaryValues[1]) summaryValues[1].textContent = totalSiswa;
-        if (summaryValues[2]) summaryValues[2].textContent = rataRata;
+        if (values[0]) values[0].textContent = totalKelas;
+        if (values[1]) values[1].textContent = totalSiswa;
+        if (values[2]) values[2].textContent = rataRata;
     }
 
     function applyFilter() {
-        const selectedYear = String(select?.value || "").trim();
+        const selectedYear = select.value.trim();
         const cards = getCards();
         const visibleCards = [];
 
@@ -96,33 +93,31 @@ document.addEventListener("DOMContentLoaded", () => {
             if (visible) visibleCards.push(card);
         });
 
-        dataKelas.querySelectorAll(":scope > .k-div-6").forEach(section => {
+        dataKelas.querySelectorAll(".k-div-6").forEach(section => {
             const hasVisibleCard = section.querySelector("[data-kelas-id]:not([hidden])");
             section.hidden = !hasVisibleCard;
         });
 
         updateSummary(visibleCards);
-        emptyState.hidden = visibleCards.length > 0;
+        emptyState.hidden = visibleCards.length !== 0;
     }
 
-    select?.addEventListener("change", applyFilter);
+    select.addEventListener("change", applyFilter);
 
     refreshOptions();
     applyFilter();
 
-    // Menyesuaikan filter saat kelas ditambah atau diedit melalui kelas.js.
+    // Hanya memantau penambahan/penghapusan kartu atau perubahan data kelas.
+    // Tidak memantau perubahan teks sehingga tidak membuat loop/performa lambat.
     const observer = new MutationObserver(() => {
-        const current = select?.value || "";
         refreshOptions();
-        if (current && select?.value !== current) {
-            select.value = current;
-        }
         applyFilter();
     });
 
     observer.observe(dataKelas, {
         childList: true,
         subtree: true,
-        characterData: true,
+        attributes: true,
+        attributeFilter: ["data-kelas-id", "data-kelas-name", "data-tahun", "data-siswa", "data-wali-id", "data-wali"]
     });
 });
