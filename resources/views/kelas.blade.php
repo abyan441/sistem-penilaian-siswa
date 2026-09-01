@@ -473,6 +473,9 @@
 
 @endforelse
 
+    <div class="kelas-filter-empty" hidden>
+        Tidak ada data kelas untuk tahun ajaran yang dipilih.
+    </div>
 
 </main>
 
