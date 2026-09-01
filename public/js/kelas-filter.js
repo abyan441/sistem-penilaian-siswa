@@ -2,11 +2,69 @@ document.addEventListener("DOMContentLoaded", () => {
     "use strict";
 
     const dataKelas = document.getElementById("data-kelas");
-    const select = document.getElementById("kelas-tahun-filter");
+    if (!dataKelas) return;
 
-    if (!dataKelas || !select) return;
+    const header = dataKelas.querySelector(".k-div");
+    if (!header) return;
 
-    const cards = () => Array.from(dataKelas.querySelectorAll("[data-kelas-id]"));
+    let select = document.getElementById("kelas-tahun-filter");
+
+    if (!select) {
+        const filter = document.createElement("div");
+        filter.className = "kelas-filter";
+        filter.innerHTML = `
+            <label class="kelas-filter-label" for="kelas-tahun-filter">Tahun Ajaran</label>
+            <select class="kelas-filter-select" id="kelas-tahun-filter" aria-label="Filter tahun ajaran">
+                <option value="">Semua Tahun Ajaran</option>
+            </select>
+        `;
+
+        const addButton = header.querySelector("#kelas-add-button");
+        if (addButton) {
+            header.insertBefore(filter, addButton);
+        } else {
+            header.appendChild(filter);
+        }
+
+        select = filter.querySelector("#kelas-tahun-filter");
+    }
+
+    if (!select) return;
+
+    const emptyState = document.createElement("div");
+    emptyState.className = "kelas-filter-empty";
+    emptyState.id = "kelas-filter-empty";
+    emptyState.hidden = true;
+    emptyState.textContent = "Tidak ada kelas pada tahun ajaran yang dipilih.";
+    dataKelas.appendChild(emptyState);
+
+    function getCards() {
+        return Array.from(dataKelas.querySelectorAll("[data-kelas-id]"));
+    }
+
+    function loadYears() {
+        const years = [...new Set(
+            getCards()
+                .map(card => String(card.dataset.tahun || "").trim())
+                .filter(Boolean)
+        )].sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+
+        const current = select.value;
+        select.innerHTML = "<option value=\"\">Semua Tahun Ajaran</option>";
+
+        years.forEach(year => {
+            const option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            select.appendChild(option);
+        });
+
+        if (current && years.includes(current)) {
+            select.value = current;
+        } else if (years.length) {
+            select.value = years[0];
+        }
+    }
 
     function updateSummary(visibleCards) {
         const values = dataKelas.querySelectorAll(
@@ -25,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function applyFilter() {
         const selectedYear = select.value.trim();
-        const allCards = cards();
+        const allCards = getCards();
         const visibleCards = [];
 
         allCards.forEach(card => {
@@ -33,7 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 !selectedYear || String(card.dataset.tahun || "").trim() === selectedYear;
 
             card.hidden = !visible;
-
             if (visible) visibleCards.push(card);
         });
 
@@ -45,13 +102,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         updateSummary(visibleCards);
-
-        const emptyState = document.getElementById("kelas-filter-empty");
-        if (emptyState) {
-            emptyState.hidden = visibleCards.length !== 0;
-        }
+        emptyState.hidden = visibleCards.length !== 0;
     }
 
     select.addEventListener("change", applyFilter);
+    loadYears();
     applyFilter();
 });
