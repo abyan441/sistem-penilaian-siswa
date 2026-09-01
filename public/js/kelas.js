@@ -33,6 +33,32 @@ document.addEventListener("DOMContentLoaded", () => {
     let editingCard = null;
     let pendingDeleteCard = null;
 
+    function removeDuplicateYearFilters() {
+        const allYearFilters = Array.from(document.querySelectorAll("select")).filter(select =>
+            Array.from(select.options).some(option =>
+                String(option.textContent || "").trim() === "Semua Tahun Ajaran"
+            )
+        );
+
+        if (allYearFilters.length <= 1) return;
+
+        const primaryFilter = document.getElementById("kelas-year-filter") || allYearFilters[0];
+
+        allYearFilters.forEach(select => {
+            if (select === primaryFilter) return;
+
+            const wrapper =
+                select.closest(".kelas-filter-wrap") ||
+                select.closest(".kelas-select-wrap") ||
+                select.parentElement;
+
+            if (wrapper && wrapper !== document.body) wrapper.remove();
+            else select.remove();
+        });
+    }
+
+
+
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content") || "";
 
     function showMessage(message, type = "error") {
@@ -643,6 +669,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    removeDuplicateYearFilters();
     updateSummary();
     syncYearFilter();
     setWaliOptions();
