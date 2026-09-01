@@ -378,6 +378,13 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         });
     }
 
+    public static function hapus(int $id): bool
+    {
+        $nilai = static::query()->findOrFail($id);
+
+        return (bool) $nilai->delete();
+    }
+
     public static function perkembanganDashboard(): array
     {
         $data = static::query()

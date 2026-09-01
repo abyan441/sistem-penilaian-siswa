@@ -70,6 +70,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/input-nilai', [NilaiController::class, 'store'])->name('input-nilai.store');
     });
 
+    Route::middleware(['role:admin'])->group(function () {
+        Route::delete('/input-nilai/{id}', [NilaiController::class, 'destroy'])->name('input-nilai.destroy');
+    });
+
     /* RAPORT */
     Route::middleware(['role:admin,guru,kepala_sekolah'])->group(function () {
         Route::get('/raport', [RaportController::class, 'index'])->name('raport');

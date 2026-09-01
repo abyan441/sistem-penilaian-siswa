@@ -139,6 +139,20 @@ class NilaiController extends ApiController
         }
     }
 
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            Nilai::hapus($id);
+
+            return $this->successResponse(null, 'Nilai siswa berhasil dihapus.');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
+            return $this->notFoundResponse('Data nilai');
+        } catch (\Throwable $exception) {
+            report($exception);
+            return $this->errorResponse('Terjadi kesalahan saat menghapus nilai.', 500);
+        }
+    }
+
     private function validationMessages(): array
     {
         return [

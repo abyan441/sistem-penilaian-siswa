@@ -396,4 +396,109 @@ class ArchitectureIntegrationTest extends TestCase
             'status' => 'aktif',
         ]);
     }
+
+    public function test_penugasan_guru_yang_sudah_memiliki_nilai_tidak_bisa_dihapus(): void
+    {
+        $admin = User::query()->create([
+            'name' => 'Admin',
+            'username' => 'admin_hapus',
+            'password' => Hash::make('password123'),
+            'nama_lengkap' => 'Admin',
+            'email' => 'admin_hapus@test.com',
+            'role' => 'admin',
+            'status' => 'aktif',
+        ]);
+        $guru = User::query()->create([
+            'name' => 'Guru Nilai',
+            'username' => 'guru_nilai',
+            'password' => Hash::make('password123'),
+            'nama_lengkap' => 'Guru Nilai',
+            'email' => 'guru_nilai@test.com',
+            'role' => 'guru',
+            'status' => 'aktif',
+        ]);
+        $mapel = MataPelajaran::query()->create([
+            'kode_mapel' => 'MAT',
+            'nama_pelajaran' => 'Matematika',
+            'kkm' => 75,
+        ]);
+        $siswa = Siswa::query()->create([
+            'nisn' => '123456789012345',
+            'nama_siswa' => 'Siswa Nilai',
+            'jenis_kelamin' => 'L',
+        ]);
+        $guruMapel = GuruMapel::query()->create([
+            'guru_id' => $guru->id,
+            'mapel_id' => $mapel->id,
+        ]);
+        $nilai = Nilai::query()->create([
+            'siswa_id' => $siswa->id,
+            'guru_mapel_id' => $guruMapel->id,
+            'semester' => 1,
+            'nilai_tugas' => 80,
+            'nilai_uts' => 80,
+            'nilai_uas' => 80,
+            'nilai_akhir' => 80,
+        ]);
+
+        $response = $this->actingAs($admin)->delete(route('guru.destroy', $guruMapel->id));
+
+        $response->assertStatus(422)
+            ->assertJsonPath('success', false)
+            ->assertJsonPath('message', 'Penugasan guru mata pelajaran tidak dapat dihapus karena sudah memiliki data nilai.');
+        $this->assertDatabaseHas('guru_mapel', ['id' => $guruMapel->id]);
+
+        $deleteGradeResponse = $this->actingAs($admin)->delete(route('input-nilai.destroy', $nilai->id));
+
+        $deleteGradeResponse->assertOk()
+            ->assertJsonPath('success', true);
+        $this->assertDatabaseMissing('nilai', ['id' => $nilai->id]);
+
+        $deleteAssignmentResponse = $this->actingAs($admin)->delete(route('guru.destroy', $guruMapel->id));
+
+        $deleteAssignmentResponse->assertOk()
+            ->assertJsonPath('success', true);
+        $this->assertDatabaseMissing('guru_mapel', ['id' => $guruMapel->id]);
+    }
+
+    public function test_penugasan_guru_bisa_dihapus_setelah_nilai_dihapus(): void
+    {
+        $guru = User::query()->create([
+            'name' => 'Guru Hapus',
+            'username' => 'guru_hapus',
+            'password' => Hash::make('password123'),
+            'nama_lengkap' => 'Guru Hapus',
+            'email' => 'guru_hapus@test.com',
+            'role' => 'guru',
+            'status' => 'aktif',
+        ]);
+        $mapel = MataPelajaran::query()->create([
+            'kode_mapel' => 'IPA',
+            'nama_pelajaran' => 'Ilmu Pengetahuan Alam',
+            'kkm' => 75,
+        ]);
+        $siswa = Siswa::query()->create([
+            'nisn' => '543210987654321',
+            'nama_siswa' => 'Siswa Hapus',
+            'jenis_kelamin' => 'P',
+        ]);
+        $guruMapel = GuruMapel::query()->create([
+            'guru_id' => $guru->id,
+            'mapel_id' => $mapel->id,
+        ]);
+        $nilai = Nilai::query()->create([
+            'siswa_id' => $siswa->id,
+            'guru_mapel_id' => $guruMapel->id,
+            'semester' => 1,
+            'nilai_tugas' => 80,
+            'nilai_uts' => 80,
+            'nilai_uas' => 80,
+            'nilai_akhir' => 80,
+        ]);
+
+        $nilai->delete();
+
+        $this->assertTrue(GuruMapel::hapus($guruMapel->id));
+        $this->assertDatabaseMissing('guru_mapel', ['id' => $guruMapel->id]);
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GuruMapel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class GuruController extends ApiController
 {
@@ -42,6 +43,8 @@ class GuruController extends ApiController
                 null,
                 'Data guru berhasil dihapus.'
             );
+        } catch (ValidationException $exception) {
+            return $this->errorResponse($exception->getMessage());
         } catch (\RuntimeException $exception) {
             return $this->errorResponse($exception->getMessage());
         }

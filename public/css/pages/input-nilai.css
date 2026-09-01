@@ -476,6 +476,18 @@
     min-width: 900px;
 }
 
+.nilai-table-admin .nilai-table-header,
+.nilai-table-admin .nilai-table-body {
+    grid-template-columns:
+        0.65fr
+        1.55fr
+        repeat(3, 1fr)
+        1fr
+        0.8fr
+        0.9fr;
+    min-width: 1010px;
+}
+
 /* =========================================================
    TABLE HEADER
    ========================================================= */
@@ -626,6 +638,30 @@
     font-size: 15px;
     font-weight: 600;
     line-height: 1;
+}
+
+.nilai-delete-button {
+    justify-self: center;
+    min-width: 64px;
+    min-height: 34px;
+    padding: 6px 10px;
+    border: 1px solid #dc3545;
+    border-radius: 7px;
+    background: transparent;
+    color: #dc3545;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+}
+
+.nilai-delete-button:hover {
+    background: #dc3545;
+    color: var(--primarypr-00);
+}
+
+.nilai-delete-button:disabled {
+    cursor: wait;
+    opacity: 0.6;
 }
 
 /* A */

@@ -14,8 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const config = window.inputNilaiConfig || {};
     const dataUrl = config.dataUrl || "/input-nilai/data";
     const storeUrl = config.storeUrl || "/input-nilai";
+    const deleteUrl = config.deleteUrl || "/input-nilai";
     const csrfToken = config.csrfToken || "";
     const readOnly = Boolean(config.readOnly);
+    const isAdmin = Boolean(config.isAdmin);
     let toastTimeout;
 
     function showMessage(message, type = "error") {
@@ -145,6 +147,18 @@ document.addEventListener("DOMContentLoaded", function () {
             badge.appendChild(badgeText);
             row.appendChild(badge);
 
+            if (isAdmin && student.nilai_id) {
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.className = "nilai-delete-button";
+                deleteButton.dataset.nilaiId = student.nilai_id;
+                deleteButton.setAttribute("aria-label", `Hapus nilai ${student.nama_siswa || "siswa"}`);
+                deleteButton.textContent = "Hapus";
+                row.appendChild(deleteButton);
+            } else if (isAdmin) {
+                row.appendChild(document.createElement("span"));
+            }
+
             tableBody.appendChild(row);
             updateRow(row);
         });
@@ -202,6 +216,37 @@ document.addEventListener("DOMContentLoaded", function () {
     tableBody?.addEventListener("input", (event) => {
         if (!readOnly && event.target.classList.contains("nilai-input")) {
             updateRow(event.target.closest(".nilai-row"));
+        }
+    });
+
+    tableBody?.addEventListener("click", async (event) => {
+        const deleteButton = event.target.closest(".nilai-delete-button");
+        if (!deleteButton || !isAdmin) return;
+
+        const nilaiId = deleteButton.dataset.nilaiId;
+        if (!nilaiId) return;
+        if (!window.confirm("Hapus nilai siswa ini? Data yang dihapus tidak dapat dikembalikan.")) return;
+
+        deleteButton.disabled = true;
+        try {
+            const response = await fetch(`${deleteUrl}/${nilaiId}`, {
+                method: "DELETE",
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": csrfToken,
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Nilai gagal dihapus.");
+            }
+            showMessage(result.message || "Nilai siswa berhasil dihapus.", "success");
+            await loadData();
+        } catch (error) {
+            showMessage(error.message || "Terjadi kesalahan saat menghapus nilai.");
+        } finally {
+            deleteButton.disabled = false;
         }
     });
 

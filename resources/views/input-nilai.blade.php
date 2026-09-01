@@ -103,7 +103,7 @@
         </div>
     </section>
 
-    <section class="nilai-table-wrapper" aria-label="Daftar nilai siswa">
+    <section class="nilai-table-wrapper{{ !empty($isAdmin) ? ' nilai-table-admin' : '' }}" aria-label="Daftar nilai siswa">
         <div class="nilai-table-header" role="row">
             <span role="columnheader">No</span>
             <span role="columnheader">Nama Siswa</span>
@@ -112,6 +112,9 @@
             <span role="columnheader">UAS (40%)</span>
             <span role="columnheader">Nilai Akhir</span>
             <span role="columnheader">Predikat</span>
+            @if (!empty($isAdmin))
+                <span role="columnheader">Aksi</span>
+            @endif
         </div>
 
         <div class="nilai-table-body" id="nilai-table-body" aria-label="Nilai siswa" role="grid">
@@ -130,6 +133,7 @@
     window.inputNilaiConfig = {
         dataUrl: @json(route('input-nilai.data')),
         storeUrl: @json(route('input-nilai.store')),
+        deleteUrl: @json(url('/input-nilai')),
         csrfToken: @json(csrf_token()),
         readOnly: @json((bool) ($readOnly ?? false)),
         isAdmin: @json((bool) ($isAdmin ?? false)),
