@@ -55,8 +55,8 @@
                     <span class="nilai-filter-label">Kelas</span>
                     <select class="dropdown-items" name="kelas_id" id="kelas-select">
                         <option value="">Semua Kelas</option>
-                        @foreach ($kelasOptions->unique('nama_kelas')->values() as $item)
-                            <option value="{{ $item->id }}" data-tahun="{{ $item->tahun_ajaran }}">
+                        @foreach ($kelasOptions as $item)
+                            <option value="{{ $item->id }}" data-tahun="{{ $item->tahun_ajaran }}" data-nama-kelas="{{ $item->nama_kelas }}">
                                 Kelas {{ $item->nama_kelas }}
                             </option>
                         @endforeach
@@ -141,50 +141,51 @@
 </script>
 <script src="{{ asset('js/input-nilai.js') }}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const kelasSelect = document.getElementById('kelas-select');
-        const tahunSelect = document.getElementById('tahun-ajaran-select');
-        if (!kelasSelect || !tahunSelect) return;
+document.addEventListener('DOMContentLoaded', function () {
+    const kelasSelect = document.getElementById('kelas-select');
+    const tahunSelect = document.getElementById('tahun-ajaran-select');
+    if (!kelasSelect || !tahunSelect) return;
 
-        const options = Array.from(kelasSelect.options)
-            .filter(option => option.value !== '')
-            .map(option => ({
-                value: option.value,
-                text: option.textContent.trim(),
-                tahun: option.dataset.tahun || ''
-            }));
+    const options = Array.from(kelasSelect.options)
+        .filter(option => option.value !== '')
+        .map(option => ({
+            value: option.value,
+            text: option.textContent.trim(),
+            nama: option.dataset.namaKelas || option.textContent.replace(/^Kelas\s+/i, '').trim(),
+            tahun: option.dataset.tahun || ''
+        }));
 
-        function rebuildKelas() {
-            const tahun = tahunSelect.value;
-            const currentValue = kelasSelect.value;
-            const filtered = tahun
-                ? options.filter(option => option.tahun === tahun)
-                : options;
+    function rebuildKelas() {
+        const tahun = tahunSelect.value;
+        const currentValue = kelasSelect.value;
+        const filtered = tahun
+            ? options.filter(option => option.tahun === tahun)
+            : options;
 
-            kelasSelect.innerHTML = '<option value="">Semua Kelas</option>';
+        kelasSelect.innerHTML = '<option value="">Semua Kelas</option>';
 
-            const seen = new Set();
-            filtered.forEach(option => {
-                const key = option.text.replace(/^Kelas\s+/i, '').trim();
-                if (seen.has(key)) return;
-                seen.add(key);
+        const seen = new Set();
+        filtered.forEach(option => {
+            if (seen.has(option.nama)) return;
+            seen.add(option.nama);
 
-                const element = document.createElement('option');
-                element.value = option.value;
-                element.textContent = option.text;
-                element.dataset.tahun = option.tahun;
-                kelasSelect.appendChild(element);
-            });
+            const element = document.createElement('option');
+            element.value = option.value;
+            element.textContent = `Kelas ${option.nama}`;
+            element.dataset.tahun = option.tahun;
+            element.dataset.namaKelas = option.nama;
+            kelasSelect.appendChild(element);
+        });
 
-            if (filtered.some(option => option.value === currentValue)) {
-                kelasSelect.value = currentValue;
-            } else {
-                kelasSelect.value = '';
-            }
+        if (filtered.some(option => option.value === currentValue)) {
+            kelasSelect.value = currentValue;
+        } else {
+            kelasSelect.value = '';
         }
+    }
 
-        tahunSelect.addEventListener('change', rebuildKelas);
-        rebuildKelas();
-    });
+    tahunSelect.addEventListener('change', rebuildKelas);
+    rebuildKelas();
+});
 </script>
 @endpush
