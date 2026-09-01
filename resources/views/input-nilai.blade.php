@@ -55,8 +55,8 @@
                     <span class="nilai-filter-label">Kelas</span>
                     <select class="dropdown-items" name="kelas_id" id="kelas-select">
                         <option value="">Semua Kelas</option>
-                        @foreach ($kelasOptions as $item)
-                            <option value="{{ $item->id }}">
+                        @foreach ($kelasOptions->unique('nama_kelas')->values() as $item)
+                            <option value="{{ $item->id }}" data-tahun="{{ $item->tahun_ajaran }}">
                                 Kelas {{ $item->nama_kelas }}
                             </option>
                         @endforeach
@@ -140,4 +140,51 @@
     };
 </script>
 <script src="{{ asset('js/input-nilai.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const kelasSelect = document.getElementById('kelas-select');
+        const tahunSelect = document.getElementById('tahun-ajaran-select');
+        if (!kelasSelect || !tahunSelect) return;
+
+        const options = Array.from(kelasSelect.options)
+            .filter(option => option.value !== '')
+            .map(option => ({
+                value: option.value,
+                text: option.textContent.trim(),
+                tahun: option.dataset.tahun || ''
+            }));
+
+        function rebuildKelas() {
+            const tahun = tahunSelect.value;
+            const currentValue = kelasSelect.value;
+            const filtered = tahun
+                ? options.filter(option => option.tahun === tahun)
+                : options;
+
+            kelasSelect.innerHTML = '<option value="">Semua Kelas</option>';
+
+            const seen = new Set();
+            filtered.forEach(option => {
+                const key = option.text.replace(/^Kelas\s+/i, '').trim();
+                if (seen.has(key)) return;
+                seen.add(key);
+
+                const element = document.createElement('option');
+                element.value = option.value;
+                element.textContent = option.text;
+                element.dataset.tahun = option.tahun;
+                kelasSelect.appendChild(element);
+            });
+
+            if (filtered.some(option => option.value === currentValue)) {
+                kelasSelect.value = currentValue;
+            } else {
+                kelasSelect.value = '';
+            }
+        }
+
+        tahunSelect.addEventListener('change', rebuildKelas);
+        rebuildKelas();
+    });
+</script>
 @endpush
