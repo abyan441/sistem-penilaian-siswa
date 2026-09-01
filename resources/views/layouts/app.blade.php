@@ -32,6 +32,9 @@
     <link rel="stylesheet" href="{{ asset('css/layouts/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/layouts/account-modal.css') }}">
 
+    {{-- FILTER HALAMAN DATA KELAS --}}
+    <link rel="stylesheet" href="{{ asset('css/pages/kelas-filter.css') }}">
+
     {{-- BASE LAYOUT --}}
     <style>
         html,
@@ -237,6 +240,7 @@
     <script src="{{ asset('js/header.js') }}"></script>
     <script src="{{ asset('js/account-modal.js') }}"></script>
     <script src="{{ asset('js/notifications.js') }}"></script>
+    <script src="{{ asset('js/kelas-filter.js') }}"></script>
 
     @stack('scripts')
 
