@@ -107,17 +107,31 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshOptions();
     applyFilter();
 
-    // Hanya memantau penambahan/penghapusan kartu atau perubahan data kelas.
-    // Tidak memantau perubahan teks sehingga tidak membuat loop/performa lambat.
-    const observer = new MutationObserver(() => {
-        refreshOptions();
-        applyFilter();
-    });
+    // Pantau hanya container kartu kelas.
+    // Jangan memantau seluruh #data-kelas karena refreshOptions()
+    // mengubah isi <select> dan dapat memicu observer tanpa henti.
+    const classContainers = dataKelas.querySelectorAll(".k-div-7");
 
-    observer.observe(dataKelas, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ["data-kelas-id", "data-kelas-name", "data-tahun", "data-siswa", "data-wali-id", "data-wali"]
-    });
+    if (classContainers.length) {
+        const observer = new MutationObserver(() => {
+            refreshOptions();
+            applyFilter();
+        });
+
+        classContainers.forEach(container => {
+            observer.observe(container, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: [
+                    "data-kelas-id",
+                    "data-kelas-name",
+                    "data-tahun",
+                    "data-siswa",
+                    "data-wali-id",
+                    "data-wali"
+                ]
+            });
+        });
+    }
 });
