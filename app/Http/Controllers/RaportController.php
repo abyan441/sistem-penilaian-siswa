@@ -47,6 +47,7 @@ class RaportController extends ApiController
         }
 
         if ($isGuruWali) {
+            $kelasWali = $kelasWali ?? throw new HttpException(403, 'Menu raport hanya dapat diakses oleh guru yang menjadi wali kelas.');
             $tahunAjaranOptions = collect([$kelasWali->tahun_ajaran]);
             $tahunAjaran = $kelasWali->tahun_ajaran;
             $siswa = Siswa::query()
@@ -108,9 +109,11 @@ class RaportController extends ApiController
                 ->orderBy('nisn')
                 ->get();
 
-            return $this->successResponse(Siswa::dataRaport($validated['tahun_ajaran'])
-                    ->whereIn('id', $siswa->pluck('id'))
-                    ->values());
+            $dataRaport = collect(Siswa::dataRaport($validated['tahun_ajaran']))
+                ->whereIn('id', $siswa->pluck('id'))
+                ->values();
+
+            return $this->successResponse($dataRaport);
         }
 
         return $this->successResponse(Siswa::dataRaport($validated['tahun_ajaran']));
