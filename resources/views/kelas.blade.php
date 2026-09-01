@@ -35,15 +35,16 @@
 
 
 
-    {{-- FILTER TAHUN AJARAN --}}
     <div class="kelas-header-actions">
         <div class="kelas-filter-wrap">
             <label for="kelas-year-filter" class="kelas-filter-label">Tahun Ajaran</label>
             <div class="kelas-filter-control">
-                <svg aria-hidden="true" viewBox="0 0 24 24" class="kelas-filter-icon"><path d="M7 2v3M17 2v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg aria-hidden="true" viewBox="0 0 24 24" class="kelas-filter-icon">
+                    <path d="M7 2v3M17 2v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 <select id="kelas-year-filter" aria-label="Filter kelas berdasarkan tahun ajaran">
                     <option value="all">Semua Tahun Ajaran</option>
-                    @foreach($kelas->pluck('tahun_ajaran')->filter()->unique()->sort()->values() as $tahunAjaran)
+                    @foreach($kelas->pluck('tahun_ajaran')->filter()->unique()->sortDesc()->values() as $tahunAjaran)
                         <option value="{{ $tahunAjaran }}">{{ $tahunAjaran }}</option>
                     @endforeach
                 </select>
