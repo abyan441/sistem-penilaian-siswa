@@ -167,11 +167,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function refreshYearFilterOptions() {
         if (!kelasYearFilter) return;
-        const currentValue = kelasYearFilter.value || "all";
-        const years = [...new Set(getCards().map(card => String(card.dataset.tahun || "").trim()).filter(Boolean))]
-            .sort((a, b) => b.localeCompare(a));
+
+        const selectedValue = kelasYearFilter.value || "all";
+        const years = [...new Set(
+            getCards()
+                .map(card => String(card.dataset.tahun || "").trim())
+                .filter(Boolean)
+        )].sort((a, b) => b.localeCompare(a));
 
         kelasYearFilter.innerHTML = '<option value="all">Semua Tahun Ajaran</option>';
+
         years.forEach(year => {
             const option = document.createElement("option");
             option.value = year;
@@ -179,27 +184,42 @@ document.addEventListener("DOMContentLoaded", () => {
             kelasYearFilter.appendChild(option);
         });
 
-        kelasYearFilter.value = years.includes(currentValue) ? currentValue : "all";
+        kelasYearFilter.value = years.includes(selectedValue) ? selectedValue : "all";
     }
 
     function applyYearFilter() {
-        const selectedYear = kelasYearFilter?.value || "all";
-        document.querySelectorAll("#data-kelas > .k-div-6").forEach(section => {
+        if (!kelasYearFilter) return;
+
+        const selectedYear = String(kelasYearFilter.value || "all").trim();
+        const sections = Array.from(document.querySelectorAll("#data-kelas > .k-div-6"));
+        let visibleCards = 0;
+
+        sections.forEach(section => {
             const cards = Array.from(section.querySelectorAll("[data-kelas-id]"));
-            let visibleCount = 0;
+            let sectionHasVisibleCard = false;
 
             cards.forEach(card => {
-                const visible = selectedYear === "all" || String(card.dataset.tahun || "") === selectedYear;
-                card.hidden = !visible;
-                if (visible) visibleCount++;
+                const cardYear = String(card.dataset.tahun || "").trim();
+                const shouldShow = selectedYear === "all" || cardYear === selectedYear;
+
+                card.hidden = !shouldShow;
+                card.style.display = shouldShow ? "" : "none";
+
+                if (shouldShow) {
+                    sectionHasVisibleCard = true;
+                    visibleCards++;
+                }
             });
 
-            section.hidden = visibleCount === 0;
+            section.hidden = !sectionHasVisibleCard;
+            section.style.display = sectionHasVisibleCard ? "" : "none";
         });
 
         const emptyState = document.querySelector(".kelas-filter-empty");
-        const hasVisibleCards = getCards().some(card => !card.hidden);
-        if (emptyState) emptyState.hidden = hasVisibleCards;
+        if (emptyState) {
+            emptyState.hidden = visibleCards > 0;
+            emptyState.style.display = visibleCards > 0 ? "none" : "";
+        }
     }
 
     function syncYearFilter() {
@@ -469,7 +489,6 @@ document.addEventListener("DOMContentLoaded", () => {
             else createKelasCard(kelas);
 
             updateSummary();
-    syncYearFilter();
             syncYearFilter();
             closeKelasForm();
             setWaliOptions();
@@ -575,6 +594,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.remove();
             removeEmptyLevelSections();
             updateSummary();
+            syncYearFilter();
             pendingDeleteCard = null;
             closeModal(deleteModal);
             if (editingCard === card) closeKelasForm();
