@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const deleteWarning = document.getElementById("kelas-delete-warning");
     const deleteConfirm = document.getElementById("kelas-delete-confirm");
     const kelasDeleteCancel = document.getElementById("kelas-delete-cancel");
+    const kelasYearFilter = document.getElementById("kelas-year-filter");
 
     let editingCard = null;
     let pendingDeleteCard = null;
@@ -162,6 +163,48 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!kelasWali || kelasWali.selectedIndex < 0) return "";
         const option = kelasWali.options[kelasWali.selectedIndex];
         return option ? option.textContent.trim() : "";
+    }
+
+    function refreshYearFilterOptions() {
+        if (!kelasYearFilter) return;
+        const currentValue = kelasYearFilter.value || "all";
+        const years = [...new Set(getCards().map(card => String(card.dataset.tahun || "").trim()).filter(Boolean))]
+            .sort((a, b) => b.localeCompare(a));
+
+        kelasYearFilter.innerHTML = '<option value="all">Semua Tahun Ajaran</option>';
+        years.forEach(year => {
+            const option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            kelasYearFilter.appendChild(option);
+        });
+
+        kelasYearFilter.value = years.includes(currentValue) ? currentValue : "all";
+    }
+
+    function applyYearFilter() {
+        const selectedYear = kelasYearFilter?.value || "all";
+        document.querySelectorAll("#data-kelas > .k-div-6").forEach(section => {
+            const cards = Array.from(section.querySelectorAll("[data-kelas-id]"));
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const visible = selectedYear === "all" || String(card.dataset.tahun || "") === selectedYear;
+                card.hidden = !visible;
+                if (visible) visibleCount++;
+            });
+
+            section.hidden = visibleCount === 0;
+        });
+
+        const emptyState = document.querySelector(".kelas-filter-empty");
+        const hasVisibleCards = getCards().some(card => !card.hidden);
+        if (emptyState) emptyState.hidden = hasVisibleCards;
+    }
+
+    function syncYearFilter() {
+        refreshYearFilterOptions();
+        applyYearFilter();
     }
 
     function updateSummary() {
@@ -337,6 +380,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     kelasYear?.addEventListener("change", setWaliOptions);
+    kelasYearFilter?.addEventListener("change", applyYearFilter);
 
     document.addEventListener("click", event => {
         const editButton = event.target.closest(".kelas-edit-btn");
@@ -425,6 +469,8 @@ document.addEventListener("DOMContentLoaded", () => {
             else createKelasCard(kelas);
 
             updateSummary();
+    syncYearFilter();
+            syncYearFilter();
             closeKelasForm();
             setWaliOptions();
 
