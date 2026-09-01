@@ -624,5 +624,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     updateSummary();
+    syncYearFilter();
     setWaliOptions();
 });
