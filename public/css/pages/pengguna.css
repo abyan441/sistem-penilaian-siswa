@@ -359,6 +359,26 @@
     color: var(--primarypr-50) !important;
 }
 
+/* Pastikan kolom Status tetap tampil pada mode baca saja
+   (Kepala Sekolah / non-admin). */
+.user-management-content .mp-user-table-read-only .mp-status-column {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: var(--primarypr-50) !important;
+}
+
+.user-management-content .mp-user-table-read-only .mp-status-column .mp-text-wrapper-12 {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
 /* =========================================================
    ALIGNMENT BODY
    ========================================================= */
