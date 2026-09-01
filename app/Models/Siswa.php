@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\ValidationException;
 use RuntimeException;
 
 class Siswa extends Model
@@ -97,15 +98,82 @@ class Siswa extends Model
         return self::query()->count();
     }
 
+    protected static function validasiData(array $data, ?int $excludeId = null): array
+    {
+        $nisn = trim((string) ($data['nisn'] ?? ''));
+        $namaSiswa = trim((string) ($data['nama_siswa'] ?? ''));
+        $jenisKelamin = $data['jenis_kelamin'] ?? null;
+        $kelasId = $data['kelas_id'] ?? null;
+
+        if ($nisn === '') {
+            throw ValidationException::withMessages([
+                'nisn' => 'NISN wajib diisi.',
+            ]);
+        }
+
+        if (mb_strlen($nisn) > 15) {
+            throw ValidationException::withMessages([
+                'nisn' => 'NISN maksimal 15 karakter.',
+            ]);
+        }
+
+        if ($namaSiswa === '') {
+            throw ValidationException::withMessages([
+                'nama_siswa' => 'Nama siswa wajib diisi.',
+            ]);
+        }
+
+        if (mb_strlen($namaSiswa) > 40) {
+            throw ValidationException::withMessages([
+                'nama_siswa' => 'Nama siswa maksimal 40 karakter.',
+            ]);
+        }
+
+        if (!in_array($jenisKelamin, ['L', 'P'], true)) {
+            throw ValidationException::withMessages([
+                'jenis_kelamin' => 'Jenis kelamin tidak valid. Pilih L atau P.',
+            ]);
+        }
+
+        if (!is_numeric($kelasId) || !Kelas::query()->whereKey((int) $kelasId)->exists()) {
+            throw ValidationException::withMessages([
+                'kelas_id' => 'Kelas yang dipilih tidak ditemukan.',
+            ]);
+        }
+
+        $duplicate = self::query()->where('nisn', $nisn);
+
+        if ($excludeId !== null) {
+            $duplicate->where('id', '!=', $excludeId);
+        }
+
+        if ($duplicate->exists()) {
+            throw ValidationException::withMessages([
+                'nisn' => 'NISN sudah digunakan oleh siswa lain.',
+            ]);
+        }
+
+        return [
+            'nisn' => $nisn,
+            'nama_siswa' => $namaSiswa,
+            'jenis_kelamin' => $jenisKelamin,
+            'kelas_id' => (int) $kelasId,
+        ];
+    }
+
     public static function tambah(array $data): self
     {
-        return self::query()->create($data);
+        $validated = self::validasiData($data);
+
+        return self::query()->create($validated);
     }
 
     public static function ubah(int $id, array $data): self
     {
         $siswa = self::query()->findOrFail($id);
-        $siswa->update($data);
+        $validated = self::validasiData($data, $siswa->id);
+
+        $siswa->update($validated);
 
         return $siswa->fresh('kelas');
     }

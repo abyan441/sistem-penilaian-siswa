@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\ValidationException;
 use RuntimeException;
 
 class MataPelajaran extends Model
@@ -73,24 +74,77 @@ class MataPelajaran extends Model
         return $minimum === null ? null : (int) $minimum;
     }
 
+    protected static function validasiData(array $data, ?int $excludeId = null): array
+    {
+        $kodeMapel = trim((string) ($data['kode_mapel'] ?? ''));
+        $namaPelajaran = trim((string) ($data['nama_pelajaran'] ?? ''));
+        $kkm = $data['kkm'] ?? null;
+
+        if ($kodeMapel === '') {
+            throw ValidationException::withMessages([
+                'kode_mapel' => 'Kode mata pelajaran wajib diisi.',
+            ]);
+        }
+
+        if (mb_strlen($kodeMapel) > 5) {
+            throw ValidationException::withMessages([
+                'kode_mapel' => 'Kode mata pelajaran maksimal 5 karakter.',
+            ]);
+        }
+
+        if ($namaPelajaran === '') {
+            throw ValidationException::withMessages([
+                'nama_pelajaran' => 'Nama mata pelajaran wajib diisi.',
+            ]);
+        }
+
+        if (mb_strlen($namaPelajaran) > 45) {
+            throw ValidationException::withMessages([
+                'nama_pelajaran' => 'Nama mata pelajaran maksimal 45 karakter.',
+            ]);
+        }
+
+        if (!is_numeric($kkm) || (int) $kkm < 0 || (int) $kkm > 100) {
+            throw ValidationException::withMessages([
+                'kkm' => 'KKM harus berupa angka antara 0 sampai 100.',
+            ]);
+        }
+
+        $kodeMapelTersimpan = strtoupper($kodeMapel);
+
+        $duplicate = self::query()
+            ->whereRaw('UPPER(kode_mapel) = ?', [$kodeMapelTersimpan]);
+
+        if ($excludeId !== null) {
+            $duplicate->where('id', '!=', $excludeId);
+        }
+
+        if ($duplicate->exists()) {
+            throw ValidationException::withMessages([
+                'kode_mapel' => 'Kode mata pelajaran sudah digunakan.',
+            ]);
+        }
+
+        return [
+            'kode_mapel' => $kodeMapelTersimpan,
+            'nama_pelajaran' => $namaPelajaran,
+            'kkm' => (int) $kkm,
+        ];
+    }
+
     public static function tambah(array $data): self
     {
-        return self::query()->create([
-            'kode_mapel' => strtoupper(trim($data['kode_mapel'])),
-            'nama_pelajaran' => trim($data['nama_pelajaran']),
-            'kkm' => $data['kkm'],
-        ]);
+        $validated = self::validasiData($data);
+
+        return self::query()->create($validated);
     }
 
     public static function ubah(int $id, array $data): self
     {
         $mapel = self::query()->findOrFail($id);
+        $validated = self::validasiData($data, $mapel->id);
 
-        $mapel->update([
-            'kode_mapel' => strtoupper(trim($data['kode_mapel'])),
-            'nama_pelajaran' => trim($data['nama_pelajaran']),
-            'kkm' => $data['kkm'],
-        ]);
+        $mapel->update($validated);
 
         return $mapel->refresh();
     }

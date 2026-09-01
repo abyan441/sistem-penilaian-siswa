@@ -13,6 +13,10 @@ return Application::configure(
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->appendToGroup('web', [
+            \App\Http\Middleware\EnsureActiveAccount::class,
+        ]);
+
         /*
          * Alias middleware untuk pengecekan role user.
          *

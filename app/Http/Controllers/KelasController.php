@@ -9,7 +9,7 @@ use Illuminate\View\View;
 use InvalidArgumentException;
 use RuntimeException;
 
-class KelasController extends Controller
+class KelasController extends ApiController
 {
     /**
      * Menampilkan halaman data kelas.
@@ -41,25 +41,16 @@ class KelasController extends Controller
                 ])
             );
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Data kelas berhasil ditambahkan.',
-                'data' => $this->formatKelas($kelas),
-            ], 201);
-
+            return $this->successResponse(
+                $this->formatKelas($kelas),
+                'Data kelas berhasil ditambahkan.',
+                201
+            );
         } catch (InvalidArgumentException $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ], 422);
-
+            return $this->errorResponse($exception->getMessage());
         } catch (\Throwable $exception) {
             report($exception);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat menambahkan data kelas.',
-            ], 500);
+            return $this->errorResponse('Terjadi kesalahan saat menambahkan data kelas.', 500);
         }
     }
 
@@ -80,25 +71,15 @@ class KelasController extends Controller
                 ])
             );
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Data kelas berhasil diperbarui.',
-                'data' => $this->formatKelas($kelas),
-            ]);
-
+            return $this->successResponse(
+                $this->formatKelas($kelas),
+                'Data kelas berhasil diperbarui.'
+            );
         } catch (InvalidArgumentException $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ], 422);
-
+            return $this->errorResponse($exception->getMessage());
         } catch (\Throwable $exception) {
             report($exception);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat memperbarui data kelas.',
-            ], 500);
+            return $this->errorResponse('Terjadi kesalahan saat memperbarui data kelas.', 500);
         }
     }
 
@@ -110,24 +91,13 @@ class KelasController extends Controller
         try {
             Kelas::hapusKelas($id);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Data kelas berhasil dihapus.',
-            ]);
+            return $this->successResponse(null, 'Data kelas berhasil dihapus.');
 
         } catch (RuntimeException $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ], 422);
-
+            return $this->errorResponse($exception->getMessage());
         } catch (\Throwable $exception) {
             report($exception);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat menghapus data kelas.',
-            ], 500);
+            return $this->errorResponse('Terjadi kesalahan saat menghapus data kelas.', 500);
         }
     }
 
@@ -139,33 +109,26 @@ class KelasController extends Controller
         try {
             $kelas = Kelas::detailKelas($id);
 
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'id' => $kelas->id,
-                    'nama_kelas' => $kelas->nama_kelas,
-                    'tahun_ajaran' => $kelas->tahun_ajaran,
-                    'wali_kelas_id' => $kelas->wali_kelas_id,
-                    'wali_kelas' => $kelas->waliKelas?->nama_lengkap ?? '-',
-                    'jumlah_siswa' => $kelas->siswa_count,
-                    'siswa' => $kelas->siswa->map(function ($siswa) {
-                        return [
-                            'id' => $siswa->id,
-                            'nisn' => $siswa->nisn,
-                            'nama_siswa' => $siswa->nama_siswa,
-                            'jenis_kelamin' => $siswa->jenis_kelamin,
-                        ];
-                    })->values(),
-                ],
+            return $this->successResponse([
+                'id' => $kelas->id,
+                'nama_kelas' => $kelas->nama_kelas,
+                'tahun_ajaran' => $kelas->tahun_ajaran,
+                'wali_kelas_id' => $kelas->wali_kelas_id,
+                'wali_kelas' => $kelas->waliKelas?->nama_lengkap ?? '-',
+                'jumlah_siswa' => $kelas->siswa_count,
+                'siswa' => $kelas->siswa->map(function ($siswa) {
+                    return [
+                        'id' => $siswa->id,
+                        'nisn' => $siswa->nisn,
+                        'nama_siswa' => $siswa->nama_siswa,
+                        'jenis_kelamin' => $siswa->jenis_kelamin,
+                    ];
+                })->values(),
             ]);
 
         } catch (\Throwable $exception) {
             report($exception);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengambil detail kelas dari database.',
-            ], 500);
+            return $this->errorResponse('Gagal mengambil detail kelas dari database.', 500);
         }
     }
 

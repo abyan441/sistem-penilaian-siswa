@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class PenggunaController extends Controller
+class PenggunaController extends ApiController
 {
     public function index()
     {
@@ -22,21 +22,14 @@ class PenggunaController extends Controller
     {
         $pengguna = User::buatPengguna($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Pengguna berhasil ditambahkan.',
-            'data' => $pengguna,
-        ], 201);
+        return $this->successResponse($pengguna, 'Pengguna berhasil ditambahkan.', 201);
     }
 
     public function show(int $user): JsonResponse
     {
         $pengguna = User::penggunaById($user);
 
-        return response()->json([
-            'success' => true,
-            'data' => $pengguna,
-        ]);
+        return $this->successResponse($pengguna);
     }
 
     public function update(PenggunaRequest $request, int $user): JsonResponse
@@ -47,16 +40,9 @@ class PenggunaController extends Controller
                 $request->validated()
             );
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Pengguna berhasil diperbarui.',
-                'data' => $pengguna,
-            ]);
+            return $this->successResponse($pengguna, 'Pengguna berhasil diperbarui.');
         } catch (\RuntimeException $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ], 422);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -78,18 +64,11 @@ class PenggunaController extends Controller
                 $validated['status']
             );
 
-            return response()->json([
-                'success' => true,
-                'message' => $pengguna->status === 'aktif'
+            return $this->successResponse($pengguna, $pengguna->status === 'aktif'
                     ? 'Akun berhasil diaktifkan.'
-                    : 'Akun berhasil dinonaktifkan.',
-                'data' => $pengguna,
-            ]);
+                    : 'Akun berhasil dinonaktifkan.');
         } catch (\RuntimeException $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ], 422);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 
@@ -98,15 +77,9 @@ class PenggunaController extends Controller
         try {
             User::hapusPengguna($user);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Pengguna berhasil dihapus.',
-            ]);
+            return $this->successResponse(null, 'Pengguna berhasil dihapus.');
         } catch (\RuntimeException $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ], 422);
+            return $this->errorResponse($exception->getMessage());
         }
     }
 }

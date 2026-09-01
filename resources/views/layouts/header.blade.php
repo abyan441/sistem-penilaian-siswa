@@ -86,7 +86,8 @@
          MODAL UBAH EMAIL
          ===================================================== --}}
     <div class="account-modal" id="change-email-modal" role="dialog" aria-modal="true"
-        aria-labelledby="change-email-title" aria-describedby="change-email-description" hidden>
+        aria-labelledby="change-email-title" aria-describedby="change-email-description"
+        @if ($errors->hasAny(['new_email', 'confirm_email', 'password'])) @else hidden @endif>
         <div class="account-modal-overlay" data-close-account-modal></div>
         <div class="account-modal-dialog">
             <div class="account-modal-header">
@@ -101,6 +102,11 @@
             </div>
 
             <div class="account-modal-body">
+                @if ($errors->hasAny(['new_email', 'confirm_email', 'password']))
+                    <div class="account-form-alert" role="alert">
+                        {{ $errors->first('new_email') ?: $errors->first('confirm_email') ?: $errors->first('password') }}
+                    </div>
+                @endif
                 <form class="account-modal-form" id="change-email-form"
                     action="{{ route('akun.email.update') }}" method="POST">
                     @csrf
@@ -148,7 +154,8 @@
          MODAL UBAH PASSWORD
          ===================================================== --}}
     <div class="account-modal" id="change-password-modal" role="dialog" aria-modal="true"
-        aria-labelledby="change-password-title" aria-describedby="change-password-description" hidden>
+        aria-labelledby="change-password-title" aria-describedby="change-password-description"
+        @if ($errors->hasAny(['current_password', 'new_password'])) @else hidden @endif>
         <div class="account-modal-overlay" data-close-account-modal></div>
         <div class="account-modal-dialog">
             <div class="account-modal-header">
@@ -163,6 +170,11 @@
             </div>
 
             <div class="account-modal-body">
+                @if ($errors->hasAny(['current_password', 'new_password']))
+                    <div class="account-form-alert" role="alert">
+                        {{ $errors->first('current_password') ?: $errors->first('new_password') }}
+                    </div>
+                @endif
                 <form class="account-modal-form" id="change-password-form"
                     action="{{ route('akun.password.update') }}" method="POST">
                     @csrf

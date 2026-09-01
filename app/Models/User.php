@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -14,7 +14,7 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $primaryKey = 'id';
     public $timestamps = false;
-    protected $fillable = ['username', 'password', 'nama_lengkap', 'email', 'role', 'status', 'nip'];
+    protected $fillable = ['name', 'username', 'password', 'nama_lengkap', 'email', 'role', 'status', 'nip'];
     protected $hidden = ['password'];
 
     protected function casts(): array
@@ -52,6 +52,11 @@ class User extends Authenticatable
         return ['admin', 'kepala_sekolah', 'guru'];
     }
 
+    public static function daftarRoleLogin(): array
+    {
+        return ['admin', 'kepala_sekolah', 'guru'];
+    }
+
     public static function daftarRoleTambah(): array
     {
         return ['kepala_sekolah', 'guru'];
@@ -76,34 +81,43 @@ class User extends Authenticatable
         return self::query()->findOrFail($id);
     }
 
+    private static function countByConditions(array $conditions = []): int
+    {
+        $query = self::query();
+        foreach ($conditions as $column => $value) {
+            $query->where($column, $value);
+        }
+        return $query->count();
+    }
+
     public static function totalPengguna(): int
     {
-        return self::query()->count();
+        return self::countByConditions();
     }
 
     public static function totalAdmin(): int
     {
-        return self::query()->where('role', 'admin')->count();
+        return self::countByConditions(['role' => 'admin']);
     }
 
     public static function totalKepalaSekolah(): int
     {
-        return self::query()->where('role', 'kepala_sekolah')->count();
+        return self::countByConditions(['role' => 'kepala_sekolah']);
     }
 
     public static function totalGuru(): int
     {
-        return self::query()->where('role', 'guru')->count();
+        return self::countByConditions(['role' => 'guru']);
     }
 
     public static function totalAktif(): int
     {
-        return self::query()->where('status', 'aktif')->count();
+        return self::countByConditions(['status' => 'aktif']);
     }
 
     public static function totalTidakAktif(): int
     {
-        return self::query()->where('status', 'tidak_aktif')->count();
+        return self::countByConditions(['status' => 'tidak_aktif']);
     }
 
     public static function statistikPengguna(): array
@@ -118,9 +132,19 @@ class User extends Authenticatable
         ];
     }
 
+    public static function guruAktif()
+    {
+        return self::query()
+            ->where('role', 'guru')
+            ->where('status', 'aktif')
+            ->orderBy('nama_lengkap')
+            ->orderBy('id')
+            ->get();
+    }
+
     public static function totalGuruAktif(): int
     {
-        return self::query()->where('role', 'guru')->where('status', 'aktif')->count();
+        return self::countByConditions(['role' => 'guru', 'status' => 'aktif']);
     }
 
     public static function kepalaSekolahAktif(): ?self
@@ -176,6 +200,21 @@ class User extends Authenticatable
         return $pengguna->fresh();
     }
 
+    public static function loginBoleh(string $email, string $password): ?self
+    {
+        $user = self::query()
+            ->where('email', $email)
+            ->whereIn('role', self::daftarRoleLogin())
+            ->where('status', 'aktif')
+            ->first();
+
+        if (!$user || !Hash::check($password, $user->password)) {
+            return null;
+        }
+
+        return $user;
+    }
+
     public static function ubahEmail(self $user, string $email): self
     {
         $user->email = $email;
@@ -184,12 +223,59 @@ class User extends Authenticatable
         return $user->fresh();
     }
 
+    public static function ubahEmailDiri(self $user, string $emailBaru, string $konfirmasiEmail, string $passwordSaatIni): self
+    {
+        if (trim($emailBaru) === '') {
+            throw new \InvalidArgumentException('Email baru wajib diisi.');
+        }
+
+        if (!filter_var($emailBaru, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException('Format email baru tidak valid.');
+        }
+
+        if (mb_strlen($emailBaru) > 30) {
+            throw new \InvalidArgumentException('Email baru maksimal 30 karakter.');
+        }
+
+        if (trim($emailBaru) !== trim($konfirmasiEmail)) {
+            throw new \InvalidArgumentException('Konfirmasi email tidak sama dengan email baru.');
+        }
+
+        if (!Hash::check($passwordSaatIni, $user->password)) {
+            throw new \InvalidArgumentException('Password saat ini salah.');
+        }
+
+        $exists = self::query()
+            ->where('email', $emailBaru)
+            ->whereKeyNot($user->getKey())
+            ->exists();
+
+        if ($exists) {
+            throw new \InvalidArgumentException('Email tersebut sudah digunakan oleh pengguna lain.');
+        }
+
+        return self::ubahEmail($user, $emailBaru);
+    }
+
     public static function ubahPassword(self $user, string $password): self
     {
         $user->password = $password;
         $user->save();
 
         return $user->fresh();
+    }
+
+    public static function ubahPasswordDiri(self $user, string $passwordSaatIni, string $passwordBaru): self
+    {
+        if (!Hash::check($passwordSaatIni, $user->password)) {
+            throw new \InvalidArgumentException('Password saat ini salah.');
+        }
+
+        if (strlen($passwordBaru) < 8) {
+            throw new \InvalidArgumentException('Password baru minimal 8 karakter.');
+        }
+
+        return self::ubahPassword($user, $passwordBaru);
     }
 
     public static function ubahStatus(int $id, string $status): self

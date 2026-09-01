@@ -251,6 +251,16 @@
     box-sizing: border-box;
 }
 
+.user-management-content .mp-user-table-read-only .mp-user-row {
+    grid-template-columns:
+        7%
+        17%
+        23%
+        25%
+        15%
+        13%;
+}
+
 /* =========================================================
    HEADER TABEL
    ========================================================= */
@@ -339,6 +349,14 @@
 
 .user-management-content .mp-user-table-header .mp-user-cell:nth-child(7) {
     padding-right: 20px;
+}
+
+.user-management-content .mp-status-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: visible;
+    color: var(--primarypr-50) !important;
 }
 
 /* =========================================================

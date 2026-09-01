@@ -171,6 +171,17 @@
     box-sizing: border-box;
 }
 
+.account-form-alert {
+    margin-bottom: 18px;
+    padding: 11px 13px;
+    border: 1px solid #f1b7bd;
+    border-radius: 8px;
+    background: #fff2f3;
+    color: #842029;
+    font-size: 13px;
+    line-height: 19px;
+}
+
 /* =========================================================
    FORM
    ========================================================= */

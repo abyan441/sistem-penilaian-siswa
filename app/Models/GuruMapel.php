@@ -52,11 +52,7 @@ class GuruMapel extends Model
 
     public static function daftarGuru()
     {
-        return User::where('role', 'guru')
-            ->where('status', 'aktif')
-            ->orderBy('nama_lengkap')
-            ->orderBy('id')
-            ->get();
+        return User::guruAktif();
     }
 
     public static function daftarMataPelajaran()

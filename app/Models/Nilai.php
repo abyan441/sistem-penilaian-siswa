@@ -58,6 +58,23 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         return in_array($semester, [1, 2], true) ? $semester : 1;
     }
 
+    public static function bolehMengelolaNilai(?string $role): bool
+    {
+        return !in_array($role, ['admin', 'kepala_sekolah'], true);
+    }
+
+    public static function readOnlyUntukRole(?string $role): bool
+    {
+        return in_array($role, ['admin', 'kepala_sekolah'], true);
+    }
+
+    public static function pastikanDapatMengelolaNilai(?string $role): void
+    {
+        if (!static::bolehMengelolaNilai($role)) {
+            throw new InvalidArgumentException('Akun ini hanya dapat melihat nilai dan tidak dapat mengubah atau menyimpan nilai.');
+        }
+    }
+
     public static function untukRaport(int $siswaId, int $semester): Collection
     {
         self::pastikanSemester($semester);
@@ -106,23 +123,19 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         });
     }
 
-    public static function kelasWaliGuru($guruId)
+    public static function kelasWaliGuru($guruId, $firstOnly = false)
     {
-        return Kelas::query()
+        $query = Kelas::query()
             ->where('wali_kelas_id', $guruId)
             ->orderByDesc('tahun_ajaran')
-            ->orderBy('nama_kelas')
-            ->get();
-    }
+            ->orderBy('nama_kelas');
 
-    public static function kelasAktifGuru($guruId)
-    {
-        return static::kelasWaliGuru($guruId)->first();
+        return $firstOnly ? $query->first() : $query->get();
     }
 
     public static function pastikanKelasWaliGuru($guruId)
     {
-        $kelas = static::kelasAktifGuru($guruId);
+        $kelas = self::kelasWaliGuru($guruId, true);
         if (!$kelas) {
             throw new InvalidArgumentException('Anda belum memiliki kelas yang diampu sebagai wali kelas.');
         }
@@ -274,9 +287,19 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
             ->get()
             ->keyBy('siswa_id');
 
+        $kelasName = 'Semua Kelas';
+        if ($kelasId) {
+            try {
+                $kelas = Kelas::findOrFail($kelasId);
+                $kelasName = $kelas->nama_kelas;
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                throw new InvalidArgumentException("Kelas dengan ID {$kelasId} tidak ditemukan.");
+            }
+        }
+
         return [
             'kelas_id' => $kelasId ? (int) $kelasId : null,
-            'kelas' => $kelasId ? Kelas::find($kelasId)?->nama_kelas : 'Semua Kelas',
+            'kelas' => $kelasName,
             'tahun_ajaran' => $tahunAjaran ?: 'Semua Tahun Ajaran',
             'semester' => (int) $semester,
             'mapel_id' => (int) $mapelId,
@@ -304,9 +327,19 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
             ->get()
             ->keyBy('siswa_id');
 
+        $kelasName = 'Semua Kelas';
+        if ($kelasId) {
+            try {
+                $kelas = Kelas::findOrFail($kelasId);
+                $kelasName = $kelas->nama_kelas;
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                throw new InvalidArgumentException("Kelas dengan ID {$kelasId} tidak ditemukan.");
+            }
+        }
+
         return [
             'kelas_id' => $kelasId ? (int) $kelasId : null,
-            'kelas' => $kelasId ? Kelas::find($kelasId)?->nama_kelas : 'Semua Kelas',
+            'kelas' => $kelasName,
             'tahun_ajaran' => $tahunAjaran ?: 'Semua Tahun Ajaran',
             'semester' => (int) $semester,
             'mapel_id' => (int) $mapelId,

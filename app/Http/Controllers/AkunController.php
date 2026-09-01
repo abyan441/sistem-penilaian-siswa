@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class AkunController extends Controller
 {
@@ -16,34 +15,37 @@ class AkunController extends Controller
         $user = $request->user();
 
         $validated = $request->validate([
-            'new_email' => [
-                'required',
-                'email',
-                'max:30',
-                Rule::unique('users', 'email')->ignore($user->id),
-            ],
-            'confirm_email' => [
-                'required',
-                'same:new_email',
-            ],
-            'password' => [
-                'required',
-                'current_password:web',
-            ],
+            'new_email' => ['required', 'email', 'max:30'],
+            'confirm_email' => ['required', 'same:new_email'],
+            'password' => ['required', 'current_password:web'],
         ], [
             'new_email.required' => 'Email baru wajib diisi.',
             'new_email.email' => 'Format email baru tidak valid.',
             'new_email.max' => 'Email baru maksimal 30 karakter.',
-            'new_email.unique' => 'Email tersebut sudah digunakan oleh pengguna lain.',
             'confirm_email.required' => 'Konfirmasi email wajib diisi.',
             'confirm_email.same' => 'Konfirmasi email tidak sama dengan email baru.',
             'password.required' => 'Password saat ini wajib diisi.',
             'password.current_password' => 'Password saat ini salah.',
         ]);
 
-        User::ubahEmail($user, $validated['new_email']);
+        try {
+            User::ubahEmailDiri(
+                $user,
+                $validated['new_email'],
+                $validated['confirm_email'],
+                $validated['password']
+            );
 
-        return back()->with('account_success', 'Email berhasil diperbarui.');
+            return back()->with('account_success', 'Email berhasil diperbarui.');
+        } catch (\InvalidArgumentException $exception) {
+            return back()->withErrors(['new_email' => $exception->getMessage()])->withInput();
+        } catch (\Illuminate\Database\QueryException $exception) {
+            \Log::error('Database error updating email', ['error' => $exception->getMessage(), 'user_id' => $user->id]);
+            return back()->withErrors(['new_email' => 'Terjadi kesalahan database. Silakan coba lagi.'])->withInput();
+        } catch (\Exception $exception) {
+            \Log::error('Unexpected error updating email', ['error' => $exception->getMessage(), 'user_id' => $user->id]);
+            return back()->withErrors(['new_email' => 'Terjadi kesalahan yang tidak diperkirakan.'])->withInput();
+        }
     }
 
     /**
@@ -52,16 +54,8 @@ class AkunController extends Controller
     public function updatePassword(Request $request)
     {
         $validated = $request->validate([
-            'current_password' => [
-                'required',
-                'current_password:web',
-            ],
-            'new_password' => [
-                'required',
-                'string',
-                'min:8',
-                'confirmed',
-            ],
+            'current_password' => ['required', 'current_password:web'],
+            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ], [
             'current_password.required' => 'Password saat ini wajib diisi.',
             'current_password.current_password' => 'Password saat ini salah.',
@@ -70,8 +64,22 @@ class AkunController extends Controller
             'new_password.confirmed' => 'Konfirmasi password baru tidak sama.',
         ]);
 
-        User::ubahPassword($request->user(), $validated['new_password']);
+        try {
+            User::ubahPasswordDiri(
+                $request->user(),
+                $validated['current_password'],
+                $validated['new_password']
+            );
 
-        return back()->with('account_success', 'Password berhasil diperbarui.');
+            return back()->with('account_success', 'Password berhasil diperbarui.');
+        } catch (\InvalidArgumentException $exception) {
+            return back()->withErrors(['current_password' => $exception->getMessage()])->withInput();
+        } catch (\Illuminate\Database\QueryException $exception) {
+            \Log::error('Database error updating password', ['error' => $exception->getMessage(), 'user_id' => $request->user()->id]);
+            return back()->withErrors(['current_password' => 'Terjadi kesalahan database. Silakan coba lagi.'])->withInput();
+        } catch (\Exception $exception) {
+            \Log::error('Unexpected error updating password', ['error' => $exception->getMessage(), 'user_id' => $request->user()->id]);
+            return back()->withErrors(['current_password' => 'Terjadi kesalahan yang tidak diperkirakan.'])->withInput();
+        }
     }
 }

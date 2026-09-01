@@ -8,12 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
 
-class NilaiController extends Controller
+class NilaiController extends ApiController
 {
     public function index()
     {
         $user = Auth::user();
-        $readOnly = in_array($user->role, ['admin', 'kepala_sekolah'], true);
+        $readOnly = Nilai::readOnlyUntukRole($user?->role);
 
         if ($readOnly) {
             return view('input-nilai', array_merge(
@@ -42,7 +42,7 @@ class NilaiController extends Controller
 
         try {
             $user = Auth::user();
-            $readOnly = in_array($user->role, ['admin', 'kepala_sekolah'], true);
+            $readOnly = Nilai::readOnlyUntukRole($user?->role);
 
             $data = $readOnly
                 ? Nilai::dataNilaiAdmin(
@@ -59,24 +59,12 @@ class NilaiController extends Controller
                     $validated['tahun_ajaran'] ?? null
                 );
 
-            return response()->json([
-                'success' => true,
-                'readOnly' => $readOnly,
-                'data' => $data,
-            ]);
+            return $this->successResponse($data, '', 200, ['readOnly' => $readOnly]);
         } catch (InvalidArgumentException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-                'data' => [],
-            ], 422);
+            return $this->errorResponse($e->getMessage());
         } catch (\Throwable $e) {
             report($e);
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat mengambil data nilai.',
-                'data' => [],
-            ], 500);
+            return $this->errorResponse('Terjadi kesalahan saat mengambil data nilai.', 500);
         }
     }
 
@@ -84,7 +72,7 @@ class NilaiController extends Controller
     {
         try {
             $user = Auth::user();
-            $readOnly = in_array($user->role, ['admin', 'kepala_sekolah'], true);
+            $readOnly = Nilai::readOnlyUntukRole($user?->role);
 
             if ($readOnly) {
                 $validated = $request->validate([
@@ -100,28 +88,17 @@ class NilaiController extends Controller
                 $siswa = $kelas ? Nilai::daftarSiswa($kelas->id) : Nilai::semuaSiswa();
             }
 
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'kelas_id' => $kelas?->id,
-                    'kelas' => $kelas?->nama_kelas ?? 'Semua Kelas',
-                    'tahun_ajaran' => $kelas?->tahun_ajaran ?? 'Semua Tahun Ajaran',
-                    'siswa' => $siswa,
-                ],
+            return $this->successResponse([
+                'kelas_id' => $kelas?->id,
+                'kelas' => $kelas?->nama_kelas ?? 'Semua Kelas',
+                'tahun_ajaran' => $kelas?->tahun_ajaran ?? 'Semua Tahun Ajaran',
+                'siswa' => $siswa,
             ]);
         } catch (InvalidArgumentException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-                'data' => [],
-            ], 422);
+            return $this->errorResponse($e->getMessage());
         } catch (\Throwable $e) {
             report($e);
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat mengambil siswa.',
-                'data' => [],
-            ], 500);
+            return $this->errorResponse('Terjadi kesalahan saat mengambil siswa.', 500);
         }
     }
 
@@ -129,11 +106,10 @@ class NilaiController extends Controller
     {
         $user = Auth::user();
 
-        if (in_array($user?->role, ['admin', 'kepala_sekolah'], true)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Akun ini hanya dapat melihat nilai dan tidak dapat mengubah atau menyimpan nilai.',
-            ], 403);
+        try {
+            Nilai::pastikanDapatMengelolaNilai($user?->role);
+        } catch (InvalidArgumentException $e) {
+            return $this->errorResponse($e->getMessage(), 403);
         }
 
         $validated = $request->validate([
@@ -154,21 +130,12 @@ class NilaiController extends Controller
                 $validated['nilai']
             );
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Nilai siswa berhasil disimpan.',
-            ]);
+            return $this->successResponse(null, 'Nilai siswa berhasil disimpan.');
         } catch (InvalidArgumentException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 422);
+            return $this->errorResponse($e->getMessage());
         } catch (\Throwable $e) {
             report($e);
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat menyimpan nilai.',
-            ], 500);
+            return $this->errorResponse('Terjadi kesalahan saat menyimpan nilai.', 500);
         }
     }
 

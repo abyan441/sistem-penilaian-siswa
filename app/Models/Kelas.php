@@ -51,16 +51,12 @@ class Kelas extends Model
 
     public static function semuaWaliKelas()
     {
-        return User::query()
-            ->where('role', 'guru')
-            ->where('status', 'aktif')
-            ->orderBy('nama_lengkap')
-            ->get();
+        return User::guruAktif();
     }
 
-    public static function kelasWali($waliKelasId)
+    public static function kelasWali($waliKelasId, $throwIfNotFound = false)
     {
-        return static::query()
+        $query = static::query()
             ->where('wali_kelas_id', $waliKelasId)
             ->with([
                 'waliKelas',
@@ -68,22 +64,9 @@ class Kelas extends Model
                     ->orderBy('nama_siswa')
                     ->orderBy('nisn'),
             ])
-            ->withCount('siswa')
-            ->first();
-    }
+            ->withCount('siswa');
 
-    public static function kelasWaliOrFail($waliKelasId)
-    {
-        return static::query()
-            ->where('wali_kelas_id', $waliKelasId)
-            ->with([
-                'waliKelas',
-                'siswa' => fn ($query) => $query
-                    ->orderBy('nama_siswa')
-                    ->orderBy('nisn'),
-            ])
-            ->withCount('siswa')
-            ->firstOrFail();
+        return $throwIfNotFound ? $query->firstOrFail() : $query->first();
     }
 
     public static function adalahKelasWali($kelasId, $waliKelasId): bool
@@ -117,6 +100,20 @@ class Kelas extends Model
         }
 
         return static::tahunAjaranOptions()->first();
+    }
+
+    public static function dapatAksesRaport(int $guruId): bool
+    {
+        return static::query()
+            ->where('wali_kelas_id', $guruId)
+            ->exists();
+    }
+
+    public static function kelasWaliGuru(int $guruId): ?self
+    {
+        return static::query()
+            ->where('wali_kelas_id', $guruId)
+            ->first();
     }
 
     public static function siswaUntukRaport(?string $tahunAjaran)

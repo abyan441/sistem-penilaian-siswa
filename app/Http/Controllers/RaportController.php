@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class RaportController extends Controller
+class RaportController extends ApiController
 {
     private function pastikanAksesRaport(): void
     {
         $user = Auth::user();
 
-        if ($user?->role === 'guru' && !Kelas::query()->where('wali_kelas_id', $user->id)->exists()) {
+        if ($user?->role === 'guru' && !Kelas::dapatAksesRaport((int) $user->id)) {
             throw new HttpException(403, 'Menu raport hanya dapat diakses oleh guru yang menjadi wali kelas.');
         }
     }
@@ -31,9 +31,7 @@ class RaportController extends Controller
             return null;
         }
 
-        return Kelas::query()
-            ->where('wali_kelas_id', $user->id)
-            ->first();
+        return Kelas::kelasWaliGuru((int) $user->id);
     }
 
     public function index(Request $request): View
@@ -101,10 +99,7 @@ class RaportController extends Controller
 
         if ($user?->role === 'guru') {
             if (!$kelasWali || $kelasWali->tahun_ajaran !== trim($validated['tahun_ajaran'])) {
-                return response()->json([
-                    'success' => true,
-                    'data' => [],
-                ]);
+                return $this->successResponse([]);
             }
 
             $siswa = Siswa::query()
@@ -113,18 +108,12 @@ class RaportController extends Controller
                 ->orderBy('nisn')
                 ->get();
 
-            return response()->json([
-                'success' => true,
-                'data' => Siswa::dataRaport($validated['tahun_ajaran'])
+            return $this->successResponse(Siswa::dataRaport($validated['tahun_ajaran'])
                     ->whereIn('id', $siswa->pluck('id'))
-                    ->values(),
-            ]);
+                    ->values());
         }
 
-        return response()->json([
-            'success' => true,
-            'data' => Siswa::dataRaport($validated['tahun_ajaran']),
-        ]);
+        return $this->successResponse(Siswa::dataRaport($validated['tahun_ajaran']));
     }
 
     public function preview(Request $request, int $id): View
@@ -166,7 +155,12 @@ class RaportController extends Controller
 
         $nilai = Nilai::dataRaportSiswa($siswa->id, $semester);
         $kepalaSekolah = User::kepalaSekolahAktif();
-        $kelas = $siswa->kelas;
+        $kelas = $siswa->kelas ?? throw new HttpException(500, 'Data kelas siswa tidak ditemukan.');
+
+        if (!$kepalaSekolah) {
+            \Log::warning('Tidak ada kepala sekolah aktif untuk raport siswa ID: ' . $siswa->id);
+        }
+
         $rataRata = $nilai->isNotEmpty() ? Nilai::rataRataRaport($nilai) : null;
 
         return view('raport-preview', [

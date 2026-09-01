@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,46 +44,26 @@ class LoginController extends Controller
             'password.required' => 'Kata sandi wajib diisi.',
         ]);
 
-        /*
-         * Pastikan akun memiliki role yang diperbolehkan
-         * dan statusnya aktif.
-         */
-        $allowedRoles = [
-            'guru',
-            'admin',
-            'kepala_sekolah',
-        ];
-
-        $user = \App\Models\User::query()
-            ->where('email', $credentials['email'])
-            ->whereIn('role', $allowedRoles)
-            ->where('status', 'aktif')
-            ->first();
+        $user = User::loginBoleh(
+            $credentials['email'],
+            $credentials['password']
+        );
 
         if (!$user) {
+            $message = 'Akun tidak ditemukan, role tidak memiliki akses, atau akun tidak aktif.';
+
+            if (!User::query()->where('email', $credentials['email'])->exists()) {
+                $message = 'Email atau kata sandi salah.';
+            }
+
             return back()
                 ->withErrors([
-                    'email' => 'Akun tidak ditemukan, role tidak memiliki akses, atau akun tidak aktif.',
+                    'email' => $message,
                 ])
                 ->withInput($request->only('email'));
         }
 
-        /*
-         * Coba autentikasi berdasarkan email,
-         * password, role, dan status aktif.
-         */
-        if (!Auth::attempt([
-            'email' => $credentials['email'],
-            'password' => $credentials['password'],
-            'role' => $user->role,
-            'status' => 'aktif',
-        ])) {
-            return back()
-                ->withErrors([
-                    'email' => 'Email atau kata sandi salah.',
-                ])
-                ->withInput($request->only('email'));
-        }
+        Auth::login($user);
 
         /*
          * Regenerasi session setelah login berhasil

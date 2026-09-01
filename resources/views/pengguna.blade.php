@@ -12,6 +12,7 @@
 @section('content')
 
 @php
+    $isAdmin = auth()->user()?->role === 'admin';
     $adaKepalaSekolah = $pengguna
         ->where('role', 'kepala_sekolah')
         ->isNotEmpty();
@@ -44,6 +45,7 @@
 
         </div>
 
+        @if ($isAdmin)
         <button
             class="mp-button-tambah-siswa"
             type="button"
@@ -82,6 +84,7 @@
             </span>
 
         </button>
+        @endif
 
     </header>
 
@@ -163,7 +166,7 @@
         </h2>
 
         <div
-            class="mp-user-table"
+            class="mp-user-table{{ $isAdmin ? '' : ' mp-user-table-read-only' }}"
             role="table"
             aria-label="Daftar pengguna akun sistem E-Raport"
         >
@@ -211,18 +214,20 @@
                 </div>
 
                 <div
-                    class="mp-text-wrapper-6 mp-user-cell"
+                    class="mp-text-wrapper-6 mp-user-cell mp-status-column"
                     role="columnheader"
                 >
                     Status
                 </div>
 
+                @if ($isAdmin)
                 <div
                     class="mp-text-wrapper-6 mp-user-cell"
                     role="columnheader"
                 >
                     Aksi
                 </div>
+                @endif
 
             </div>
 
@@ -304,7 +309,7 @@
                         {{-- STATUS --}}
 
                         <div
-                            class="mp-div-wrapper-2 mp-user-cell"
+                            class="mp-div-wrapper-2 mp-user-cell mp-status-column"
                             role="cell"
                         >
 
@@ -323,6 +328,7 @@
 
                         {{-- AKSI --}}
 
+                        @if ($isAdmin)
                         <div
                             class="mp-div-7 mp-user-cell"
                             role="cell"
@@ -451,6 +457,7 @@
                             </button>
 
                         </div>
+                        @endif
 
                     </div>
 
