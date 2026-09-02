@@ -6,6 +6,7 @@
     gap: 10px;
     position: relative;
 }
+
 .kelas-content .k-div {
     align-items: center;
     gap: 12px;
@@ -16,6 +17,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-div-2 {
     display: flex;
     flex-direction: column;
@@ -24,6 +26,7 @@
     flex: 1;
     flex-grow: 1;
 }
+
 .kelas-content .k-text-wrapper {
     position: relative;
     align-self: stretch;
@@ -36,6 +39,7 @@
     line-height: var(--heading-h5-medium-line-height);
     font-style: var(--heading-h5-medium-font-style);
 }
+
 .kelas-content .k-text-wrapper-2 {
     position: relative;
     align-self: stretch;
@@ -47,6 +51,7 @@
     line-height: var(--paragraph-p16-regular-line-height);
     font-style: var(--paragraph-p16-regular-font-style);
 }
+
 .kelas-content .k-button-tambah-siswa {
     display: flex;
     width: 164px;
@@ -58,12 +63,14 @@
     background-color: var(--primarypr-30);
     border-radius: 9px;
 }
+
 .kelas-content .k-ic-round-plus {
     position: relative;
     width: 17px;
     height: 17px;
     aspect-ratio: 1;
 }
+
 .kelas-content .k-vector {
     position: absolute;
     width: 79.17%;
@@ -71,6 +78,7 @@
     top: 20.82%;
     left: 20.83%;
 }
+
 .kelas-content .k-tambah-siswa {
     position: relative;
     flex: 0 1 auto;
@@ -85,6 +93,7 @@
     font-style: var(--label-l16-regular-font-style);
     text-align: center;
 }
+
 .kelas-content .k-div-3 {
     flex-wrap: wrap;
     align-items: flex-start;
@@ -96,6 +105,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-div-4 {
     min-width: 240px;
     align-items: center;
@@ -109,6 +119,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-div-5 {
     flex-direction: column;
     align-items: flex-start;
@@ -118,6 +129,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-text-wrapper-3 {
     position: relative;
     align-self: stretch;
@@ -130,6 +142,7 @@
     line-height: var(--paragraph-p16-regular-line-height);
     font-style: var(--paragraph-p16-regular-font-style);
 }
+
 .kelas-content .k-text-wrapper-4 {
     position: relative;
     align-self: stretch;
@@ -142,6 +155,7 @@
     line-height: var(--heading-h3-bold-line-height);
     font-style: var(--heading-h3-bold-font-style);
 }
+
 .kelas-content .k-radix-icons-people {
     display: flex;
     min-width: 40px;
@@ -157,6 +171,7 @@
     background-color: var(--secondarysc-40);
     border-radius: 12px;
 }
+
 .kelas-content .k-vector-wrapper {
     display: flex;
     min-width: 40px;
@@ -173,6 +188,7 @@
     background-color: var(--secondarysc-20);
     border-radius: 12px;
 }
+
 .kelas-content .k-div-6 {
     flex-direction: column;
     align-items: flex-start;
@@ -184,6 +200,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-text-wrapper-5 {
     position: relative;
     align-self: stretch;
@@ -196,6 +213,7 @@
     line-height: var(--heading-h5-medium-line-height);
     font-style: var(--heading-h5-medium-font-style);
 }
+
 .kelas-content .k-div-7 {
     flex-wrap: wrap;
     align-items: center;
@@ -206,6 +224,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-div-8 {
     flex-direction: column;
     min-width: 295px;
@@ -221,6 +240,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-div-9 {
     flex-direction: column;
     align-items: center;
@@ -231,6 +251,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-div-10 {
     align-items: flex-start;
     gap: 50px;
@@ -240,6 +261,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-div-11 {
     flex-direction: column;
     align-items: flex-start;
@@ -249,6 +271,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-div-12 {
     flex-direction: column;
     align-items: flex-start;
@@ -258,6 +281,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-div-13 {
     align-items: center;
     gap: 10px;
@@ -267,6 +291,7 @@
     display: flex;
     position: relative;
 }
+
 .kelas-content .k-img-2 {
     position: relative;
     flex: 1;
@@ -277,6 +302,7 @@
     max-height: 20px;
     aspect-ratio: 1;
 }
+
 .kelas-content .k-text-wrapper-6 {
     position: relative;
     align-self: stretch;
@@ -289,6 +315,7 @@
     line-height: var(--paragraph-p12-regular-line-height);
     font-style: var(--paragraph-p12-regular-font-style);
 }
+
 .kelas-content .k-div-wrapper {
     display: flex;
     flex: 0 0 40px;
@@ -308,6 +335,7 @@
     aspect-ratio: 1;
     position: relative;
 }
+
 .kelas-content .k-text-wrapper-7 {
     position: relative;
     display: block;
@@ -323,6 +351,7 @@
     font-style: var(--heading-h5-medium-font-style);
     text-align: center;
 }
+
 .kelas-content .k-line {
     position: relative;
     align-self: stretch;
@@ -330,14 +359,19 @@
     height: 1px;
     margin-bottom: -0.9px;
 }
+
+/* AREA AKSI */
 .kelas-content .k-div-14 {
     width: 193px;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     gap: 10px;
     flex: 0 0 auto;
     display: flex;
     position: relative;
+    box-sizing: border-box;
 }
+
 .kelas-content .k-text-wrapper-8 {
     position: relative;
     flex: 1;
@@ -351,6 +385,7 @@
     line-height: var(--paragraph-p16-regular-line-height);
     font-style: var(--paragraph-p16-regular-font-style);
 }
+
 .kelas-content .k-text-wrapper-9 {
     position: relative;
     flex: 1;
@@ -364,6 +399,7 @@
     line-height: var(--paragraph-p16-regular-line-height);
     font-style: var(--paragraph-p16-regular-font-style);
 }
+
 .kelas-content .k-div-15 {
     display: flex;
     flex-wrap: wrap;
@@ -374,6 +410,7 @@
     width: 100%;
     flex: 0 0 auto;
 }
+
 .kelas-content .k-div-16 {
     display: flex;
     flex-direction: column;
@@ -388,9 +425,11 @@
     background-color: var(--primarypr-00);
     border-radius: 12px;
 }
+
 .kelas-content {
     width: min(1150px, 100%);
 }
+
 .kelas-content .k-button-tambah-siswa {
     border: 0;
     appearance: none;
@@ -398,16 +437,19 @@
     font: inherit;
     text-align: left;
 }
+
 .kelas-content .k-text-wrapper-8,
 .kelas-content .k-text-wrapper-9 {
     display: block;
 }
+
 .kelas-content .k-button-tambah-siswa:focus-visible,
 .kelas-content .k-text-wrapper-8:focus-visible,
 .kelas-content .k-text-wrapper-9:focus-visible {
     outline: 2px solid var(--secondarysec-80);
     outline-offset: 3px;
 }
+
 @media (max-width: 640px) {
     .kelas-content .k-div,
     .kelas-content .k-div-3,
@@ -415,10 +457,12 @@
         padding-right: 16px;
         padding-left: 16px;
     }
+
     .kelas-content .k-div {
         align-items: flex-start;
         flex-wrap: wrap;
     }
+
     .kelas-content .k-button-tambah-siswa {
         width: auto;
         justify-content: center;
@@ -428,6 +472,7 @@
     .kelas-content .k-button-tambah-siswa .k-tambah-siswa {
         text-align: center;
     }
+
     .kelas-content .k-div-4,
     .kelas-content .k-div-8,
     .kelas-content .k-div-16 {
@@ -617,12 +662,17 @@
     object-fit: fill;
 }
 
+/* =========================================================
+   AREA AKSI DATA KELAS
+========================================================= */
+
 #data-kelas .k-div-14 {
     width: 193px;
     height: 20px;
     align-self: center;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 10px;
     box-sizing: border-box;
 }
@@ -876,18 +926,14 @@
     box-sizing: border-box;
 }
 
-.dashboard .frame-4 > #data-kelas.kelas-content .k-line {
-    width: 100%;
-    height: 1px;
-    min-height: 1px;
-}
-
+/* Default area aksi dashboard */
 .dashboard .frame-4 > #data-kelas.kelas-content .k-div-14 {
     width: 193px;
     height: 20px;
     align-self: center;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 10px;
     box-sizing: border-box;
 }
@@ -1147,9 +1193,11 @@
 body.kelas-modal-open {
     overflow: hidden;
 }
+
 .kelas-modal[hidden] {
     display: none !important;
 }
+
 .kelas-modal {
     position: fixed;
     inset: 0;
@@ -1162,6 +1210,7 @@ body.kelas-modal-open {
     padding: 16px;
     box-sizing: border-box;
 }
+
 .kelas-modal-backdrop {
     position: absolute;
     inset: 0;
@@ -1170,6 +1219,7 @@ body.kelas-modal-open {
     background: rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(3px);
 }
+
 .kelas-modal-dialog {
     position: relative;
     z-index: 2001;
@@ -1182,16 +1232,19 @@ body.kelas-modal-open {
     box-sizing: border-box;
     animation: kelasModalIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 @keyframes kelasModalIn {
     from {
         opacity: 0;
         transform: scale(0.95) translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: scale(1) translateY(0);
     }
 }
+
 .kelas-modal-header {
     display: flex;
     align-items: flex-start;
@@ -1200,6 +1253,7 @@ body.kelas-modal-open {
     padding-bottom: 12px;
     border-bottom: 1px solid var(--secondarysc-00);
 }
+
 .kelas-modal-header h2 {
     margin: 0;
     font-family: var(--heading-h5-bold-font-family);
@@ -1208,12 +1262,14 @@ body.kelas-modal-open {
     line-height: var(--heading-h5-bold-line-height);
     color: var(--primarypr-40);
 }
+
 .kelas-modal-header p {
     margin: 4px 0 0;
     font-family: var(--paragraph-p12-regular-font-family);
     font-size: var(--paragraph-p12-regular-font-size);
     color: var(--primarypr-50);
 }
+
 .kelas-modal-close {
     background: transparent;
     border: 0;
@@ -1228,30 +1284,36 @@ body.kelas-modal-open {
         background-color 0.2s,
         color 0.2s;
 }
+
 .kelas-modal-close:hover {
     background: var(--secondarysc-00);
     color: var(--primarypr-50);
 }
+
 .kelas-modal-close svg {
     width: 20px;
     height: 20px;
 }
+
 .kelas-form {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
+
 .kelas-form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
+
 .kelas-form-group label {
     font-family: var(--label-l16-medium-font-family);
     font-size: var(--label-l16-medium-font-size);
     font-weight: var(--label-l16-medium-font-weight);
     color: var(--primarypr-50);
 }
+
 .kelas-form-group input,
 .kelas-select-wrap select {
     width: 100%;
@@ -1269,19 +1331,23 @@ body.kelas-modal-open {
         border-color 0.2s,
         box-shadow 0.2s;
 }
+
 .kelas-form-group input:focus,
 .kelas-select-wrap select:focus {
     border-color: var(--primarypr-40);
     box-shadow: 0 0 0 3px rgba(101, 146, 135, 0.2);
 }
+
 .kelas-select-wrap {
     position: relative;
     width: 100%;
 }
+
 .kelas-select-wrap select {
     appearance: none;
     cursor: pointer;
 }
+
 .kelas-select-wrap::after {
     content: "";
     position: absolute;
@@ -1295,12 +1361,14 @@ body.kelas-modal-open {
     border-top: 6px solid var(--primarypr-50);
     pointer-events: none;
 }
+
 .kelas-form-help {
     font-family: var(--paragraph-p12-regular-font-family);
     font-size: var(--paragraph-p12-regular-font-size);
     color: var(--primarypr-50);
     display: block;
 }
+
 .kelas-form-actions {
     display: flex;
     align-items: center;
@@ -1310,6 +1378,7 @@ body.kelas-modal-open {
     padding-top: 16px;
     border-top: 1px solid var(--secondarysc-00);
 }
+
 .kelas-form-cancel {
     padding: 10px 18px;
     border: 1px solid var(--secondarysc-50);
@@ -1322,9 +1391,11 @@ body.kelas-modal-open {
     cursor: pointer;
     transition: background-color 0.2s;
 }
+
 .kelas-form-cancel:hover {
     background: var(--primarypr-10);
 }
+
 .kelas-form-submit {
     padding: 10px 20px;
     border: 0;
@@ -1337,9 +1408,11 @@ body.kelas-modal-open {
     cursor: pointer;
     transition: filter 0.2s;
 }
+
 .kelas-form-submit:hover {
     filter: brightness(0.92);
 }
+
 .kelas-form-delete-confirm {
     padding: 10px 20px;
     border: 0;
@@ -1351,14 +1424,17 @@ body.kelas-modal-open {
     font-weight: var(--label-l16-medium-font-weight);
     cursor: pointer;
 }
+
 .kelas-form-delete-confirm:disabled {
     opacity: 0.45;
     cursor: not-allowed;
 }
+
 .kelas-delete-dialog {
     max-width: 460px;
     text-align: center;
 }
+
 .kelas-delete-icon {
     width: 52px;
     height: 52px;
@@ -1369,16 +1445,19 @@ body.kelas-modal-open {
     background: rgba(220, 72, 72, 0.1);
     color: var(--colors-accents-red);
 }
+
 .kelas-delete-icon svg {
     width: 25px;
     height: 25px;
 }
+
 .kelas-delete-title {
     margin: 0;
     font-family: var(--heading-h5-bold-font-family);
     font-size: var(--heading-h5-bold-font-size);
     color: var(--primarypr-50);
 }
+
 .kelas-delete-text {
     margin: 8px 0 0;
     font-family: var(--paragraph-p16-regular-font-family);
@@ -1386,6 +1465,7 @@ body.kelas-modal-open {
     line-height: 1.5;
     color: var(--primarypr-50);
 }
+
 .kelas-delete-warning {
     padding: 10px 12px;
     margin: 12px 0 0;
@@ -1403,18 +1483,22 @@ body.kelas-modal-open {
     font: inherit;
     padding: 0;
 }
+
 .k-div-14 .kelas-edit-btn {
     color: var(--secondarysec-80);
 }
+
 .k-div-14 .kelas-edit-btn:hover {
     text-decoration: underline;
 }
+
 @media (max-width: 768px) {
     .kelas-modal {
         padding: 12px;
         align-items: center;
         overflow-y: auto;
     }
+
     .kelas-modal-dialog {
         width: 100%;
         max-width: 520px;
@@ -1423,6 +1507,7 @@ body.kelas-modal-open {
         padding: 20px 18px;
         border-radius: 14px;
     }
+
     .kelas-form-actions {
         flex-direction: column;
         align-items: stretch;
@@ -1431,6 +1516,7 @@ body.kelas-modal-open {
         margin-top: 10px;
         padding-top: 14px;
     }
+
     .kelas-form-cancel,
     .kelas-form-submit,
     .kelas-form-delete-confirm {
@@ -1440,18 +1526,22 @@ body.kelas-modal-open {
         box-sizing: border-box;
     }
 }
+
 @media (max-width: 480px) {
     .kelas-modal {
         padding: 8px;
     }
+
     .kelas-modal-dialog {
         max-height: calc(100vh - 16px);
         padding: 18px 14px;
         border-radius: 12px;
     }
+
     .kelas-form-actions {
         gap: 8px;
     }
+
     .kelas-form-cancel,
     .kelas-form-submit,
     .kelas-form-delete-confirm {
@@ -1465,6 +1555,7 @@ body.kelas-modal-open {
     justify-content: center !important;
     gap: 7px !important;
 }
+
 #data-kelas .k-button-tambah-siswa .k-ic-round-plus {
     width: 16px !important;
     height: 16px !important;
@@ -1480,6 +1571,7 @@ body.kelas-modal-open {
     line-height: 0 !important;
     color: var(--primarypr-00) !important;
 }
+
 #data-kelas .k-button-tambah-siswa .k-ic-round-plus svg,
 #data-kelas .k-button-tambah-siswa .k-ic-round-plus .k-vector {
     display: block !important;
@@ -1491,6 +1583,7 @@ body.kelas-modal-open {
     color: var(--primarypr-00) !important;
     stroke: var(--primarypr-00) !important;
 }
+
 #data-kelas .k-button-tambah-siswa .k-ic-round-plus svg path {
     stroke: var(--primarypr-00) !important;
     fill: none !important;
@@ -1517,13 +1610,16 @@ body.kelas-modal-open {
         color 0.2s ease,
         border-color 0.2s ease !important;
 }
+
 .kelas-form-delete:hover {
     background: var(--colors-accents-red) !important;
     color: var(--primarypr-00) !important;
 }
+
 .kelas-form-delete:active {
     transform: translateY(1px);
 }
+
 @media (max-width: 900px) {
     .kelas-form-delete {
         width: 100% !important;
@@ -1580,6 +1676,7 @@ body.kelas-modal-open {
     line-height: 1 !important;
     flex: 0 0 auto !important;
 }
+
 #kelas-form .kelas-form-actions > .kelas-form-submit,
 #kelas-form .kelas-form-actions > #kelas-form-submit-btn,
 #kelas-form .kelas-form-actions > .kelas-form-cancel,
@@ -1588,6 +1685,7 @@ body.kelas-modal-open {
     width: auto !important;
     min-width: 0 !important;
 }
+
 @media (max-width: 768px) {
     #kelas-form .kelas-form-actions > button {
         width: 100% !important;
@@ -1701,12 +1799,137 @@ body.kelas-modal-open {
     }
 }
 
-#data-kelas .k-div-14 {
-    width: 100%;
-    max-width: 100%;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+/* =========================================================
+   PERBAIKAN POSISI DETAIL UNTUK ROLE TANPA EDIT
+========================================================= */
+
+/*
+   Kondisi:
+   - Jika .kelas-edit-btn ADA:
+     Detail + Edit tetap berdampingan.
+   - Jika .kelas-edit-btn TIDAK ADA:
+     Detail berada tepat di tengah.
+
+   :has() digunakan agar CSS dapat mendeteksi
+   keberadaan tombol Edit tanpa membutuhkan JavaScript.
+*/
+
+#data-kelas .k-div-14:has(.kelas-edit-btn),
+.dashboard .frame-4 > #data-kelas.kelas-content .k-div-14:has(.kelas-edit-btn) {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+}
+
+#data-kelas .k-div-14:not(:has(.kelas-edit-btn)),
+.dashboard
+    .frame-4
+    > #data-kelas.kelas-content
+    .k-div-14:not(:has(.kelas-edit-btn)) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    grid-template-columns: none !important;
+}
+
+/*
+   Detail ketika Edit tidak tersedia:
+   dibuat tidak mengambil 50% lebar area,
+   sehingga benar-benar berada di tengah.
+*/
+#data-kelas .k-div-14:not(:has(.kelas-edit-btn)) .k-text-wrapper-8,
+.dashboard
+    .frame-4
+    > #data-kelas.kelas-content
+    .k-div-14:not(:has(.kelas-edit-btn))
+    .k-text-wrapper-8 {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+}
+
+/*
+   Jika Edit tersedia, kedua tombol tetap
+   membagi area aksi secara seimbang.
+*/
+#data-kelas .k-div-14:has(.kelas-edit-btn) .k-text-wrapper-8,
+#data-kelas .k-div-14:has(.kelas-edit-btn) .k-text-wrapper-9,
+.dashboard
+    .frame-4
+    > #data-kelas.kelas-content
+    .k-div-14:has(.kelas-edit-btn)
+    .k-text-wrapper-8,
+.dashboard
+    .frame-4
+    > #data-kelas.kelas-content
+    .k-div-14:has(.kelas-edit-btn)
+    .k-text-wrapper-9 {
+    width: auto;
+    min-width: 0;
+    text-align: center;
+}
+
+/*
+   Memastikan posisi tetap benar pada tablet dan HP.
+*/
+@media (max-width: 768px) {
+    #data-kelas .k-div-14:not(:has(.kelas-edit-btn)),
+    .dashboard
+        .frame-4
+        > #data-kelas.kelas-content
+        .k-div-14:not(:has(.kelas-edit-btn)) {
+        width: 100% !important;
+        max-width: 193px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0 !important;
+    }
+
+    #data-kelas .k-div-14:not(:has(.kelas-edit-btn)) .k-text-wrapper-8,
+    .dashboard
+        .frame-4
+        > #data-kelas.kelas-content
+        .k-div-14:not(:has(.kelas-edit-btn))
+        .k-text-wrapper-8 {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        text-align: center !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #data-kelas .k-div-14:not(:has(.kelas-edit-btn)),
+    .dashboard
+        .frame-4
+        > #data-kelas.kelas-content
+        .k-div-14:not(:has(.kelas-edit-btn)) {
+        width: 100% !important;
+        max-width: none !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    #data-kelas .k-div-14:not(:has(.kelas-edit-btn)) .k-text-wrapper-8,
+    .dashboard
+        .frame-4
+        > #data-kelas.kelas-content
+        .k-div-14:not(:has(.kelas-edit-btn))
+        .k-text-wrapper-8 {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        text-align: center !important;
+    }
 }
 
 #data-kelas .k-text-wrapper-8,
@@ -1895,10 +2118,10 @@ body.kelas-modal-open {
     opacity: 1 !important;
 }
 
-
 /* =========================================================
    FILTER TAHUN AJARAN
 ========================================================= */
+
 .kelas-header-actions {
     display: flex;
     align-items: flex-end;
@@ -1936,7 +2159,7 @@ body.kelas-modal-open {
 
 .kelas-filter-control:focus-within {
     border-color: var(--secondarysec-80);
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, .12);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.12);
 }
 
 .kelas-filter-icon {
@@ -2003,4 +2226,50 @@ body.kelas-modal-open {
     .kelas-header-actions .k-button-tambah-siswa {
         width: 100% !important;
     }
+}
+
+/* =========================================================
+   FINAL OVERRIDE
+   DETAIL DI TENGAH JIKA TOMBOL EDIT TIDAK ADA
+========================================================= */
+
+#data-kelas .k-div-14:not(:has(.kelas-edit-btn)) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    grid-template-columns: none !important;
+    gap: 0 !important;
+}
+
+#data-kelas .k-div-14:not(:has(.kelas-edit-btn)) .k-text-wrapper-8 {
+    display: block !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: max-content !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+}
+
+.dashboard
+    .frame-4
+    > #data-kelas.kelas-content
+    .k-div-14:not(:has(.kelas-edit-btn)) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    grid-template-columns: none !important;
+    gap: 0 !important;
+}
+
+.dashboard
+    .frame-4
+    > #data-kelas.kelas-content
+    .k-div-14:not(:has(.kelas-edit-btn))
+    .k-text-wrapper-8 {
+    display: block !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: max-content !important;
+    margin: 0 auto !important;
+    text-align: center !important;
 }

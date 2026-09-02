@@ -257,18 +257,19 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    color: #202020;
+    color: var(--primarypr-00);
     font-family: var(--paragraph-p16-regular-font-family);
     font-size: var(--paragraph-p16-regular-font-size);
     line-height: 24px;
 }
 
 .kkm-low {
-    background: #faf7bb;
+    background: var(--secondarysc-20);
+    color: var(--primarypr-50);
 }
 
 .kkm-high {
-    background: #b1d3b9;
+    background: var(--primarypr-20);
 }
 
 .mapel-actions {
@@ -302,7 +303,7 @@
 }
 
 .mapel-edit-btn {
-    color: #2196f3;
+    color: var(--secondarysec-80);
 }
 
 .mapel-delete-btn {

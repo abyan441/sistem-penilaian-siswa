@@ -48,15 +48,6 @@
         </form>
     </section>
 
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap;">
-        <p style="margin:0;color:var(--primarypr-50);font-family:var(--paragraph-p16-regular-font-family);font-size:12px;">
-            Menampilkan data siswa <strong>{{ $tahunAjaranTerpilih ?? 'dari semua tahun ajaran' }}</strong>
-        </p>
-        @if ($tahunAjaranTerpilih !== null)
-            <span style="color:var(--primarypr-50);font-size:12px;opacity:.75;">Data tahun ajaran lain tetap tersimpan dan dapat dipilih melalui filter.</span>
-        @endif
-    </div>
-
     <section class="siswa-table-card" aria-label="Daftar siswa">
         <div class="siswa-table-scroll">
             <div class="siswa-table" role="table" aria-label="Data siswa">
