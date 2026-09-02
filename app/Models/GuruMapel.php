@@ -45,8 +45,14 @@ class GuruMapel extends Model
 
     public static function semua()
     {
-        return self::with(['guru', 'mataPelajaran'])
-            ->orderBy('id')
+        return self::query()
+            ->join('users', 'guru_mapel.guru_id', '=', 'users.id')
+            ->join('mata_pelajaran', 'guru_mapel.mapel_id', '=', 'mata_pelajaran.id')
+            ->select('guru_mapel.*')
+            ->with(['guru', 'mataPelajaran'])
+            ->orderBy('users.nama_lengkap')
+            ->orderBy('mata_pelajaran.nama_pelajaran')
+            ->orderBy('guru_mapel.id')
             ->get();
     }
 
