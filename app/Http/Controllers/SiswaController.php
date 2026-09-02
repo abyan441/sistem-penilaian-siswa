@@ -10,11 +10,15 @@ class SiswaController extends ApiController
 {
     public function index(Request $request)
     {
-        $tahunAjaran = $request->query('tahun_ajaran');
+        $requestedTahunAjaran = $request->query('tahun_ajaran');
 
-        // Jika belum memilih filter, tampilkan tahun ajaran terbaru
-        // agar data dari tahun yang berbeda tidak terlihat seperti duplikat.
-        $tahunAjaranTerpilih = Kelas::resolveTahunAjaran($tahunAjaran);
+        // Default ke tahun ajaran terbaru supaya data lintas tahun tidak
+        // tampil bersamaan dan nama siswa tidak terlihat seperti duplikat.
+        if ($requestedTahunAjaran === 'semua') {
+            $tahunAjaranTerpilih = null;
+        } else {
+            $tahunAjaranTerpilih = Kelas::resolveTahunAjaran($requestedTahunAjaran);
+        }
 
         return view(
             'siswa',
