@@ -50,8 +50,8 @@ class GuruMapel extends Model
             ->join('mata_pelajaran', 'guru_mapel.mapel_id', '=', 'mata_pelajaran.id')
             ->select('guru_mapel.*')
             ->with(['guru', 'mataPelajaran'])
-            ->orderBy('users.nama_lengkap')
-            ->orderBy('mata_pelajaran.nama_pelajaran')
+            ->orderByRaw('LOWER(TRIM(users.nama_lengkap)) ASC')
+            ->orderByRaw('LOWER(TRIM(mata_pelajaran.nama_pelajaran)) ASC')
             ->orderBy('guru_mapel.id')
             ->get();
     }
