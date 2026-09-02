@@ -44,19 +44,26 @@ class Siswa extends Model
             ->orderBy('nisn');
     }
 
-    public static function dataHalaman(): array
+    public static function dataHalaman(?string $tahunAjaran = null): array
     {
+        $query = self::query()
+            ->with('kelas')
+            ->orderBy(
+                Kelas::query()
+                    ->select('nama_kelas')
+                    ->whereColumn('kelas.id', 'siswa.kelas_id')
+            )
+            ->orderBy('nama_siswa')
+            ->orderBy('nisn');
+
+        if ($tahunAjaran !== null && $tahunAjaran !== '') {
+            $query->tahunAjaran($tahunAjaran);
+        }
+
         return [
-            'siswa' => self::query()
-                ->with('kelas')
-                ->orderBy(
-                    Kelas::query()
-                        ->select('nama_kelas')
-                        ->whereColumn('kelas.id', 'siswa.kelas_id')
-                )
-                ->orderBy('nama_siswa')
-                ->get(),
+            'siswa' => $query->get(),
             'kelas' => Kelas::query()
+                ->orderBy('tahun_ajaran', 'desc')
                 ->orderBy('nama_kelas')
                 ->get(),
         ];
