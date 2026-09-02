@@ -2,14 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 
 class SiswaController extends ApiController
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('siswa', Siswa::dataHalaman());
+        $tahunAjaran = $request->query('tahun_ajaran');
+
+        // Jika belum memilih filter, tampilkan tahun ajaran terbaru
+        // agar data dari tahun yang berbeda tidak terlihat seperti duplikat.
+        $tahunAjaranTerpilih = Kelas::resolveTahunAjaran($tahunAjaran);
+
+        return view(
+            'siswa',
+            Siswa::dataHalaman($tahunAjaranTerpilih) + [
+                'tahunAjaranTerpilih' => $tahunAjaranTerpilih,
+                'tahunAjaranOptions' => Kelas::tahunAjaranOptions(),
+            ]
+        );
     }
 
     public function store(Request $request)
@@ -58,6 +71,8 @@ class SiswaController extends ApiController
 
     private function formatData(Siswa $siswa)
     {
+        $siswa->loadMissing('kelas');
+
         return [
             'id' => $siswa->id,
             'nisn' => $siswa->nisn,
@@ -65,6 +80,7 @@ class SiswaController extends ApiController
             'jenis_kelamin' => $siswa->jenis_kelamin,
             'kelas_id' => $siswa->kelas_id,
             'kelas' => $siswa->kelas?->nama_kelas ?? '-',
+            'tahun_ajaran' => $siswa->kelas?->tahun_ajaran,
         ];
     }
 }
