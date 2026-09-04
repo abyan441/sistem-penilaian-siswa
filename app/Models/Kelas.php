@@ -93,6 +93,18 @@ class Kelas extends Model
             ->pluck('tahun_ajaran');
     }
 
+    public static function tahunAjaranWaliGuru(int $guruId)
+    {
+        return static::query()
+            ->where('wali_kelas_id', $guruId)
+            ->whereNotNull('tahun_ajaran')
+            ->where('tahun_ajaran', '!=', '')
+            ->select('tahun_ajaran')
+            ->distinct()
+            ->orderByDesc('tahun_ajaran')
+            ->pluck('tahun_ajaran');
+    }
+
     public static function resolveTahunAjaran(?string $tahunAjaran): ?string
     {
         if ($tahunAjaran !== null && $tahunAjaran !== '') {
@@ -109,10 +121,17 @@ class Kelas extends Model
             ->exists();
     }
 
-    public static function kelasWaliGuru(int $guruId): ?self
+    public static function kelasWaliGuru(int $guruId, ?string $tahunAjaran = null): ?self
     {
-        return static::query()
-            ->where('wali_kelas_id', $guruId)
+        $query = static::query()
+            ->where('wali_kelas_id', $guruId);
+
+        if ($tahunAjaran !== null && $tahunAjaran !== '') {
+            $query->where('tahun_ajaran', trim($tahunAjaran));
+        }
+
+        return $query
+            ->orderByDesc('tahun_ajaran')
             ->first();
     }
 
