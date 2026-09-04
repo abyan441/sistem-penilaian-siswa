@@ -164,6 +164,28 @@ document.addEventListener("DOMContentLoaded", function () {
             badge.appendChild(badgeText);
             row.appendChild(badge);
 
+            const noteWrapper = document.createElement("div");
+            noteWrapper.className = "nilai-catatan-wrapper";
+
+            const noteInput = document.createElement("textarea");
+            noteInput.className = "nilai-catatan-input";
+            noteInput.rows = 2;
+            noteInput.maxLength = 1000;
+            noteInput.placeholder = "Tulis catatan guru...";
+            noteInput.value = student.catatan_guru || "";
+            noteInput.setAttribute(
+                "aria-label",
+                `Catatan guru untuk ${student.nama_siswa || "siswa"}`,
+            );
+
+            if (readOnly) {
+                noteInput.disabled = true;
+                noteInput.readOnly = true;
+            }
+
+            noteWrapper.appendChild(noteInput);
+            row.appendChild(noteWrapper);
+
             if (isAdmin && student.nilai_id) {
                 const deleteButton = document.createElement("button");
                 deleteButton.type = "button";
@@ -317,6 +339,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 Number(row.querySelector(".nilai-input-uts")?.value) || 0,
             nilai_uas:
                 Number(row.querySelector(".nilai-input-uas")?.value) || 0,
+            catatan_guru:
+                row.querySelector(".nilai-catatan-input")?.value?.trim() || "",
         }));
 
         if (saveButton) saveButton.disabled = true;
