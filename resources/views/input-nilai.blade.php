@@ -4,6 +4,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/pages/input-nilai.css') }}">
+<link rel="stylesheet" href="{{ asset('css/pages/input-nilai-catatan.css') }}">
 @endpush
 
 @section('content')
@@ -112,6 +113,7 @@
             <span role="columnheader">UAS (40%)</span>
             <span role="columnheader">Nilai Akhir</span>
             <span role="columnheader">Predikat</span>
+            <span role="columnheader">Catatan Guru</span>
             @if (!empty($isAdmin))
                 <span role="columnheader">Aksi</span>
             @endif
