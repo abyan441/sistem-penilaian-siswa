@@ -103,7 +103,7 @@
                                     <td>{{ $item->guruMapel?->mataPelajaran?->nama_pelajaran ?? 'Mata pelajaran tidak ditemukan' }}</td>
                                     <td>{{ number_format($nilaiAkhir, 2, ',', '.') }}</td>
                                     <td>{{ $item->predikat }}</td>
-                                    <td>{{ $item->deskripsi_predikat }}</td>
+                                    <td>{{ filled($item->catatan_guru) ? $item->catatan_guru : '-' }}</td>
                                 </tr>
                             @empty
                                 <tr>
