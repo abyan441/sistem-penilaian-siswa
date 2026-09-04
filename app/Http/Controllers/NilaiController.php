@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Nilai;
+use App\Models\Siswa;
+use App\Models\GuruMapel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
 class NilaiController extends ApiController
@@ -58,6 +61,23 @@ class NilaiController extends ApiController
                     $validated['kelas_id'] ?? null,
                     $validated['tahun_ajaran'] ?? null
                 );
+
+            $nilaiIds = collect($data['siswa'] ?? [])
+                ->pluck('nilai_id')
+                ->filter()
+                ->values();
+
+            $catatan = $nilaiIds->isNotEmpty()
+                ? DB::table('nilai')->whereIn('id', $nilaiIds)->pluck('catatan_guru', 'id')
+                : collect();
+
+            $data['siswa'] = collect($data['siswa'] ?? [])
+                ->map(function (array $student) use ($catatan) {
+                    $nilaiId = $student['nilai_id'] ?? null;
+                    $student['catatan_guru'] = $nilaiId ? ($catatan->get($nilaiId) ?? '') : '';
+                    return $student;
+                })
+                ->all();
 
             return $this->successResponse($data, '', 200, ['readOnly' => $readOnly]);
         } catch (InvalidArgumentException $e) {
@@ -120,6 +140,7 @@ class NilaiController extends ApiController
             'nilai.*.nilai_tugas' => ['required', 'numeric', 'between:0,100'],
             'nilai.*.nilai_uts' => ['required', 'numeric', 'between:0,100'],
             'nilai.*.nilai_uas' => ['required', 'numeric', 'between:0,100'],
+            'nilai.*.catatan_guru' => ['nullable', 'string', 'max:1000'],
         ], $this->validationMessages());
 
         try {
@@ -130,12 +151,41 @@ class NilaiController extends ApiController
                 $validated['nilai']
             );
 
-            return $this->successResponse(null, 'Nilai siswa berhasil disimpan.');
+            $guruMapel = GuruMapel::query()
+                ->where('guru_id', $user->id)
+                ->where('mapel_id', $validated['mapel_id'])
+                ->firstOrFail();
+
+            DB::transaction(function () use ($validated, $guruMapel) {
+                foreach ($validated['nilai'] as $data) {
+                    $siswa = Siswa::query()
+                        ->with('kelas:id,tahun_ajaran')
+                        ->findOrFail($data['siswa_id']);
+
+                    $tahunAjaran = $siswa->kelas?->tahun_ajaran;
+                    if (!$tahunAjaran) {
+                        throw new InvalidArgumentException('Tahun ajaran siswa tidak ditemukan.');
+                    }
+
+                    DB::table('nilai')
+                        ->where('siswa_id', $siswa->id)
+                        ->where('guru_mapel_id', $guruMapel->id)
+                        ->where('tahun_ajaran', $tahunAjaran)
+                        ->where('semester', $validated['semester'])
+                        ->update([
+                            'catatan_guru' => isset($data['catatan_guru']) && trim($data['catatan_guru']) !== ''
+                                ? trim($data['catatan_guru'])
+                                : null,
+                        ]);
+                }
+            });
+
+            return $this->successResponse(null, 'Nilai dan catatan guru berhasil disimpan.');
         } catch (InvalidArgumentException $e) {
             return $this->errorResponse($e->getMessage());
         } catch (\Throwable $e) {
             report($e);
-            return $this->errorResponse('Terjadi kesalahan saat menyimpan nilai.', 500);
+            return $this->errorResponse('Terjadi kesalahan saat menyimpan nilai dan catatan guru.', 500);
         }
     }
 
@@ -181,6 +231,8 @@ class NilaiController extends ApiController
             'nilai.*.nilai_uas.required' => 'Nilai UAS wajib diisi.',
             'nilai.*.nilai_uas.numeric' => 'Nilai UAS harus berupa angka.',
             'nilai.*.nilai_uas.between' => 'Nilai UAS harus berada pada rentang 0 sampai 100.',
+            'nilai.*.catatan_guru.string' => 'Catatan guru harus berupa teks.',
+            'nilai.*.catatan_guru.max' => 'Catatan guru maksimal 1000 karakter.',
         ];
     }
 }
