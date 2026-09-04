@@ -1,0 +1,90 @@
+.nilai-table-header,
+.nilai-table-body {
+    grid-template-columns:
+        0.55fr
+        1.45fr
+        repeat(3, 0.85fr)
+        0.85fr
+        0.7fr
+        2fr;
+    min-width: 1180px;
+}
+
+.nilai-table-admin .nilai-table-header,
+.nilai-table-admin .nilai-table-body {
+    grid-template-columns:
+        0.55fr
+        1.45fr
+        repeat(3, 0.85fr)
+        0.85fr
+        0.7fr
+        2fr
+        0.8fr;
+    min-width: 1280px;
+}
+
+.nilai-table-header > :nth-child(8),
+.nilai-table-header > :nth-child(9) {
+    text-align: center;
+}
+
+.nilai-table-body .nilai-catatan-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    padding: 8px 10px;
+    box-sizing: border-box;
+}
+
+.nilai-catatan-input {
+    width: 100%;
+    min-width: 0;
+    min-height: 52px;
+    max-height: 76px;
+    padding: 8px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 9px;
+    background: var(--primarypr-00);
+    color: var(--primarypr-50);
+    font: inherit;
+    font-size: 14px;
+    line-height: 20px;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nilai-catatan-input::placeholder {
+    color: var(--primarypr-60);
+    opacity: 0.75;
+}
+
+.nilai-catatan-input:focus {
+    border-color: var(--secondarysec-80);
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.12);
+}
+
+.nilai-catatan-input:disabled,
+.nilai-catatan-input[readonly] {
+    background: var(--primarypr-10);
+    cursor: default;
+    resize: none;
+}
+
+.nilai-catatan-wrapper .nilai-catatan-input {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .nilai-table-header,
+    .nilai-table-body {
+        min-width: 1080px;
+    }
+
+    .nilai-table-admin .nilai-table-header,
+    .nilai-table-admin .nilai-table-body {
+        min-width: 1180px;
+    }
+}
