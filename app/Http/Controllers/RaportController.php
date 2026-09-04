@@ -23,7 +23,7 @@ class RaportController extends ApiController
         }
     }
 
-    private function kelasWaliGuru(): ?Kelas
+    private function kelasWaliGuru(?string $tahunAjaran = null): ?Kelas
     {
         $user = Auth::user();
 
@@ -31,7 +31,7 @@ class RaportController extends ApiController
             return null;
         }
 
-        return Kelas::kelasWaliGuru((int) $user->id);
+        return Kelas::kelasWaliGuru((int) $user->id, $tahunAjaran);
     }
 
     public function index(Request $request): View
@@ -39,17 +39,30 @@ class RaportController extends ApiController
         $this->pastikanAksesRaport();
 
         $user = Auth::user();
-        $kelasWali = $this->kelasWaliGuru();
         $isGuruWali = $user?->role === 'guru';
-
-        if ($isGuruWali && !$kelasWali) {
-            throw new HttpException(403, 'Menu raport hanya dapat diakses oleh guru yang menjadi wali kelas.');
-        }
+        $tahunAjaranDiminta = $request->query('tahun_ajaran');
 
         if ($isGuruWali) {
-            $kelasWali = $kelasWali ?? throw new HttpException(403, 'Menu raport hanya dapat diakses oleh guru yang menjadi wali kelas.');
-            $tahunAjaranOptions = collect([$kelasWali->tahun_ajaran]);
-            $tahunAjaran = $kelasWali->tahun_ajaran;
+            $tahunAjaranOptions = Kelas::tahunAjaranWaliGuru((int) $user->id);
+
+            if ($tahunAjaranOptions->isEmpty()) {
+                throw new HttpException(403, 'Menu raport hanya dapat diakses oleh guru yang menjadi wali kelas.');
+            }
+
+            $tahunAjaran = ($tahunAjaranDiminta !== null && $tahunAjaranDiminta !== '')
+                ? trim($tahunAjaranDiminta)
+                : $tahunAjaranOptions->first();
+
+            if (!$tahunAjaranOptions->contains($tahunAjaran)) {
+                $tahunAjaran = $tahunAjaranOptions->first();
+            }
+
+            $kelasWali = $this->kelasWaliGuru($tahunAjaran);
+
+            if (!$kelasWali) {
+                throw new HttpException(403, 'Anda tidak memiliki kelas wali pada tahun ajaran yang dipilih.');
+            }
+
             $siswa = Siswa::query()
                 ->with('kelas')
                 ->where('kelas_id', $kelasWali->id)
@@ -58,7 +71,7 @@ class RaportController extends ApiController
                 ->get();
         } else {
             $tahunAjaranOptions = Kelas::tahunAjaranOptions();
-            $tahunAjaran = Kelas::resolveTahunAjaran($request->query('tahun_ajaran'));
+            $tahunAjaran = Kelas::resolveTahunAjaran($tahunAjaranDiminta);
             $siswa = Kelas::siswaUntukRaport($tahunAjaran);
         }
 
@@ -96,10 +109,12 @@ class RaportController extends ApiController
         ]);
 
         $user = Auth::user();
-        $kelasWali = $this->kelasWaliGuru();
+        $tahunAjaran = trim($validated['tahun_ajaran']);
 
         if ($user?->role === 'guru') {
-            if (!$kelasWali || $kelasWali->tahun_ajaran !== trim($validated['tahun_ajaran'])) {
+            $kelasWali = $this->kelasWaliGuru($tahunAjaran);
+
+            if (!$kelasWali) {
                 return $this->successResponse([]);
             }
 
@@ -109,14 +124,14 @@ class RaportController extends ApiController
                 ->orderBy('nisn')
                 ->get();
 
-            $dataRaport = collect(Siswa::dataRaport($validated['tahun_ajaran']))
+            $dataRaport = collect(Siswa::dataRaport($tahunAjaran))
                 ->whereIn('id', $siswa->pluck('id'))
                 ->values();
 
             return $this->successResponse($dataRaport);
         }
 
-        return $this->successResponse(Siswa::dataRaport($validated['tahun_ajaran']));
+        return $this->successResponse(Siswa::dataRaport($tahunAjaran));
     }
 
     public function preview(Request $request, int $id): View
@@ -137,7 +152,6 @@ class RaportController extends ApiController
         $semester = Nilai::resolveSemester($validated['semester'] ?? 1);
         $tahunAjaran = trim($validated['tahun_ajaran']);
         $user = Auth::user();
-        $kelasWali = $this->kelasWaliGuru();
 
         $query = Siswa::query()
             ->with(['kelas.waliKelas'])
@@ -147,8 +161,10 @@ class RaportController extends ApiController
             });
 
         if ($user?->role === 'guru') {
+            $kelasWali = $this->kelasWaliGuru($tahunAjaran);
+
             if (!$kelasWali) {
-                throw new HttpException(403, 'Menu raport hanya dapat diakses oleh guru yang menjadi wali kelas.');
+                throw new HttpException(403, 'Anda tidak memiliki kelas wali pada tahun ajaran yang dipilih.');
             }
 
             $query->where('kelas_id', $kelasWali->id);
