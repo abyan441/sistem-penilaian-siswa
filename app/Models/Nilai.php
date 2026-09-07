@@ -23,6 +23,7 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         'nilai_uts',
         'nilai_uas',
         'nilai_akhir',
+        'catatan_guru',
     ];
 
     protected function casts(): array
@@ -269,6 +270,7 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
                 'nilai_uas' => $uas,
                 'nilai_akhir' => $akhir,
                 'predikat' => static::predikat($akhir),
+                'catatan_guru' => $nilaiSiswa?->catatan_guru ?? '',
             ];
         });
     }
@@ -374,6 +376,9 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
                 $tugas = static::validasiNilai($data['nilai_tugas'], 'Nilai tugas');
                 $uts = static::validasiNilai($data['nilai_uts'], 'Nilai UTS');
                 $uas = static::validasiNilai($data['nilai_uas'], 'Nilai UAS');
+                $catatanGuru = isset($data['catatan_guru']) && trim($data['catatan_guru']) !== ''
+                    ? trim($data['catatan_guru'])
+                    : null;
 
                 static::updateOrCreate(
                     [
@@ -387,6 +392,7 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
                         'nilai_uts' => $uts,
                         'nilai_uas' => $uas,
                         'nilai_akhir' => static::hitungNilaiAkhir($tugas, $uts, $uas),
+                        'catatan_guru' => $catatanGuru,
                     ]
                 );
             }
