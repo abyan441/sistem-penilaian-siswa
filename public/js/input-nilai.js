@@ -219,11 +219,78 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function buildParams() {
         const params = new URLSearchParams();
-        if (kelasSelect?.value) params.set("kelas_id", kelasSelect.value);
-        if (tahunSelect?.value) params.set("tahun_ajaran", tahunSelect.value);
+        const selectedKelas = kelasSelect?.selectedOptions?.[0];
+        const tahunAjaran = tahunSelect?.value || "";
+        const namaKelas = selectedKelas?.dataset?.namaKelas || "";
+
+        if (tahunAjaran) {
+            if (kelasSelect?.value) {
+                params.set("kelas_id", kelasSelect.value);
+            }
+            params.set("tahun_ajaran", tahunAjaran);
+        } else if (namaKelas) {
+            // Saat semua tahun dipilih, gunakan nama kelas agar semua
+            // record kelas dengan nama yang sama dari berbagai tahun ikut tampil.
+            params.set("kelas_nama", namaKelas);
+        }
+
         params.set("semester", semesterSelect.value);
         params.set("mapel_id", mapelSelect.value);
         return params;
+    }
+
+    function setupKelasFilter() {
+        if (!kelasSelect || !tahunSelect) return;
+
+        const allOptions = Array.from(kelasSelect.options)
+            .filter((option) => option.value)
+            .map((option) => ({
+                value: option.value,
+                text: option.textContent.trim(),
+                nama: option.dataset.namaKelas || option.textContent.replace(/^Kelas\\s+/i, "").trim(),
+                tahun: option.dataset.tahun || "",
+            }));
+
+        function rebuildKelasOptions() {
+            const selectedOption = kelasSelect.selectedOptions?.[0];
+            const selectedName = selectedOption?.dataset?.namaKelas || "";
+            const tahun = tahunSelect.value || "";
+            const filtered = tahun
+                ? allOptions.filter((option) => option.tahun === tahun)
+                : allOptions;
+
+            kelasSelect.innerHTML = '<option value="">Semua Kelas</option>';
+
+            const seen = new Set();
+            let selectedValue = "";
+
+            filtered.forEach((option) => {
+                if (seen.has(option.nama)) return;
+                seen.add(option.nama);
+
+                const element = document.createElement("option");
+                element.value = option.value;
+                element.textContent = `Kelas ${option.nama}`;
+                element.dataset.tahun = option.tahun;
+                element.dataset.namaKelas = option.nama;
+
+                if (!selectedValue && selectedName && option.nama === selectedName) {
+                    selectedValue = option.value;
+                }
+
+                kelasSelect.appendChild(element);
+            });
+
+            kelasSelect.value = selectedValue;
+        }
+
+        tahunSelect.addEventListener("change", () => {
+            rebuildKelasOptions();
+            loadData();
+        });
+
+        kelasSelect.addEventListener("change", loadData);
+        rebuildKelasOptions();
     }
 
     async function loadData() {
@@ -257,8 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    kelasSelect?.addEventListener("change", loadData);
-    tahunSelect?.addEventListener("change", loadData);
+    setupKelasFilter();
     semesterSelect?.addEventListener("change", loadData);
     mapelSelect?.addEventListener("change", loadData);
 
