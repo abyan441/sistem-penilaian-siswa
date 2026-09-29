@@ -209,13 +209,12 @@ document.addEventListener("DOMContentLoaded", function () {
     function hasCompleteFilter() {
         return Boolean(
             semesterSelect?.value &&
-            mapelSelect?.value &&
-            (kelasSelect?.value || tahunSelect?.value),
+            mapelSelect?.value,
         );
     }
 
     function filterMessage() {
-        return "Pilih kelas atau tahun ajaran, mata pelajaran, dan semester untuk menampilkan siswa.";
+        return "Pilih mata pelajaran dan semester untuk menampilkan siswa.";
     }
 
     function buildParams() {
