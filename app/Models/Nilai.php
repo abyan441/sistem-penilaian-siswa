@@ -318,13 +318,17 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         ];
     }
 
-    public static function dataNilaiAdmin($kelasId, $tahunAjaran, $semester, $mapelId): array
+    public static function dataNilaiAdmin($kelasId, $tahunAjaran, $semester, $mapelId, $kelasNama = null): array
     {
         static::pastikanSemester($semester);
         if (!$mapelId || !MataPelajaran::query()->find($mapelId)) throw new InvalidArgumentException('Mata pelajaran tidak ditemukan.');
 
         $query = Siswa::query()->with('kelas');
-        if ($kelasId) $query->where('kelas_id', $kelasId);
+        if ($kelasId) {
+            $query->where('kelas_id', $kelasId);
+        } elseif ($kelasNama) {
+            $query->whereHas('kelas', fn ($q) => $q->where('nama_kelas', $kelasNama));
+        }
         if ($tahunAjaran) $query->whereHas('kelas', fn ($q) => $q->where('tahun_ajaran', $tahunAjaran));
         $siswa = $query->orderBy('kelas_id')->orderBy('nama_siswa')->orderBy('nisn')->get();
 
