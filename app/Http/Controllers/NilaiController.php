@@ -50,7 +50,8 @@ class NilaiController extends ApiController
                     $validated['kelas_id'] ?? null,
                     $validated['tahun_ajaran'] ?? null,
                     $validated['semester'],
-                    $validated['mapel_id']
+                    $validated['mapel_id'],
+                    $validated['kelas_nama'] ?? null
                 )
                 : Nilai::dataNilai(
                     $user->id,
