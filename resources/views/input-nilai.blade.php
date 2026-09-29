@@ -122,7 +122,7 @@
         <div class="nilai-table-body" id="nilai-table-body" aria-label="Nilai siswa" role="grid">
             <div class="nilai-empty-state">
                 <span>
-                    {{ !empty($readOnly) ? 'Pilih kelas, tahun ajaran, mata pelajaran, dan semester untuk menampilkan nilai.' : 'Pilih kelas atau tahun ajaran, mata pelajaran, dan semester untuk menampilkan siswa.' }}
+                    {{ !empty($readOnly) ? 'Pilih mata pelajaran dan semester untuk menampilkan nilai.' : 'Pilih mata pelajaran dan semester untuk menampilkan siswa.' }}
                 </span>
             </div>
         </div>
@@ -142,52 +142,4 @@
     };
 </script>
 <script src="{{ asset('js/input-nilai.js') }}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const kelasSelect = document.getElementById('kelas-select');
-    const tahunSelect = document.getElementById('tahun-ajaran-select');
-    if (!kelasSelect || !tahunSelect) return;
-
-    const options = Array.from(kelasSelect.options)
-        .filter(option => option.value !== '')
-        .map(option => ({
-            value: option.value,
-            text: option.textContent.trim(),
-            nama: option.dataset.namaKelas || option.textContent.replace(/^Kelas\s+/i, '').trim(),
-            tahun: option.dataset.tahun || ''
-        }));
-
-    function rebuildKelas() {
-        const tahun = tahunSelect.value;
-        const currentValue = kelasSelect.value;
-        const filtered = tahun
-            ? options.filter(option => option.tahun === tahun)
-            : options;
-
-        kelasSelect.innerHTML = '<option value="">Semua Kelas</option>';
-
-        const seen = new Set();
-        filtered.forEach(option => {
-            if (seen.has(option.nama)) return;
-            seen.add(option.nama);
-
-            const element = document.createElement('option');
-            element.value = option.value;
-            element.textContent = `Kelas ${option.nama}`;
-            element.dataset.tahun = option.tahun;
-            element.dataset.namaKelas = option.nama;
-            kelasSelect.appendChild(element);
-        });
-
-        if (filtered.some(option => option.value === currentValue)) {
-            kelasSelect.value = currentValue;
-        } else {
-            kelasSelect.value = '';
-        }
-    }
-
-    tahunSelect.addEventListener('change', rebuildKelas);
-    rebuildKelas();
-});
-</script>
 @endpush
