@@ -19,18 +19,11 @@
         <form class="rekap-mapel-filter-form" id="rekap-mapel-filter-form">
             <div class="rekap-mapel-filter-fields">
                 <label class="rekap-mapel-field">
-                    <span>Pilih Siswa</span>
-                    <select name="siswa" id="rekap-mapel-siswa" aria-label="Pilih Siswa">
-                        <option value="">-- Pilih Siswa --</option>
-                        @foreach ($siswa as $item)
-                            <option
-                                value="{{ $item->id }}"
-                                data-nisn="{{ $item->nisn }}"
-                                data-kelas="{{ $item->kelas?->nama_kelas }}"
-                                @selected((string) $siswaTerpilih === (string) $item->id)
-                            >
-                                {{ $item->nama_siswa }}
-                            </option>
+                    <span>Pilih Mata Pelajaran</span>
+                    <select name="mapel_id" id="rekap-mapel-mapel" aria-label="Pilih Mata Pelajaran">
+                        <option value="">-- Pilih Mata Pelajaran --</option>
+                        @foreach ($mataPelajaran as $item)
+                            <option value="{{ $item->id }}">{{ $item->nama_pelajaran }}</option>
                         @endforeach
                     </select>
                 </label>
@@ -63,7 +56,7 @@
                         <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
                         <circle cx="12" cy="12" r="2.7"></circle>
                     </svg>
-                    <span>Preview Raport</span>
+                    <span>Preview Rekap</span>
                 </button>
 
                 <button class="rekap-mapel-pdf-button" type="button" id="rekap-mapel-pdf-button">
@@ -78,87 +71,26 @@
         </form>
     </section>
 
-    <section class="rekap-mapel-search-card" aria-label="Pencarian siswa">
-        <label class="rekap-mapel-search-box">
-            <input
-                class="rekap-mapel-search-input"
-                id="rekap-mapel-search-input"
-                type="search"
-                name="cari-siswa"
-                placeholder="Cari siswa berdasarkan NISN, Nama atau Kelas..."
-                autocomplete="off"
-            >
-            <svg class="rekap-mapel-search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <circle cx="11" cy="11" r="6.5"></circle>
-                <path d="M16 16L21 21"></path>
-            </svg>
-        </label>
-    </section>
-
-    <section class="rekap-mapel-table-card" aria-label="Daftar siswa">
+    <section class="rekap-mapel-table-card" aria-label="Daftar rekap nilai mata pelajaran">
         <div class="rekap-mapel-table-head" role="row">
             <div role="columnheader">No</div>
-            <div role="columnheader">NISN</div>
-            <div role="columnheader">Nama Siswa</div>
+            <div role="columnheader">Mata Pelajaran</div>
             <div role="columnheader">Kelas</div>
             <div role="columnheader">Semester</div>
             <div role="columnheader">Aksi</div>
         </div>
 
         <div class="rekap-mapel-table-body" id="rekap-mapel-table-body" role="rowgroup">
-            @forelse ($siswa as $index => $item)
-                <div
-                    class="rekap-mapel-table-row"
-                    role="row"
-                    data-student="{{ $item->nisn }} {{ $item->nama_siswa }} {{ $item->kelas?->nama_kelas }} Semester {{ $semester }}"
-                >
-                    <div role="gridcell">{{ $index + 1 }}</div>
-                    <div role="gridcell">{{ $item->nisn }}</div>
-                    <div role="gridcell">{{ $item->nama_siswa }}</div>
-                    <div role="gridcell">
-                        <span class="rekap-mapel-class-badge">{{ $item->kelas?->nama_kelas ?? '-' }}</span>
-                    </div>
-                    <div role="gridcell">Semester {{ $semester }}</div>
-                    <div class="rekap-mapel-actions" role="gridcell">
-                        <button
-                            type="button"
-                            class="rekap-mapel-action-preview"
-                            aria-label="Preview rekap nilai mapel {{ $item->nama_siswa }}"
-                            data-student-id="{{ $item->id }}"
-                            data-student-name="{{ $item->nama_siswa }}"
-                        >
-                            <svg class="rekap-mapel-button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
-                                <circle cx="12" cy="12" r="2.7"></circle>
-                            </svg>
-                        </button>
-                        <button
-                            type="button"
-                            class="rekap-mapel-action-download"
-                            aria-label="Unduh rekap nilai mapel {{ $item->nama_siswa }}"
-                            data-student-id="{{ $item->id }}"
-                            data-student-name="{{ $item->nama_siswa }}"
-                        >
-                            <svg class="rekap-mapel-button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                <path d="M12 3v11"></path>
-                                <path d="m7.5 10.5 4.5 4.5 4.5-4.5"></path>
-                                <path d="M5 20h14"></path>
-                            </svg>
-                        </button>
-                    </div>
+            <div class="rekap-mapel-table-row rekap-mapel-empty-row" role="row">
+                <div role="gridcell" style="grid-column: 1 / -1; text-align: center;">
+                    Pilih mata pelajaran, semester, dan tahun ajaran untuk menampilkan data.
                 </div>
-            @empty
-                <div class="rekap-mapel-table-row rekap-mapel-empty-row" role="row">
-                    <div role="gridcell" style="grid-column: 1 / -1; text-align: center;">
-                        Belum ada data siswa untuk tahun ajaran yang dipilih.
-                    </div>
-                </div>
-            @endforelse
+            </div>
         </div>
     </section>
 </section>
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/rekap-mapel.js') }}"></script>
+    <script src="{{ asset('js/rekap-nilai-mapel.js') }}"></script>
 @endpush
