@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .map((option) => ({
                 value: option.value,
                 text: option.textContent.trim(),
-                nama: option.dataset.namaKelas || option.textContent.replace(/^Kelas\\s+/i, "").trim(),
+                nama: option.dataset.namaKelas || option.textContent.replace(/^Kelas\s+/i, "").trim(),
                 tahun: option.dataset.tahun || "",
             }));
 
