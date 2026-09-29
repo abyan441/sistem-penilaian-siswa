@@ -38,6 +38,7 @@ class NilaiController extends ApiController
             'mapel_id' => ['required', 'integer', 'exists:mata_pelajaran,id'],
             'kelas_id' => ['nullable', 'integer', 'exists:kelas,id'],
             'tahun_ajaran' => ['nullable', 'string', 'max:20'],
+            'kelas_nama' => ['nullable', 'string', 'max:100'],
         ], $this->validationMessages());
 
         try {
@@ -56,7 +57,8 @@ class NilaiController extends ApiController
                     $validated['semester'],
                     $validated['mapel_id'],
                     $validated['kelas_id'] ?? null,
-                    $validated['tahun_ajaran'] ?? null
+                    $validated['tahun_ajaran'] ?? null,
+                    $validated['kelas_nama'] ?? null
                 );
 
             return $this->successResponse($data, '', 200, ['readOnly' => $readOnly]);
@@ -167,6 +169,8 @@ class NilaiController extends ApiController
             'kelas_id.exists' => 'Kelas yang dipilih tidak ditemukan.',
             'tahun_ajaran.string' => 'Tahun ajaran harus berupa teks.',
             'tahun_ajaran.max' => 'Tahun ajaran maksimal 20 karakter.',
+            'kelas_nama.string' => 'Nama kelas harus berupa teks.',
+            'kelas_nama.max' => 'Nama kelas maksimal 100 karakter.',
             'nilai.required' => 'Data nilai wajib diisi.',
             'nilai.array' => 'Format data nilai tidak valid.',
             'nilai.min' => 'Minimal satu data nilai harus diisi.',
