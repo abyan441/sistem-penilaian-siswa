@@ -69,6 +69,11 @@
                 auth()->user()->role === 'kepala_sekolah' ||
                 $isWaliKelas
             )
+                <a class="{{ request()->routeIs('rekap-nilai-mapel') || request()->is('rekap-nilai-mapel') ? 'button-dashboard' : 'div-2' }}" href="{{ route('rekap-nilai-mapel') }}" @if(request()->routeIs('rekap-nilai-mapel') || request()->is('rekap-nilai-mapel')) aria-current="page" @endif>
+                    <img class="img-2" src="{{ asset('gambar/raport_icon.png') }}" alt="">
+                    <span class="text-wrapper-4">Rekap Nilai Mapel</span>
+                </a>
+
                 <a class="{{ request()->routeIs('raport') || request()->is('raport') ? 'button-dashboard' : 'div-2' }}" href="{{ route('raport') }}" @if(request()->routeIs('raport') || request()->is('raport')) aria-current="page" @endif>
                     <img class="img-2" src="{{ asset('gambar/raport_icon.png') }}" alt="">
                     <span class="text-wrapper-4">Raport</span>

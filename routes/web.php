@@ -11,6 +11,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\RaportController;
+use App\Http\Controllers\RekapNilaiMapelController;
 use App\Http\Controllers\DashboardController;
 
 /* =========================================================
@@ -77,6 +78,7 @@ Route::middleware(['auth'])->group(function () {
     /* RAPORT */
     Route::middleware(['role:admin,guru,kepala_sekolah'])->group(function () {
         Route::get('/raport', [RaportController::class, 'index'])->name('raport');
+        Route::get('/rekap-nilai-mapel', [RekapNilaiMapelController::class, 'index'])->name('rekap-nilai-mapel');
         Route::get('/raport/data', [RaportController::class, 'data'])->name('raport.data');
         Route::get('/raport/{id}/preview', [RaportController::class, 'preview'])->name('raport.preview');
     });
