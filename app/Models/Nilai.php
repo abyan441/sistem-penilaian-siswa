@@ -275,13 +275,17 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         });
     }
 
-    public static function dataNilai($guruId, $semester, $mapelId, $kelasId = null, $tahunAjaran = null): array
+    public static function dataNilai($guruId, $semester, $mapelId, $kelasId = null, $tahunAjaran = null, $kelasNama = null): array
     {
         static::pastikanSemester($semester);
         $guruMapel = static::pastikanGuruMapel((int) $guruId, (int) $mapelId);
 
         $query = Siswa::query()->with('kelas');
-        if ($kelasId) $query->where('kelas_id', $kelasId);
+        if ($kelasId) {
+            $query->where('kelas_id', $kelasId);
+        } elseif ($kelasNama) {
+            $query->whereHas('kelas', fn ($q) => $q->where('nama_kelas', $kelasNama));
+        }
         if ($tahunAjaran) $query->whereHas('kelas', fn ($q) => $q->where('tahun_ajaran', $tahunAjaran));
 
         $siswa = $query->orderBy('kelas_id')->orderBy('nama_siswa')->orderBy('nisn')->get();
