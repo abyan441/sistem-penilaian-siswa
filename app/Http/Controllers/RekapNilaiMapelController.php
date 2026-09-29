@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\GuruMapel;
 use App\Models\Kelas;
+use App\Models\MataPelajaran;
 use App\Models\Nilai;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -27,6 +29,46 @@ class RekapNilaiMapelController extends ApiController
             'tahunAjaran' => $tahunAjaran,
             'semester' => Nilai::resolveSemester($request->query('semester', 1)),
         ]);
+    }
+
+    public function data(Request $request): JsonResponse
+    {
+        $this->pastikanAkses();
+
+        $validated = $request->validate([
+            'mapel_id' => ['required', 'integer', 'exists:mata_pelajaran,id'],
+            'semester' => ['required', 'integer', 'in:1,2'],
+            'tahun_ajaran' => ['required', 'string', 'max:20'],
+        ]);
+
+        $tahunAjaranOptions = $this->ambilTahunAjaranOptions();
+        $tahunAjaran = trim($validated['tahun_ajaran']);
+
+        if (!$tahunAjaranOptions->contains($tahunAjaran)) {
+            return $this->errorResponse('Tahun ajaran yang dipilih tidak tersedia.', 422);
+        }
+
+        $mapel = MataPelajaran::query()->find((int) $validated['mapel_id']);
+
+        if (!$mapel) {
+            return $this->notFoundResponse('Mata pelajaran');
+        }
+
+        $kelas = Kelas::dataRekapNilaiMapel($tahunAjaran);
+
+        $data = $kelas->values()->map(function ($item, $index) use ($mapel, $validated) {
+            return [
+                'nomor' => $index + 1,
+                'mapel_id' => (int) $mapel->id,
+                'mata_pelajaran' => $mapel->nama_pelajaran,
+                'kelas_id' => (int) $item->id,
+                'kelas' => $item->nama_kelas,
+                'semester' => (int) $validated['semester'],
+                'tahun_ajaran' => $item->tahun_ajaran,
+            ];
+        })->all();
+
+        return $this->successResponse($data);
     }
 
     private function pastikanAkses(): void

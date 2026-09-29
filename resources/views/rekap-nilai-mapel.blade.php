@@ -7,7 +7,12 @@
 @endpush
 
 @section('content')
-<section class="rekap-mapel-page" id="rekap-mapel" aria-labelledby="rekap-mapel-title">
+<section
+    class="rekap-mapel-page"
+    id="rekap-mapel"
+    aria-labelledby="rekap-mapel-title"
+    data-endpoint="{{ route('rekap-nilai-mapel.data') }}"
+>
     <header class="rekap-mapel-heading">
         <div class="rekap-mapel-heading-copy">
             <h1 id="rekap-mapel-title">Rekap Nilai Mapel</h1>
@@ -77,13 +82,14 @@
             <div role="columnheader">Mata Pelajaran</div>
             <div role="columnheader">Kelas</div>
             <div role="columnheader">Semester</div>
+            <div role="columnheader">Tahun Ajaran</div>
             <div role="columnheader">Aksi</div>
         </div>
 
         <div class="rekap-mapel-table-body" id="rekap-mapel-table-body" role="rowgroup">
             <div class="rekap-mapel-table-row rekap-mapel-empty-row" role="row">
                 <div role="gridcell" style="grid-column: 1 / -1; text-align: center;">
-                    Pilih mata pelajaran, semester, dan tahun ajaran untuk menampilkan data.
+                    Pilih mata pelajaran untuk menampilkan data.
                 </div>
             </div>
         </div>

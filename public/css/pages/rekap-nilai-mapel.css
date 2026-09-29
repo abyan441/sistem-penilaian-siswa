@@ -1,5 +1,5 @@
 /* =========================================================
-   RAPORT PAGE
+   REKAP NILAI MAPEL
    ========================================================= */
 
 .rekap-mapel-page {
@@ -12,10 +12,6 @@
     color: var(--primarypr-50);
     font-family: var(--paragraph-p16-regular-font-family);
 }
-
-/* =========================================================
-   JUDUL
-   ========================================================= */
 
 .rekap-mapel-heading {
     width: 100%;
@@ -127,10 +123,6 @@
     color: var(--primarypr-50);
 }
 
-/* =========================================================
-   FILTER ACTION
-   ========================================================= */
-
 .rekap-mapel-filter-actions {
     display: flex;
     align-items: center;
@@ -155,15 +147,10 @@
     background: var(--primarypr-30);
     cursor: pointer;
     box-sizing: border-box;
-    transition:
-        filter 0.2s ease,
-        transform 0.2s ease;
+    transition: filter 0.2s ease, transform 0.2s ease;
 }
 
-.rekap-mapel-preview-button {
-    min-width: 135px;
-}
-
+.rekap-mapel-preview-button,
 .rekap-mapel-pdf-button {
     min-width: 135px;
 }
@@ -206,28 +193,22 @@
     box-sizing: border-box;
 }
 
-/* Header dan row HARUS memakai grid yang sama */
 .rekap-mapel-table-head,
 .rekap-mapel-table-row {
     display: grid;
-
     grid-template-columns:
         64px
         minmax(220px, 2fr)
-        minmax(180px, 1.5fr)
         minmax(130px, 1fr)
+        minmax(160px, 1.2fr)
+        minmax(140px, 1.1fr)
         minmax(120px, 1fr);
-
     column-gap: 0;
     align-items: center;
     width: 100%;
-    min-width: 780px;
+    min-width: 850px;
     box-sizing: border-box;
 }
-
-/* =========================================================
-   TABLE HEADER
-   ========================================================= */
 
 .rekap-mapel-table-head {
     min-height: 63px;
@@ -242,15 +223,12 @@
     font-weight: 500;
 }
 
-.rekap-mapel-table-head > div {
+.rekap-mapel-table-head > div,
+.rekap-mapel-table-row > div {
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
 }
-
-/* =========================================================
-   TABLE ROW
-   ========================================================= */
 
 .rekap-mapel-table-row {
     min-height: 78px;
@@ -262,12 +240,6 @@
     font-family: var(--paragraph-p16-regular-font-family);
     font-size: 14px;
     line-height: 20px;
-}
-
-.rekap-mapel-table-row > div {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
 }
 
 .rekap-mapel-table-row:last-child {
@@ -294,7 +266,7 @@
    BADGE KELAS
    ========================================================= */
 
-.rekap-mapel-table-row > div:nth-child(4) {
+.rekap-mapel-table-row > div:nth-child(3) {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -318,8 +290,8 @@
    KOLOM AKSI
    ========================================================= */
 
-.rekap-mapel-table-head > div:nth-child(5),
-.rekap-mapel-table-row > div:nth-child(5) {
+.rekap-mapel-table-head > div:nth-child(6),
+.rekap-mapel-table-row > div:nth-child(6) {
     width: 100%;
     display: flex;
     align-items: center;
@@ -354,9 +326,7 @@
     justify-content: center;
     box-sizing: border-box;
     cursor: pointer;
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .rekap-mapel-actions button:hover {
@@ -380,14 +350,16 @@
     box-sizing: border-box;
 }
 
-/* Preview */
 .rekap-mapel-actions button:first-child .rekap-mapel-button-icon {
     stroke: var(--secondarysec-80);
 }
 
-/* Download */
 .rekap-mapel-actions button:last-child .rekap-mapel-button-icon {
     stroke: var(--primarypr-30);
+}
+
+.rekap-mapel-empty-row {
+    color: var(--primarypr-50);
 }
 
 /* =========================================================
@@ -400,10 +372,6 @@
         min-width: 0;
     }
 }
-
-/* =========================================================
-   TABLET
-   ========================================================= */
 
 @media (min-width: 769px) and (max-width: 1100px) {
     .rekap-mapel-page {
@@ -420,13 +388,9 @@
 
     .rekap-mapel-table-head,
     .rekap-mapel-table-row {
-        min-width: 780px;
+        min-width: 850px;
     }
 }
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
 
 @media (max-width: 768px) {
     .rekap-mapel-page {
@@ -464,13 +428,9 @@
 
     .rekap-mapel-table-head,
     .rekap-mapel-table-row {
-        min-width: 780px;
+        min-width: 850px;
     }
 }
-
-/* =========================================================
-   HP KECIL
-   ========================================================= */
 
 @media (max-width: 480px) {
     .rekap-mapel-page {
@@ -485,7 +445,6 @@
         font-size: 13px;
     }
 
-    .rekap-mapel-filter-card,
     .rekap-mapel-filter-actions .rekap-mapel-button-icon {
         width: 19px;
         height: 19px;
@@ -498,6 +457,6 @@
 
     .rekap-mapel-table-head,
     .rekap-mapel-table-row {
-        min-width: 780px;
+        min-width: 850px;
     }
 }

@@ -41,6 +41,16 @@ class Kelas extends Model
             ->get();
     }
 
+
+    public static function dataRekapNilaiMapel(string $tahunAjaran)
+    {
+        return static::query()
+            ->where('tahun_ajaran', trim($tahunAjaran))
+            ->orderBy('nama_kelas')
+            ->orderBy('id')
+            ->get(['id', 'nama_kelas', 'tahun_ajaran']);
+    }
+
     public static function kelasById($id)
     {
         return static::query()
