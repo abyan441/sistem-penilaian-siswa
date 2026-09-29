@@ -1,21 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Raport | Cyber Olympus E-Raport System')
+@section('title', 'Rekap Nilai Mapel | Cyber Olympus E-Raport System')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/pages/rekap-mapel.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pages/rekap-nilai-mapel.css') }}">
 @endpush
 
 @section('content')
 <section class="rekap-mapel-page" id="rekap-mapel" aria-labelledby="rekap-mapel-title">
     <header class="rekap-mapel-heading">
         <div class="rekap-mapel-heading-copy">
-            <h1 id="rekap-mapel-title">Cetak Raport</h1>
+            <h1 id="rekap-mapel-title">Rekap Nilai Mapel</h1>
             <p>Preview dan cetak rekap nilai mata pelajaran siswa</p>
         </div>
     </header>
 
-    <section class="rekap-mapel-filter-card" aria-label="Filter rekap-mapel">
+    <section class="rekap-mapel-filter-card" aria-label="Filter rekap nilai mata pelajaran">
         <form class="rekap-mapel-filter-form" id="rekap-mapel-filter-form">
             <div class="rekap-mapel-filter-fields">
                 <label class="rekap-mapel-field">
