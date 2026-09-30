@@ -5,13 +5,16 @@
 .rekap-mapel-preview-page .report-header h2 { margin-bottom: 8px; }
 .rekap-mapel-preview-page .rekap-mapel-score-table { min-width: 1080px; table-layout: fixed; }
 .rekap-mapel-preview-page .rekap-mapel-score-table th,
-.rekap-mapel-preview-page .rekap-mapel-score-table td { vertical-align: middle; }
+.rekap-mapel-preview-page .rekap-mapel-score-table td {
+    vertical-align: middle;
+    text-align: center;
+}
 .rekap-mapel-preview-page .rekap-mapel-score-table th:nth-child(1),
 .rekap-mapel-preview-page .rekap-mapel-score-table td:nth-child(1) { width: 55px; }
 .rekap-mapel-preview-page .rekap-mapel-score-table th:nth-child(2),
 .rekap-mapel-preview-page .rekap-mapel-score-table td:nth-child(2) { width: 115px; }
 .rekap-mapel-preview-page .rekap-mapel-score-table th:nth-child(3),
-.rekap-mapel-preview-page .rekap-mapel-score-table td:nth-child(3) { width: 190px; text-align: left; }
+.rekap-mapel-preview-page .rekap-mapel-score-table td:nth-child(3) { width: 190px; }
 .rekap-mapel-preview-page .rekap-mapel-score-table th:nth-child(4),
 .rekap-mapel-preview-page .rekap-mapel-score-table td:nth-child(4),
 .rekap-mapel-preview-page .rekap-mapel-score-table th:nth-child(5),
@@ -23,7 +26,7 @@
 .rekap-mapel-preview-page .rekap-mapel-score-table th:nth-child(8),
 .rekap-mapel-preview-page .rekap-mapel-score-table td:nth-child(8) { width: 90px; }
 .rekap-mapel-preview-page .rekap-mapel-score-table th:nth-child(9),
-.rekap-mapel-preview-page .rekap-mapel-score-table td:nth-child(9) { width: 220px; text-align: left; }
+.rekap-mapel-preview-page .rekap-mapel-score-table td:nth-child(9) { width: 220px; }
 
 @media print {
 .rekap-mapel-preview-page .report-paper { width: 100% !important; min-width: 0 !important; max-width: none !important; }
