@@ -80,6 +80,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/raport', [RaportController::class, 'index'])->name('raport');
         Route::get('/rekap-nilai-mapel', [RekapNilaiMapelController::class, 'index'])->name('rekap-nilai-mapel');
         Route::get('/rekap-nilai-mapel/data', [RekapNilaiMapelController::class, 'data'])->name('rekap-nilai-mapel.data');
+        Route::get('/rekap-nilai-mapel/{kelasId}/preview', [RekapNilaiMapelController::class, 'preview'])->name('rekap-nilai-mapel.preview');
         Route::get('/raport/data', [RaportController::class, 'data'])->name('raport.data');
         Route::get('/raport/{id}/preview', [RaportController::class, 'preview'])->name('raport.preview');
     });

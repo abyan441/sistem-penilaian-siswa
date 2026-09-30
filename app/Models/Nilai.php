@@ -275,6 +275,48 @@ class Nilai extends \Illuminate\Database\Eloquent\Model
         });
     }
 
+    public static function dataRekapNilaiMapel(int $kelasId, int $mapelId, int $semester, string $tahunAjaran): Collection
+    {
+        static::pastikanSemester($semester);
+
+        $siswa = Siswa::query()
+            ->where('kelas_id', $kelasId)
+            ->orderBy('nama_siswa')
+            ->orderBy('nisn')
+            ->get(['id', 'nisn', 'nama_siswa']);
+
+        $guruMapelIds = GuruMapel::query()
+            ->where('mapel_id', $mapelId)
+            ->pluck('id');
+
+        $nilai = static::query()
+            ->where('semester', $semester)
+            ->where('tahun_ajaran', trim($tahunAjaran))
+            ->whereIn('guru_mapel_id', $guruMapelIds)
+            ->whereIn('siswa_id', $siswa->pluck('id'))
+            ->orderBy('id')
+            ->get()
+            ->keyBy('siswa_id');
+
+        return $siswa->values()->map(function ($item, $index) use ($nilai) {
+            $nilaiSiswa = $nilai->get($item->id);
+            $nilaiAkhir = $nilaiSiswa?->nilai_akhir !== null ? (float) $nilaiSiswa->nilai_akhir : null;
+
+            return [
+                'nomor' => $index + 1,
+                'siswa_id' => (int) $item->id,
+                'nisn' => $item->nisn,
+                'nama_siswa' => $item->nama_siswa,
+                'nilai_tugas' => $nilaiSiswa?->nilai_tugas !== null ? (float) $nilaiSiswa->nilai_tugas : null,
+                'nilai_uts' => $nilaiSiswa?->nilai_uts !== null ? (float) $nilaiSiswa->nilai_uts : null,
+                'nilai_uas' => $nilaiSiswa?->nilai_uas !== null ? (float) $nilaiSiswa->nilai_uas : null,
+                'nilai_akhir' => $nilaiAkhir,
+                'predikat' => $nilaiAkhir !== null ? static::predikat($nilaiAkhir) : '-',
+                'catatan_guru' => $nilaiSiswa?->catatan_guru ?? '',
+            ];
+        });
+    }
+
     public static function dataNilai($guruId, $semester, $mapelId, $kelasId = null, $tahunAjaran = null, $kelasNama = null): array
     {
         static::pastikanSemester($semester);

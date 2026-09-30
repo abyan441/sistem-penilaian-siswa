@@ -31,6 +31,54 @@ class RekapNilaiMapelController extends ApiController
         ]);
     }
 
+    public function preview(Request $request, int $kelasId): View
+    {
+        $this->pastikanAkses();
+
+        $validated = $request->validate([
+            'mapel_id' => ['required', 'integer', 'exists:mata_pelajaran,id'],
+            'semester' => ['required', 'integer', 'in:1,2'],
+            'tahun_ajaran' => ['required', 'string', 'max:20'],
+        ]);
+
+        $tahunAjaranOptions = $this->ambilTahunAjaranOptions();
+        $tahunAjaran = trim($validated['tahun_ajaran']);
+
+        if (!$tahunAjaranOptions->contains($tahunAjaran)) {
+            throw new HttpException(422, 'Tahun ajaran yang dipilih tidak tersedia.');
+        }
+
+        $kelas = Kelas::query()
+            ->whereKey($kelasId)
+            ->where('tahun_ajaran', $tahunAjaran)
+            ->with('waliKelas')
+            ->firstOrFail();
+
+        $user = auth()->user();
+
+        if ($user?->role === 'guru' && (int) $kelas->wali_kelas_id !== (int) $user->id) {
+            throw new HttpException(403, 'Anda hanya dapat melihat rekap nilai kelas yang menjadi kelas wali Anda.');
+        }
+
+        $mapel = MataPelajaran::query()->findOrFail((int) $validated['mapel_id']);
+        $semester = (int) $validated['semester'];
+
+        $data = Nilai::dataRekapNilaiMapel(
+            (int) $kelas->id,
+            (int) $mapel->id,
+            $semester,
+            $tahunAjaran
+        );
+
+        return view('rekap-nilai-mapel-preview', [
+            'kelas' => $kelas,
+            'mapel' => $mapel,
+            'semester' => $semester,
+            'tahunAjaran' => $tahunAjaran,
+            'data' => $data,
+        ]);
+    }
+
     public function data(Request $request): JsonResponse
     {
         $this->pastikanAkses();

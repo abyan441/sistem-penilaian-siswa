@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const previewButton = document.getElementById("rekap-mapel-preview-button");
 
     const endpoint = page?.dataset.endpoint || "";
+    const previewEndpoint = page?.dataset.previewEndpoint || "";
 
     function getFilterData() {
         return {
@@ -177,7 +178,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const action = button.dataset.action;
 
         if (action === "preview") {
-            showMessage("Preview rekap per kelas akan dikembangkan pada tahap berikutnya.", "info");
+            const data = getFilterData();
+            const kelasId = button.dataset.kelasId;
+            if (!kelasId) { showMessage("Data kelas tidak ditemukan."); return; }
+            if (!data.mapel || !data.tahunAjaran) { showMessage("Mata pelajaran dan tahun ajaran wajib dipilih."); return; }
+            if (!previewEndpoint) { showMessage("Endpoint preview rekap nilai mapel belum tersedia."); return; }
+            const url = new URL(previewEndpoint.replace(/\\/0\\/preview$/, "/" + encodeURIComponent(kelasId) + "/preview"), window.location.origin);
+            url.searchParams.set("mapel_id", data.mapel);
+            url.searchParams.set("semester", data.semester);
+            url.searchParams.set("tahun_ajaran", data.tahunAjaran);
+            window.location.href = url.toString();
         }
 
         if (action === "print") {

@@ -12,6 +12,7 @@
     id="rekap-mapel"
     aria-labelledby="rekap-mapel-title"
     data-endpoint="{{ route('rekap-nilai-mapel.data') }}"
+    data-preview-endpoint="{{ url('/rekap-nilai-mapel/0/preview') }}"
 >
     <header class="rekap-mapel-heading">
         <div class="rekap-mapel-heading-copy">
