@@ -72,7 +72,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         sync();
     }
-\n\n    initCustomDropdown(mapelSelect, "rekap-mapel");\n    initCustomDropdown(semesterSelect, "rekap-mapel");\n    initCustomDropdown(academicYearSelect, "rekap-mapel");\n\n    function getFilterData() {
+
+
+    initCustomDropdown(mapelSelect, "rekap-mapel");
+    initCustomDropdown(semesterSelect, "rekap-mapel");
+    initCustomDropdown(academicYearSelect, "rekap-mapel");
+
+    function getFilterData() {
         return {
             mapel: mapelSelect?.value || "",
             semester: semesterSelect?.value || "1",
