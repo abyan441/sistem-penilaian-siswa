@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        window.open(url, "_blank");
+        window.location.href = url;
     });
 
     pdfButton?.addEventListener("click", function () {
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        window.open(url, "_blank");
+        window.location.href = url;
     });
 
     previewButton?.addEventListener("click", loadData);
