@@ -68,7 +68,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         sync();
     }
-\n\n    initCustomDropdown(studentSelect, "raport");\n    initCustomDropdown(semesterSelect, "raport");\n    initCustomDropdown(academicYearSelect, "raport");\n\n    function getFilterData() {
+
+
+    initCustomDropdown(studentSelect, "raport");
+    initCustomDropdown(semesterSelect, "raport");
+    initCustomDropdown(academicYearSelect, "raport");
+
+    function getFilterData() {
         return {
             siswa: studentSelect?.value || "",
             semester: semesterSelect?.value || "1",
