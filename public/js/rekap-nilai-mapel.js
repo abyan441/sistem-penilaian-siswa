@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
             showAppToast(message, type);
             return;
         }
-
         window.alert(message);
     }
 
@@ -39,26 +38,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function setLoading() {
         if (!tableBody) return;
-
         tableBody.innerHTML = `
             <div class="rekap-mapel-table-row rekap-mapel-empty-row" role="row">
                 <div role="gridcell" style="grid-column: 1 / -1; text-align: center;">
                     Memuat data rekap...
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 
     function setEmpty(message) {
         if (!tableBody) return;
-
         tableBody.innerHTML = `
             <div class="rekap-mapel-table-row rekap-mapel-empty-row" role="row">
                 <div role="gridcell" style="grid-column: 1 / -1; text-align: center;">
                     ${escapeHtml(message)}
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 
     function renderRows(rows) {
@@ -78,9 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="rekap-mapel-table-row" role="row">
                     <div role="gridcell">${escapeHtml(item.nomor)}</div>
                     <div role="gridcell">${escapeHtml(item.mata_pelajaran)}</div>
-                    <div role="gridcell">
-                        <span class="rekap-mapel-class-badge">${escapeHtml(item.kelas)}</span>
-                    </div>
+                    <div role="gridcell"><span class="rekap-mapel-class-badge">${escapeHtml(item.kelas)}</span></div>
                     <div role="gridcell">${escapeHtml(semesterLabel)}</div>
                     <div role="gridcell">${escapeHtml(item.tahun_ajaran)}</div>
                     <div role="gridcell">
@@ -91,37 +84,64 @@ document.addEventListener("DOMContentLoaded", function () {
                                     <circle cx="12" cy="12" r="2.7"></circle>
                                 </svg>
                             </button>
-                            <button type="button" title="Cetak rekap" aria-label="Cetak rekap kelas ${escapeHtml(item.kelas)}" data-action="print" data-kelas-id="${escapeHtml(item.kelas_id)}">
+                            <button type="button" title="Unduh rekap" aria-label="Unduh rekap kelas ${escapeHtml(item.kelas)}" data-action="print" data-kelas-id="${escapeHtml(item.kelas_id)}">
                                 <svg class="rekap-mapel-button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                    <path d="M12 3v11"></path>
-                                    <path d="m7.5 10.5 4.5 4.5 4.5-4.5"></path>
-                                    <path d="M5 20h14"></path>
+                                    <path d="M12 3v11"></path><path d="m7.5 10.5 4.5 4.5 4.5-4.5"></path><path d="M5 20h14"></path>
                                 </svg>
                             </button>
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
         }).join("");
+    }
+
+    function createPreviewUrl(kelasId, printMode = false) {
+        const data = getFilterData();
+
+        if (!kelasId || !data.mapel || !data.tahunAjaran || !previewEndpoint) {
+            return null;
+        }
+
+        const url = new URL(
+            previewEndpoint.replace(/\/0\/preview$/, "/" + encodeURIComponent(kelasId) + "/preview"),
+            window.location.origin
+        );
+
+        url.searchParams.set("mapel_id", data.mapel);
+        url.searchParams.set("semester", data.semester);
+        url.searchParams.set("tahun_ajaran", data.tahunAjaran);
+
+        if (printMode) {
+            url.searchParams.set("print", "1");
+        }
+
+        return url.toString();
+    }
+
+    function validatePrintData() {
+        const data = getFilterData();
+
+        if (!data.mapel) {
+            showMessage("Silakan pilih mata pelajaran terlebih dahulu.");
+            mapelSelect?.focus();
+            return false;
+        }
+
+        if (!data.tahunAjaran) {
+            showMessage("Silakan pilih tahun ajaran terlebih dahulu.");
+            academicYearSelect?.focus();
+            return false;
+        }
+
+        return true;
     }
 
     async function loadData() {
         const data = getFilterData();
 
-        if (!data.mapel) {
-            setEmpty("Pilih mata pelajaran untuk menampilkan data.");
-            return;
-        }
-
-        if (!data.tahunAjaran) {
-            setEmpty("Belum ada tahun ajaran yang tersedia.");
-            return;
-        }
-
-        if (!endpoint) {
-            showMessage("Endpoint data rekap nilai mapel belum tersedia.");
-            return;
-        }
+        if (!data.mapel) { setEmpty("Pilih mata pelajaran untuk menampilkan data."); return; }
+        if (!data.tahunAjaran) { setEmpty("Belum ada tahun ajaran yang tersedia."); return; }
+        if (!endpoint) { showMessage("Endpoint data rekap nilai mapel belum tersedia."); return; }
 
         setLoading();
 
@@ -134,10 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const response = await fetch(`${endpoint}?${params.toString()}`, {
                 method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "X-Requested-With": "XMLHttpRequest",
-                },
+                headers: { Accept: "application/json", "X-Requested-With": "XMLHttpRequest" },
             });
 
             const result = await response.json();
@@ -154,16 +171,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     mapelSelect?.addEventListener("change", loadData);
-    semesterSelect?.addEventListener("change", function () {
-        if (mapelSelect?.value) {
-            loadData();
-        }
-    });
-    academicYearSelect?.addEventListener("change", function () {
-        if (mapelSelect?.value) {
-            loadData();
-        }
-    });
+    semesterSelect?.addEventListener("change", function () { if (mapelSelect?.value) loadData(); });
+    academicYearSelect?.addEventListener("change", function () { if (mapelSelect?.value) loadData(); });
 
     filterForm?.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -172,34 +181,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
     tableBody?.addEventListener("click", function (event) {
         const button = event.target.closest("button[data-action]");
-
         if (!button) return;
 
-        const action = button.dataset.action;
+        const kelasId = button.dataset.kelasId;
+        if (!kelasId) { showMessage("Data kelas tidak ditemukan."); return; }
 
-        if (action === "preview") {
-            const data = getFilterData();
-            const kelasId = button.dataset.kelasId;
-            if (!kelasId) { showMessage("Data kelas tidak ditemukan."); return; }
-            if (!data.mapel || !data.tahunAjaran) { showMessage("Mata pelajaran dan tahun ajaran wajib dipilih."); return; }
-            if (!previewEndpoint) { showMessage("Endpoint preview rekap nilai mapel belum tersedia."); return; }
-            const url = new URL(previewEndpoint.replace(/\/0\/preview$/, "/" + encodeURIComponent(kelasId) + "/preview"), window.location.origin);
-            url.searchParams.set("mapel_id", data.mapel);
-            url.searchParams.set("semester", data.semester);
-            url.searchParams.set("tahun_ajaran", data.tahunAjaran);
-            window.location.href = url.toString();
+        if (!validatePrintData()) return;
+
+        const url = createPreviewUrl(kelasId, button.dataset.action === "print");
+
+        if (!url) {
+            showMessage("Data rekap tidak lengkap.");
+            return;
         }
 
-        if (action === "print") {
-            showMessage("Cetak PDF rekap per kelas akan dikembangkan pada tahap berikutnya.", "info");
+        if (button.dataset.action === "preview") {
+            window.location.href = url;
+            return;
         }
+
+        window.open(url, "_blank");
     });
 
     pdfButton?.addEventListener("click", function () {
-        showMessage("Fungsi cetak PDF rekap nilai mapel akan dikembangkan pada tahap berikutnya.", "info");
+        if (!validatePrintData()) return;
+
+        const firstPrintButton = tableBody?.querySelector("button[data-action='print']");
+
+        if (!firstPrintButton) {
+            showMessage("Belum ada kelas yang dapat dicetak.");
+            return;
+        }
+
+        const url = createPreviewUrl(firstPrintButton.dataset.kelasId, true);
+
+        if (!url) {
+            showMessage("Data rekap tidak lengkap.");
+            return;
+        }
+
+        window.open(url, "_blank");
     });
 
-    previewButton?.addEventListener("click", function () {
-        loadData();
-    });
+    previewButton?.addEventListener("click", loadData);
 });
