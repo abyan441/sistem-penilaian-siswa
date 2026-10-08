@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-                window.open(createPreviewUrl(studentId, true), "_blank");
+                window.location.href = createPreviewUrl(studentId, true);
             });
         });
 
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            window.open(createPreviewUrl(data.siswa, true), "_blank");
+            window.location.href = createPreviewUrl(data.siswa, true);
         });
     }
 });
