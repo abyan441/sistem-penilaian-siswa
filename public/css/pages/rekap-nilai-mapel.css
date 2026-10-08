@@ -120,7 +120,12 @@
 
 .rekap-mapel-field select option:checked {
     background: var(--primarypr-30);
-    color: var(--primarypr-50);
+    color: var(--primarypr-00);
+}
+
+.rekap-mapel-field select option:hover {
+    background: linear-gradient(135deg, var(--primarypr-30), var(--primarypr-40));
+    color: var(--primarypr-00);
 }
 
 .rekap-mapel-filter-actions {
