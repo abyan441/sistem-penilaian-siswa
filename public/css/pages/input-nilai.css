@@ -320,71 +320,39 @@
     width: 100%;
     height: 40px;
     min-width: 0;
-    padding: 7px 38px 7px 14px;
-    border: 1px solid rgba(0, 0, 0, 0.18);
-    border-radius: 12px;
-    background: var(--primarypr-00);
+    padding: 0 40px 0 14px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 9px;
+    background-color: var(--primarypr-00);
     color: var(--primarypr-50);
     font-family: var(--paragraph-p16-regular-font-family);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: var(--paragraph-p16-regular-font-weight);
-    line-height: 24px;
+    line-height: 20px;
     outline: none;
     cursor: pointer;
-    accent-color: var(--secondarysec-80);
+    accent-color: var(--primarypr-30);
     box-sizing: border-box;
-    transition:
-        border-color 0.2s ease,
-        background-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.dropdown-items:hover {
-    border-color: var(--secondarysec-80);
 }
 
 .dropdown-items:focus {
-    border-color: var(--secondarysec-80);
-    background: var(--primarypr-00);
-    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.12);
+    border-color: var(--primarypr-40);
+    background-color: var(--primarypr-10);
+    box-shadow: 0 0 0 2px rgba(101, 146, 135, 0.18);
 }
-
-/* =========================================================
-   ITEM DALAM DROPDOWN
-   Warna pilihan yang aktif / dipilih
-   ========================================================= */
 
 .dropdown-items option {
-    padding: 8px 12px;
     background: var(--primarypr-00);
     color: var(--primarypr-50);
-    font-family: var(--paragraph-p16-regular-font-family);
-    font-size: 16px;
-}
-
-.dropdown-items option:hover {
-    background: var(--secondarysec-80);
-    color: var(--primarypr-00);
-}
-
-.dropdown-items option:focus {
-    background: var(--secondarysec-80);
-    color: var(--primarypr-00);
 }
 
 .dropdown-items option:checked {
-    background: var(--secondarysec-80);
+    background: var(--primarypr-30);
     color: var(--primarypr-00);
 }
 
-/*
- * Beberapa browser Windows menggunakan warna native
- * untuk item <option>. Accent color membantu menjaga
- * warna highlight tetap mengikuti warna utama desain.
- */
-
-.dropdown-items:focus option:checked {
-    background: var(--secondarysec-80);
+.dropdown-items option:hover {
+    background: linear-gradient(135deg, var(--primarypr-30), var(--primarypr-40));
     color: var(--primarypr-00);
 }
 
